@@ -1,0 +1,24 @@
+{
+  "name": "stuffr",
+  "version": "0.0.1",
+  "description": "Keeps track of your stuff",
+  "main": "webpack.config.js",
+  "dependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "html-webpack-plugin": "^2.15.0",
+    "immutable": "^3.8.1",
+    "react-bootstrap": "^0.29.5",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2",
+    "redux-actions": "^0.10.0"
+  },
+  "devDependencies": {
+    "babel-polyfill": "^6.9.1",
+    "babel-preset-es2015": "^6.6.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Powell",
+  "license": "AGPL-3.0"
+}
