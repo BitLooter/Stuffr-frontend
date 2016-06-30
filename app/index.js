@@ -3,6 +3,7 @@ import React from 'react'
 import * as ReactDOM from 'react-dom'
 import * as redux from 'redux'
 import { Provider } from 'react-redux'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 import stuffrApp from './reducers'
 import App from './components/App'
@@ -18,7 +19,9 @@ window.store = store
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <MuiThemeProvider>
+      <App />
+    </MuiThemeProvider>
   </Provider>,
   document.getElementById('app')
 )

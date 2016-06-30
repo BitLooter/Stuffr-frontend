@@ -1,5 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import TextField from 'material-ui/TextField'
+import RaisedButton from 'material-ui/RaisedButton'
+
 import { addThing } from '../actions'
 
 class AddThing extends React.Component {
@@ -9,13 +12,13 @@ class AddThing extends React.Component {
   }
   handleSubmit (e) {
     e.preventDefault()
-    this.dispatch(addThing(this.refs.thingName.value))
+    this.dispatch(addThing(this.refs.thingName.getValue()))
   }
   render () {
     return (
       <form onSubmit={e => this.handleSubmit(e)}>
-        <input ref='thingName' type='text' />
-        <button type='submit'>Add thing</button>
+        <TextField ref='thingName' name='thingName' />
+        <RaisedButton type='submit'>Add thing</RaisedButton>
       </form>
     )
   }
