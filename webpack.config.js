@@ -16,14 +16,14 @@ module.exports = {
         include: __dirname + '/app',
         loader: 'babel-loader',
         query: {
-          presets: ['es2015', 'react'],
+          presets: ['es2015', 'react', 'stage-3'],
           plugins: ['transform-object-rest-spread']
         }
       }
     ]
   },
   output: {
-    filename: 'index_bundle.js',
+    filename: 'bundle.js',
     path: __dirname + '/dist'
   },
   plugins: [HTMLWebpackPluginConfig]
