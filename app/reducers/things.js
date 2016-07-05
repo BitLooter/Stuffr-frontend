@@ -9,7 +9,7 @@ function receiveThingListReducer (state, action) {
   return immutable.List(action.payload)
 }
 
-function addThingReducer (state, action) {
+function receiveAddThingReducer (state, action) {
   return state.push({id: action.payload.id, name: action.payload.name})
 }
 
@@ -19,9 +19,9 @@ function showThingReducer (state, action) {
 }
 
 const things = handleActions({
-  RECEIVE_THING_LIST: receiveThingListReducer,
   REQUEST_THING_LIST: requestThingListReducer,
-  ADD_THING: addThingReducer,
+  RECEIVE_THING_LIST: receiveThingListReducer,
+  RECEIVE_ADD_THING: receiveAddThingReducer,
   SHOW_THING_INFO: showThingReducer
 }, immutable.List())
 
