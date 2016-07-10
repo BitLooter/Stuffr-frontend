@@ -10,8 +10,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import stuffrApp from './reducers'
 import App from './components/App'
 import { fetchThingList } from './actions'
+import { StuffrApi } from './stuffrapi'
 
 const logger = createLogger()
+global.stuffrapi = new StuffrApi('http://drwily:8080/api')
 
 let store = redux.createStore(stuffrApp, redux.applyMiddleware(thunk, logger))
 
