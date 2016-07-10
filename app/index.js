@@ -1,4 +1,3 @@
-import 'babel-polyfill'
 import React from 'react'
 import * as ReactDOM from 'react-dom'
 import * as redux from 'redux'
@@ -18,8 +17,6 @@ global.stuffrapi = new StuffrApi('http://drwily:8080/api')
 let store = redux.createStore(stuffrApp, redux.applyMiddleware(thunk, logger))
 
 store.dispatch(fetchThingList())
-
-window.store = store
 
 ReactDOM.render(
   <Provider store={store}>

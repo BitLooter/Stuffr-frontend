@@ -1,12 +1,9 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
-
-// const ThingListItem = ({ onClick, completed, name }) =>
-//   <li onClick={onClick}>{name}</li>
-// ThingListItem.propTypes = {name: PropTypes.string.isRequired}
+//  <Table multiSelectable onCellClick={onThingClick} selectable={false}>
 
 const ThingList = ({ things, onThingClick }) =>
-  <Table multiSelectable={true} onCellClick={onThingClick} selectable={false}>
+  <Table multiSelectable onCellClick={onThingClick}>
     <TableHeader>
       <TableRow>
         <TableHeaderColumn>ID</TableHeaderColumn>
@@ -22,15 +19,5 @@ const ThingList = ({ things, onThingClick }) =>
       )}
     </TableBody>
   </Table>
-// const ThingList = ({ things, onThingClick }) =>
-//   <ul>
-//     {things.map(thing =>
-//       <ThingListItem
-//         key={thing.id}
-//         name={thing.name}
-//         onClick={() => onThingClick(thing.id)}
-//       />
-//     )}
-//   </ul>
 
 export default ThingList
