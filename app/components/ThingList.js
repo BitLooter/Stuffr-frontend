@@ -1,6 +1,5 @@
 import React from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
-//  <Table multiSelectable onCellClick={onThingClick} selectable={false}>
 
 const ThingList = ({ things, onThingClick }) =>
   <Table multiSelectable onCellClick={onThingClick}>

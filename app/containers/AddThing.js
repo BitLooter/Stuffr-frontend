@@ -6,16 +6,18 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { addThing } from '../actions'
 
 class AddThing extends React.Component {
+  static proptypes = { dispatch: React.PropTypes.func.isRequired }
+
   constructor (props) {
     super(props)
-    // TODO: this code should be refactored once JS has property initializers
     this.dispatch = props.dispatch
-    this.handleSubmit = this.handleSubmit.bind(this)
   }
-  handleSubmit (e) {
+
+  handleSubmit = e => {
     e.preventDefault()
     this.dispatch(addThing({name: this.refs.thingName.getValue()}))
   }
+
   render () {
     return (
       <form onSubmit={this.handleSubmit}>
@@ -25,7 +27,6 @@ class AddThing extends React.Component {
     )
   }
 }
-AddThing.propTypes = { dispatch: React.PropTypes.func }
 
 const AddThingContainer = connect()(AddThing)
 
