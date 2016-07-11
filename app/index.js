@@ -14,7 +14,12 @@ import { StuffrApi } from './stuffrapi'
 const logger = createLogger()
 global.stuffrapi = new StuffrApi('http://drwily:8080/api')
 
-let store = redux.createStore(stuffrApp, redux.applyMiddleware(thunk, logger))
+let store = redux.createStore(stuffrApp, redux.compose(
+                                redux.applyMiddleware(thunk, logger),
+                                // Activate Redux dev tools if installed in browser
+                                // https://github.com/zalmoxisus/redux-devtools-extension
+                                window.devToolsExtension ? window.devToolsExtension() : f => f
+                              ))
 
 store.dispatch(fetchThingList())
 

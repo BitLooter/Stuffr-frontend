@@ -17,7 +17,6 @@ class AddThing extends React.Component {
     this.dispatch(addThing({name: this.refs.thingName.getValue()}))
   }
   render () {
-    // <form onSubmit={e => this.handleSubmit(e)}>
     return (
       <form onSubmit={this.handleSubmit}>
         <TextField ref='thingName' name='thingName' />

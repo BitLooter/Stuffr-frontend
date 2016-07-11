@@ -18,6 +18,7 @@ export class StuffrApi {
 
   // Makes request to the server specified in baseUrl
   async _request(path, {method = 'GET', parameters, callback} = {}) {
+    // TODO: Autodetect method
     let headers = new Headers()
     let body = JSON.stringify(parameters)
     if (method === 'POST' || method === 'PUT') {
