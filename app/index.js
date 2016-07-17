@@ -11,23 +11,38 @@ import App from './components/App'
 import { fetchThingList } from './actions'
 import { StuffrApi } from './stuffrapi'
 
-const logger = createLogger()
-global.stuffrapi = new StuffrApi('http://drwily:8080/api')
+import loadConfig from './config'
 
-let store = redux.createStore(stuffrApp, redux.compose(
-                                redux.applyMiddleware(thunk, logger),
-                                // Activate Redux dev tools if installed in browser
-                                // https://github.com/zalmoxisus/redux-devtools-extension
-                                window.devToolsExtension ? window.devToolsExtension() : f => f
-                              ))
 
-store.dispatch(fetchThingList())
+// Wrap init code in a function call to allow for async actions
+(async () => {
+  let config
+  try {
+    config = await loadConfig()
+  } catch (e) {
+    console.error(e)
+    // TODO: actually do something here
+  }
 
-ReactDOM.render(
-  <Provider store={store}>
-    <MuiThemeProvider>
-      <App />
-    </MuiThemeProvider>
-  </Provider>,
-  document.getElementById('app')
-)
+  const logger = createLogger()
+
+  global.stuffrapi = new StuffrApi(config.API_PATH)
+
+  let store = redux.createStore(stuffrApp, redux.compose(
+                                  redux.applyMiddleware(thunk, logger),
+                                  // Activate Redux dev tools if installed in browser
+                                  // https://github.com/zalmoxisus/redux-devtools-extension
+                                  window.devToolsExtension ? window.devToolsExtension() : f => f
+                                ))
+
+  store.dispatch(fetchThingList())
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <MuiThemeProvider>
+        <App />
+      </MuiThemeProvider>
+    </Provider>,
+    document.getElementById('app')
+  )
+})()
