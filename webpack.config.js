@@ -21,8 +21,7 @@ module.exports = {
         include: __dirname + '/app',
         loader: 'babel-loader',
         query: {
-          presets: ['es2015', 'react', 'stage-1'],
-          plugins: ['transform-object-rest-spread']
+          presets: ['es2015', 'react', 'stage-1']
         }
       }
     ]
