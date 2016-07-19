@@ -8,8 +8,20 @@ const defaultConfig = {
 }
 
 async function getLocalConfig() {
+  let localConfig
   let response = await fetch('configlocal.json')
-  return await response.json()
+  if (response.ok) {
+    localConfig = await response.json()
+  } else {
+    if (response.statusText === 'NOT FOUND') {
+      // Not an error, local settings file is optional
+      localConfig = {}
+    } else {
+      // TODO: Throw an error here
+    }
+  }
+
+  return localConfig
 }
 
 function checkConfig(config) {
