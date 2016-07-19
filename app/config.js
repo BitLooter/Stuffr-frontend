@@ -1,12 +1,12 @@
 // Stores default configuration values and loads from a configlocal.json file
 // if available.
 
-class ConfigError extends Error {}
-
 const defaultConfig = {
   API_PATH: '/api'
 }
 
+// Tries to download a local configuration file from the server and apply it
+// over the default configuration. If it is not available, returns {}.
 async function getLocalConfig() {
   let localConfig
   let response = await fetch('configlocal.json')
@@ -24,12 +24,14 @@ async function getLocalConfig() {
   return localConfig
 }
 
+// Does a sanity check of the given configuration object.
 function checkConfig(config) {
-  if (config.API_PATH === null) {
-    throw new ConfigError("API_PATH must be defined")
+  if (typeof(config.API_PATH) !== 'string') {
+    throw new Error("API_PATH must be defined")
   }
 }
 
+// Merges the local configuration file with default. Returns a promise.
 export default async function loadConfig () {
   const localConfig = await getLocalConfig()
   const config = {...defaultConfig, ...localConfig}

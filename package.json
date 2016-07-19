@@ -26,12 +26,14 @@
     "webpack": "^1.13.1"
   },
   "devDependencies": {
+    "babel-plugin-rewire": "^1.0.0-rc-4",
+    "chai": "^3.5.0",
     "mocha": "^2.5.3"
   },
   "scripts": {
     "dev": "webpack --progress --color --watch",
     "prod": "webpack --progress --color --config webpack.config.prod.json",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha || true"
   },
   "author": "David Powell",
   "license": "AGPL-3.0",
