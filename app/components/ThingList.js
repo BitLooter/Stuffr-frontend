@@ -10,7 +10,7 @@ const ThingList = ({ things, onThingClick }) =>
       </TableRow>
     </TableHeader>
     <TableBody>
-      {things.map(thing =>
+      {things.map((thing) =>
         <TableRow key={thing.id} onClick={() => onThingClick(thing.id)}>
           <TableRowColumn>{thing.id}</TableRowColumn>
           <TableRowColumn>{thing.name}</TableRowColumn>
@@ -18,5 +18,10 @@ const ThingList = ({ things, onThingClick }) =>
       )}
     </TableBody>
   </Table>
+ThingList.proptypes = {
+  dispatch: React.PropTypes.func.isRequired,
+  things: React.PropTypes.array.isRequired,
+  onThingClick: React.PropTypes.func.isRequired
+}
 
 export default ThingList

@@ -1,5 +1,5 @@
 // Specify Babel options for testing
-require('babel-core/register')({
-  presets: ['es2015', 'stage-1'],
-  plugins: ['babel-plugin-rewire']
-})
+var register = require('babel-core/register')
+var options = require('../webpack.config.js')
+options.module.loaders[0].query.plugins = ['babel-plugin-rewire']
+register(options.module.loaders[0].query)

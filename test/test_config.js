@@ -1,3 +1,5 @@
+/* eslint-env mocha */
+
 import 'babel-polyfill'
 import {expect} from 'chai'
 import {ConfigError, __GetDependency__} from '../app/config'
@@ -15,7 +17,7 @@ describe('Configuration handling:', () => {
 
     delete badConfig.API_PATH
     expect(runConfigCheck).to.throw(Error)
-    
+
     badConfig = {...defaultConfig, API_PATH: 1}
     expect(runConfigCheck).to.throw(Error)
   })

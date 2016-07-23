@@ -7,9 +7,9 @@ const defaultConfig = {
 
 // Tries to download a local configuration file from the server and apply it
 // over the default configuration. If it is not available, returns {}.
-async function getLocalConfig() {
+async function getLocalConfig () {
   let localConfig
-  let response = await fetch('configlocal.json')
+  const response = await fetch('configlocal.json')
   if (response.ok) {
     localConfig = await response.json()
   } else {
@@ -20,14 +20,13 @@ async function getLocalConfig() {
       // TODO: Throw an error here
     }
   }
-
   return localConfig
 }
 
 // Does a sanity check of the given configuration object.
-function checkConfig(config) {
-  if (typeof(config.API_PATH) !== 'string') {
-    throw new Error("API_PATH must be defined")
+function checkConfig (config) {
+  if (typeof config.API_PATH !== 'string') {
+    throw new Error('API_PATH must be defined')
   }
 }
 

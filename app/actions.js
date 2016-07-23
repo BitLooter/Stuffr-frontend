@@ -1,7 +1,5 @@
 import { createAction } from 'redux-actions'
 
-import { setUrlBase, stuffrRequest } from './stuffrapi'
-
 export const REQUEST_THING_LIST = 'REQUEST_THING_LIST'
 export const RECEIVE_THING_LIST = 'RECEIVE_THING_LIST'
 export const RECEIVE_THING_LIST_ERROR = 'RECEIVE_THING_LIST_ERROR'
@@ -12,8 +10,6 @@ export const RECEIVE_ADD_THING_ERROR = 'RECEIVE_ADD_THING_ERROR'
 export const ADD_THING = 'ADD_THING'
 export const SHOW_THING_INFO = 'SHOW_THING_INFO'
 
-let nextThingID = 0
-
 export const requestThingList = createAction(REQUEST_THING_LIST)
 export const receiveThingList = createAction(RECEIVE_THING_LIST)
 export const receiveThingListError = createAction(RECEIVE_THING_LIST_ERROR)
@@ -23,11 +19,10 @@ export const receiveThingListError = createAction(RECEIVE_THING_LIST_ERROR)
 export function fetchThingList () {
   return async function (dispatch) {
     dispatch(requestThingList())
-    // let thingList
     try {
-      let thingList = await global.stuffrapi.getThings()
+      const thingList = await global.stuffrapi.getThings()
       dispatch(receiveThingList(thingList))
-    } catch(error) {
+    } catch (error) {
       dispatch(receiveThingListError(error))
     }
   }
@@ -41,9 +36,9 @@ export function addThing (thing) {
   return async function (dispatch) {
     dispatch(requestAddThing())
     try {
-      let thingResponse = await global.stuffrapi.addThing(thing)
+      const thingResponse = await global.stuffrapi.addThing(thing)
       dispatch(receiveAddThing(thingResponse))
-    } catch(error) {
+    } catch (error) {
       dispatch(receiveAddThingError(error))
     }
   }

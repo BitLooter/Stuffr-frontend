@@ -15,7 +15,7 @@ class AddThing extends React.Component {
     this.dispatch = props.dispatch
   }
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault()
     this.dispatch(addThing({name: this.refs.thingName.getValue()}))
   }
