@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import i18next from 'i18next'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import injectTapEventPlugin from 'react-tap-event-plugin'
@@ -24,7 +25,7 @@ class AddThing extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <TextField ref='thingName' name='thingName' />
-        <RaisedButton type='submit'>Add thing</RaisedButton>
+        <RaisedButton type='submit'>{i18next.t('thing.add')}</RaisedButton>
       </form>
     )
   }

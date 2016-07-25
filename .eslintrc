@@ -10,9 +10,9 @@
     "react", "babel"
   ],
   "rules": {
-    "no-console": 0,
-    "generator-star-spacing": 0,
-    "babel/generator-star-spacing": 2,
+    "no-console": "off",
+    "generator-star-spacing": "off",
+    "babel/generator-star-spacing": "error",
     "react/prop-types": "off"
   }
 }
