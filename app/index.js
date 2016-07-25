@@ -10,7 +10,7 @@ import XHR from 'i18next-xhr-backend'
 
 import stuffrApp from './reducers'
 import App from './components/App'
-import { fetchThingList } from './actions'
+import { getThingList } from './actions'
 import { StuffrApi } from './stuffrapi'
 
 import loadConfig from './config'
@@ -58,5 +58,5 @@ async function runStuffr () {
     document.getElementById('app')
   )
 
-  store.dispatch(fetchThingList())
+  store.dispatch(getThingList())
 }

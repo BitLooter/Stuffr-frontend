@@ -6,7 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()  // Needed for material-ui
 
-import { addThing } from '../actions'
+import { postThing } from '../actions'
 
 class AddThing extends React.Component {
   static proptypes = { dispatch: React.PropTypes.func.isRequired }
@@ -18,7 +18,7 @@ class AddThing extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    this.dispatch(addThing({name: this.refs.thingName.getValue()}))
+    this.dispatch(postThing({name: this.refs.thingName.getValue()}))
   }
 
   render () {
