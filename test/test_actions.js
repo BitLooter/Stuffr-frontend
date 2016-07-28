@@ -6,7 +6,7 @@ import * as actions from '../app/actions'
 
 describe('Redux action creators', () => {
   it('Fetch thing list', () => {
-    const thingListAction = actions.fetchThingList()
+    const thingListAction = actions.getThingList()
     // Should be a thunk
     expect(thingListAction).to.be.a('function')
   })
