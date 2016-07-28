@@ -49,7 +49,7 @@ export function postThing (thing) {
     dispatch(postThingRequest())
     try {
       const thingResponse = await global.stuffrapi.addThing(thing)
-      dispatch(postThingDone(thingResponse))
+      dispatch(postThingDone({...thing, id: thingResponse.id}))
     } catch (error) {
       dispatch(postThingError(error))
     }
