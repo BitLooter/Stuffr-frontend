@@ -9,7 +9,9 @@ import { createAction } from 'redux-actions'
 
 // Generic thunk creator for backend API requests. *Action parameters should
 // be the appropriate action creators, and apiFunction is an async function
-// that makes the request.
+// that makes the request. apiFunction is called with the parameters given
+// to the htunk and doneAction is dispatched with the apiFunction's return
+// value.
 function createApiThunk (apiFunction, requestAction, doneAction, errorAction) {
   return function (apiParams) {
     return async function (dispatch) {

@@ -7,10 +7,6 @@ function genericErrorReducer (state, action) {
   return state
 }
 
-function getThingListRequestReducer (state, action) {
-  return state
-}
-
 function getThingListDoneReducer (state, action) {
   return immutable.List(action.payload)
 }
@@ -25,10 +21,10 @@ function showThingReducer (state, action) {
 }
 
 const things = handleActions({
-  GET_THING_LIST__REQUEST: getThingListRequestReducer,
   GET_THING_LIST__DONE: getThingListDoneReducer,
   GET_THING_LIST__ERROR: genericErrorReducer,
   POST_THING__DONE: postThingDoneReducer,
+  POST_THING__ERROR: genericErrorReducer,
   SHOW_THING_INFO: showThingReducer
 }, immutable.List())
 
