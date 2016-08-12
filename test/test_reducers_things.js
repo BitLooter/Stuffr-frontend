@@ -10,8 +10,10 @@ import * as actions from '../app/actions'
 const genericErrorReducer = __GetDependency__('genericErrorReducer')
 const getThingListDoneReducer = __GetDependency__('getThingListDoneReducer')
 const postThingDoneReducer = __GetDependency__('postThingDoneReducer')
+const showThingReducer = __GetDependency__('showThingReducer')
 
 const initialState = immutable.List()
+const loadedState = immutable.List(testThings)
 
 describe('Error Reducers:', () => {
   it('Generic error', function () {
@@ -27,17 +29,24 @@ describe('Error Reducers:', () => {
 
 describe('Things reducers:', () => {
   it('Get all things completed', () => {
-    const expectedState = immutable.List(testThings)
+    const expectedState = loadedState
     const action = actions.getThingListDone(testThings)
     expect(getThingListDoneReducer(initialState, action))
       .to.eql(expectedState)
   })
 
-  it('Adding a new thing completed', function () {
+  it('Adding a new thing completed', () => {
     const newWithId = {id: newThingId, ...newThing}
     const expectedState = immutable.List([newWithId])
     const action = actions.postThingDone(newWithId)
     const newState = postThingDoneReducer(initialState, action)
     expect(newState.toJS()).to.eql(expectedState.toJS())
+  })
+
+  it('Display thing details', () => {
+    const expectedState = loadedState
+    const action = actions.showThingInfo(newThingId)
+    const newState = showThingReducer(loadedState, action)
+    expect(newState).to.equal(expectedState)
   })
 })

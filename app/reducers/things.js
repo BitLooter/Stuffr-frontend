@@ -16,7 +16,6 @@ function postThingDoneReducer (state, action) {
 }
 
 function showThingReducer (state, action) {
-  window.alert(state.get(action.payload).name)
   return state
 }
 
