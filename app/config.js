@@ -17,7 +17,7 @@ async function getLocalConfig () {
       // Not an error, local settings file is optional
       localConfig = {}
     } else {
-      // TODO: Throw an error here
+      throw new Error(`Error ${response.status} '${response.statusText}' reading configuration`)
     }
   }
   return localConfig

@@ -1,9 +1,9 @@
 import { handleActions } from 'redux-actions'
 import * as immutable from 'immutable'
+import log from 'loglevel'
 
 function genericErrorReducer (state, action) {
-  // TODO: log this error instead of printing to console
-  console.error(action.payload)
+  log.error(`${action.type}: ${action.payload}`)
   return state
 }
 

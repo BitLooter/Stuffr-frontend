@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import createLogger from 'redux-logger'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import log from 'loglevel'
 import i18next from 'i18next'
 import XHR from 'i18next-xhr-backend'
 
@@ -32,8 +33,9 @@ i18next.use(XHR).init({
   }
 }, (error, t) => {
   if (error !== undefined) {
-    console.error('Error loading i18n: {error}')
+    log.error(`Error loading i18n: ${error}`)
   }
+  // TODO: check for errors and display a message instead of a blank page
   runStuffr()
 })
 
@@ -43,8 +45,7 @@ async function runStuffr () {
   try {
     config = await loadConfig()
   } catch (e) {
-    console.error(e)
-    // TODO: actually do something here
+    log.error(`Error loading configuration file: ${e}`)
   }
 
   global.stuffrapi = new StuffrApi(config.API_PATH)

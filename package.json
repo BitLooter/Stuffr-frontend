@@ -39,6 +39,7 @@
     "eslint-plugin-babel": "3.3.0",
     "eslint-plugin-react": "6.0.0",
     "fetch-mock": "^5.0.5",
+    "loglevel": "^1.4.1",
     "mocha": "3.0.2",
     "mocha-sinon": "1.1.5",
     "redux-mock-store": "1.1.2",

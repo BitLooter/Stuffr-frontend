@@ -3,6 +3,7 @@
 import {expect} from 'chai'
 import * as immutable from 'immutable'
 import 'mocha-sinon'
+import log from 'loglevel'
 
 import {testThings, newThing, newThingId} from './dummydata'
 import {__GetDependency__} from '../app/reducers/things'
@@ -14,13 +15,12 @@ const loadedState = immutable.List(testThings)
 describe('Error Reducers:', () => {
   it('Generic error', function () {
     const genericErrorReducer = __GetDependency__('genericErrorReducer')
-    const errorMessage = 'Unit test error'
+    const errorMessage = 'Unit test dummy error'
     const errorAction = {type: 'DUMMY_ERROR', payload: errorMessage}
-    this.sinon.stub(console, 'error')
+    this.sinon.stub(log, 'error')
     expect(genericErrorReducer(initialState, errorAction))
       .to.equal(initialState)
-    expect(console.error.calledOnce).to.be.true
-    expect(console.error.calledWith(errorMessage)).to.be.true
+    expect(log.error.calledOnce).to.be.true
   })
 })
 
