@@ -1,17 +1,17 @@
 /* eslint-env mocha */
 
-import 'babel-polyfill'
-import 'isomorphic-fetch'
 import {expect} from 'chai'
-import { createAction } from 'redux-actions'
-import nock from 'nock'
+import {createAction} from 'redux-actions'
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
+import fetchMock from 'fetch-mock'
 
 import * as actions from '../app/actions'
 import {__GetDependency__} from '../app/actions' // eslint-disable-line no-duplicate-imports
-import { StuffrApi } from '../app/stuffrapi'
+import {StuffrApi} from '../app/stuffrapi'
+import {TEST_DOMAIN, testThings, newThing, newThingId} from './dummydata'
 
+const THINGS_URL = `${TEST_DOMAIN}/things`
 const mockStore = configureStore([thunk])
 
 describe('Generic action code', () => {
@@ -29,29 +29,32 @@ describe('Generic action code', () => {
 })
 
 describe('API thunk actions', () => {
+  let api
+  beforeEach(() => {
+    api = new StuffrApi(TEST_DOMAIN)
+    global.stuffrapi = api
+  })
+  afterEach(() => {
+    api = undefined
+    delete global.stuffrapi
+    fetchMock.restore()
+  })
+
   it('Fetch thing list', async () => {
     const thingListAction = actions.getThingList()
     // Should be a thunk
     expect(thingListAction).to.be.a('function')
 
-    const testThings = [
-      {id: 1, name: 'THING1'},
-      {id: 2, name: 'THING2'}
-    ]
-    const nockScope = nock('https://example.com')
-      .get('/things')
-      .reply(200, testThings)
-    const api = new StuffrApi('https://example.com')
-    global.stuffrapi = api
+    fetchMock.get(THINGS_URL, testThings)
 
     const store = mockStore({})
     await store.dispatch(actions.getThingList())
+    expect(fetchMock.called(THINGS_URL)).to.be.true
     const thunkActions = store.getActions()
     expect(thunkActions).to.have.length(2)
     expect(thunkActions[0].type).to.equal(actions.GET_THING_LIST__REQUEST)
     expect(thunkActions[1].type).to.equal(actions.GET_THING_LIST__DONE)
     expect(thunkActions[1].payload).to.eql(testThings)
-    nockScope.done()
   })
 
   it('POST a new thing', async () => {
@@ -59,21 +62,19 @@ describe('API thunk actions', () => {
     // Should be a thunk
     expect(thingListAction).to.be.a('function')
 
-    const newThing = {name: 'NEWTHING'}
-    const newThingResponse = {id: 999}
-    const nockScope = nock('https://example.com')
-      .post('/things', newThing)
-      .reply(201, newThingResponse)
-    const api = new StuffrApi('https://example.com')
-    global.stuffrapi = api
+    const newThingResponse = {id: newThingId}
+    fetchMock.post(THINGS_URL, {
+      status: 201,
+      body: newThingResponse
+    })
 
     const store = mockStore({})
     await store.dispatch(actions.postThing(newThing))
+    expect(fetchMock.called(THINGS_URL)).to.be.true
     const thunkActions = store.getActions()
     expect(thunkActions).to.have.length(2)
     expect(thunkActions[0].type).to.equal(actions.POST_THING__REQUEST)
     expect(thunkActions[1].type).to.equal(actions.POST_THING__DONE)
     expect(thunkActions[1].payload).to.eql({...newThing, ...newThingResponse})
-    nockScope.done()
   })
 })

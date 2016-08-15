@@ -1,46 +1,40 @@
 /* eslint-env mocha */
 
 import {expect} from 'chai'
-import nock from 'nock'
+import fetchMock from 'fetch-mock'
 
-import { StuffrApi } from '../app/stuffrapi'
+import {StuffrApi} from '../app/stuffrapi'
+import {TEST_DOMAIN, testThings, newThing, newThingId} from './dummydata'
 
-const TEST_DOMAIN = 'https://example.com'
+const THINGS_URL = `${TEST_DOMAIN}/things`
 
 describe('Stuffr API wrapper', () => {
+  let api
+  beforeEach(() => {
+    api = new StuffrApi(TEST_DOMAIN)
+  })
   afterEach(() => {
-    nock.cleanAll()
+    api = undefined
+    fetchMock.restore()
   })
 
   it('/things (GET)', async () => {
-    const testThings = [
-      {id: 1, name: 'THING1'},
-      {id: 2, name: 'THING2'}
-    ]
-    const thingsScope = nock(TEST_DOMAIN)
-      .get('/things')
-      .reply(200, testThings)
-
-    const api = new StuffrApi(TEST_DOMAIN)
+    fetchMock.get(THINGS_URL, testThings)
     const things = await api.getThings()
     expect(things).to.eql(testThings)
-    thingsScope.done()
+    expect(fetchMock.called(THINGS_URL)).to.be.true
   })
 
   it('/things (POST)', async () => {
-    const newThing = [
-      {name: 'NEWTHING'}
-    ]
     const expectedResponse = {
-      id: 42
+      id: newThingId
     }
-    const testScope = nock(TEST_DOMAIN)
-      .post('/things', newThing)
-      .reply(201, expectedResponse)
-
-    const api = new StuffrApi(TEST_DOMAIN)
+    fetchMock.post(THINGS_URL, {
+      status: 201,
+      body: expectedResponse
+    })
     const thingResponse = await api.addThing(newThing)
     expect(thingResponse).to.eql(expectedResponse)
-    testScope.done()
+    expect(fetchMock.called(THINGS_URL)).to.be.true
   })
 })

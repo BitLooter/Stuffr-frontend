@@ -1,5 +1,7 @@
 // Dummy data to be shared among test cases
 
+export const TEST_DOMAIN = 'https://example.com'
+
 export const testThings = [
   {id: 1, name: 'THING1'},
   {id: 2, name: 'THING2'}

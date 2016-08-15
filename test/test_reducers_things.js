@@ -7,16 +7,13 @@ import 'mocha-sinon'
 import {testThings, newThing, newThingId} from './dummydata'
 import {__GetDependency__} from '../app/reducers/things'
 import * as actions from '../app/actions'
-const genericErrorReducer = __GetDependency__('genericErrorReducer')
-const getThingListDoneReducer = __GetDependency__('getThingListDoneReducer')
-const postThingDoneReducer = __GetDependency__('postThingDoneReducer')
-const showThingReducer = __GetDependency__('showThingReducer')
 
 const initialState = immutable.List()
 const loadedState = immutable.List(testThings)
 
 describe('Error Reducers:', () => {
   it('Generic error', function () {
+    const genericErrorReducer = __GetDependency__('genericErrorReducer')
     const errorMessage = 'Unit test error'
     const errorAction = {type: 'DUMMY_ERROR', payload: errorMessage}
     this.sinon.stub(console, 'error')
@@ -29,13 +26,14 @@ describe('Error Reducers:', () => {
 
 describe('Things reducers:', () => {
   it('Get all things completed', () => {
-    const expectedState = loadedState
+    const getThingListDoneReducer = __GetDependency__('getThingListDoneReducer')
     const action = actions.getThingListDone(testThings)
     expect(getThingListDoneReducer(initialState, action))
-      .to.eql(expectedState)
+      .to.eql(loadedState)
   })
 
   it('Adding a new thing completed', () => {
+    const postThingDoneReducer = __GetDependency__('postThingDoneReducer')
     const newWithId = {id: newThingId, ...newThing}
     const expectedState = immutable.List([newWithId])
     const action = actions.postThingDone(newWithId)
@@ -44,6 +42,7 @@ describe('Things reducers:', () => {
   })
 
   it('Display thing details', () => {
+    const showThingReducer = __GetDependency__('showThingReducer')
     const expectedState = loadedState
     const action = actions.showThingInfo(newThingId)
     const newState = showThingReducer(loadedState, action)
