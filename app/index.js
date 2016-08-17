@@ -8,13 +8,16 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import log from 'loglevel'
 import i18next from 'i18next'
 import XHR from 'i18next-xhr-backend'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import stuffrApp from './reducers'
-import App from './components/App'
+import AppContainer from './containers/AppContainer'
 import { getThingList } from './actions'
 import { StuffrApi } from './stuffrapi'
 
 import loadConfig from './config'
+
+injectTapEventPlugin()  // Needed for material-ui
 
 const logger = createLogger({collapsed: true})
 
@@ -53,7 +56,7 @@ async function runStuffr () {
   ReactDOM.render(
     <Provider store={store}>
       <MuiThemeProvider>
-        <App />
+        <AppContainer />
       </MuiThemeProvider>
     </Provider>,
     document.getElementById('app')

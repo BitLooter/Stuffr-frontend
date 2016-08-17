@@ -15,16 +15,11 @@ function postThingDoneReducer (state, action) {
   return state.push({id: action.payload.id, name: action.payload.name})
 }
 
-function showThingReducer (state, action) {
-  return state
-}
-
 const things = handleActions({
   GET_THING_LIST__DONE: getThingListDoneReducer,
   GET_THING_LIST__ERROR: genericErrorReducer,
   POST_THING__DONE: postThingDoneReducer,
-  POST_THING__ERROR: genericErrorReducer,
-  SHOW_THING_INFO: showThingReducer
+  POST_THING__ERROR: genericErrorReducer
 }, immutable.List())
 
 export default things

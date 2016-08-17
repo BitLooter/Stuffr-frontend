@@ -3,8 +3,6 @@ import { connect } from 'react-redux'
 import i18next from 'i18next'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-import injectTapEventPlugin from 'react-tap-event-plugin'
-injectTapEventPlugin()  // Needed for material-ui
 
 import { postThing } from '../actions'
 
