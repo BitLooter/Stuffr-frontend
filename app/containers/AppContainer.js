@@ -1,10 +1,11 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import ui from 'redux-ui'
 
 import AddThingContainer from './AddThingContainer'
 import ThingListContainer from './ThingListContainer'
 import ThingEditDialogContainer from './ThingEditDialogContainer'
+import {createThingDialogState} from '../uistate'
 
 let App = () => (
   <div>
@@ -16,7 +17,7 @@ let App = () => (
 
 App = ui({
   state: {
-    thingDialog: {open: false, thing: {name: 'YouShouldntSeeThis'}}
+    thingDialog: createThingDialogState(false)
   }
 })(App)
 const AppContainer = connect()(App)

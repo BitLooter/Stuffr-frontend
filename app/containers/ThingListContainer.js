@@ -3,10 +3,12 @@ import { connect } from 'react-redux'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import ui from 'redux-ui'
 
+import {createThingDialogState} from '../uistate'
+
 let ThingList = ({ things, updateUI }) =>
-  <Table multiSelectable onCellClick={(row) =>
-    updateUI('thingDialog', {open: true, thing: things.get(row)})
-  }>
+  <Table multiSelectable onCellClick={(row) => {
+    updateUI('thingDialog', createThingDialogState(true, things.get(row)))
+  }}>
     <TableHeader>
       <TableRow>
         <TableHeaderColumn>ID</TableHeaderColumn>
