@@ -92,4 +92,19 @@ describe('Stuffr API wrapper:', () => {
     expect(thingResponse).to.eql(expectedResponse)
     expect(fetchMock.called(THINGS_URL)).to.be.true
   })
+
+  it('/things/<id> (PUT)', async () => {
+    // const expectedResponse = {
+    //   id: newThingId
+    // }
+    const thingId = 3
+    const thingsUrlWithId = `${THINGS_URL}/${thingId}`
+    fetchMock.put(thingsUrlWithId, {
+      status: 204,
+      body: {}
+    })
+    const thingResponse = await api.updateThing(thingId, newThing)
+    expect(thingResponse).to.eql({})
+    expect(fetchMock.called(thingsUrlWithId)).to.be.true
+  })
 })

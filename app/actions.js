@@ -13,11 +13,11 @@ import { createAction } from 'redux-actions'
 // to the htunk and doneAction is dispatched with the apiFunction's return
 // value.
 function createApiThunk (apiFunction, requestAction, doneAction, errorAction) {
-  return function (apiParams) {
+  return function (...apiParams) {
     return async function (dispatch) {
       dispatch(requestAction())
       try {
-        const response = await apiFunction(apiParams)
+        const response = await apiFunction(...apiParams)
         dispatch(doneAction(response))
       } catch (error) {
         dispatch(errorAction(error))
@@ -55,4 +55,19 @@ export const postThing = createApiThunk(
     return {...thing, id: thingResponse.id}
   },
   postThingRequest, postThingDone, postThingError
+)
+
+// Actions to update an existing thing on the server.
+export const UPDATE_THING__REQUEST = 'UPDATE_THING__REQUEST'
+export const UPDATE_THING__DONE = 'UPDATE_THING__DONE'
+export const UPDATE_THING__ERROR = 'UPDATE_THING__ERROR'
+export const updateThingRequest = createAction(UPDATE_THING__REQUEST)
+export const updateThingDone = createAction(UPDATE_THING__DONE)
+export const updateThingError = createAction(UPDATE_THING__ERROR)
+export const updateThing = createApiThunk(
+  async function (thingId, thingData) {
+    const thingResponse = await global.stuffrapi.updateThing(thingId, thingData)
+    return thingResponse
+  },
+  updateThingRequest, updateThingDone, updateThingError
 )

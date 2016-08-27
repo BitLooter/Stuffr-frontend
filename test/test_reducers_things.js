@@ -40,12 +40,4 @@ describe('Things reducers:', () => {
     const newState = postThingDoneReducer(initialState, action)
     expect(newState.toJS()).to.eql(expectedState.toJS())
   })
-
-  it('Display thing details', () => {
-    const showThingReducer = __GetDependency__('showThingReducer')
-    const expectedState = loadedState
-    const action = actions.showThingInfo(newThingId)
-    const newState = showThingReducer(loadedState, action)
-    expect(newState).to.equal(expectedState)
-  })
 })

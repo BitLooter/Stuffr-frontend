@@ -1,11 +1,12 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import ui from 'redux-ui'
 
+import {updateThing} from '../actions'
 import {createThingDialogState} from '../uistate'
 
 export default class ThingEditDialog extends React.Component {
@@ -16,6 +17,10 @@ export default class ThingEditDialog extends React.Component {
   }
 
   handleDone = () => {
+    // TODO: check that data changed before submitting
+    // TODO: verify data
+    const newThing = {name: this.refs.thingName.getValue()}
+    this.props.dispatch(updateThing(this.props.ui.thingDialog.thing.id, newThing))
     this.close()
   }
 
@@ -46,7 +51,8 @@ export default class ThingEditDialog extends React.Component {
         open={ui.open}
         onRequestClose={this.handleCancel}
       >
-        Name: <TextField name='thingedit_name' defaultValue={thing.name} /><br />
+        Name: <TextField name='thingName' ref='thingName'
+          defaultValue={thing.name} /><br />
         Date added: {thing.date_created}
       </Dialog>
     )

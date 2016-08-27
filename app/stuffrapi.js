@@ -21,9 +21,17 @@ export class StuffrApi {
     return await this._request('/things', {parameters, callback})
   }
 
+  // PUT request to /things/<id>
+  async updateThing (thingId, thingData, callback) {
+    log.info('StuffrApi request for updateThing')
+    return await this._request(`/things/${thingId}`,
+        {method: 'PUT',
+         parameters: thingData,
+         callback})
+  }
+
   // Makes request to the server specified in baseUrl
   async _request (path, {method, parameters, callback} = {}) {
-    // TODO: Autodetect method based on presence of parameters
     const headers = new Headers()
     const body = JSON.stringify(parameters)
     const fullUrl = this.urlBase + path
