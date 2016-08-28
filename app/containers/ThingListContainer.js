@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import ui from 'redux-ui'
-// import * as immutable from 'immutable'
 
 import {createThingDialogState} from '../uistate'
 
@@ -36,7 +35,6 @@ const mapStateToProps = (state) => {
   return {things: state.things.toJS()}
 }
 
-// TODO: Change these to decorators once it's available in babel
 const ThingListContainer = connect(
   mapStateToProps
 )(ThingList)

@@ -9,6 +9,10 @@ import ui from 'redux-ui'
 import {updateThing} from '../actions'
 import {createThingDialogState} from '../uistate'
 
+@connect(
+  (state) => { return {things: state.things.toJS()} }
+)
+@ui()
 export default class ThingEditDialog extends React.Component {
   static proptypes = { dispatch: React.PropTypes.func.isRequired }
 
@@ -58,14 +62,3 @@ export default class ThingEditDialog extends React.Component {
     )
   }
 }
-ThingEditDialog = ui()(ThingEditDialog)  // eslint-disable-line no-class-assign
-
-const mapStateToProps = (state) => {
-  return {things: state.things.toJS()}
-}
-
-// TODO: Change this to a decorator once it's available in babel
-const ThingEditDialogContainer = connect(
-  mapStateToProps
-)(ThingEditDialog)
-export default ThingEditDialogContainer

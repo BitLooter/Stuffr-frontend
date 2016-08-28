@@ -6,7 +6,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 
 import { postThing } from '../actions'
 
-class AddThing extends React.Component {
+@connect()
+export default class AddThing extends React.Component {
   static proptypes = { dispatch: React.PropTypes.func.isRequired }
 
   constructor (props) {
@@ -28,7 +29,3 @@ class AddThing extends React.Component {
     )
   }
 }
-
-const AddThingContainer = connect()(AddThing)
-
-export default AddThingContainer
