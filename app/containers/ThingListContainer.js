@@ -3,11 +3,11 @@ import { connect } from 'react-redux'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import ui from 'redux-ui'
 
-import {createThingDialogState} from '../uistate'
+import {showThingEditDialog} from '../uistate'
 
 let ThingList = ({ things, updateUI }) =>
   <Table multiSelectable onCellClick={(row) => {
-    updateUI('thingDialog', createThingDialogState(true, things[row]))
+    showThingEditDialog('edit', things[row])
   }}>
     <TableHeader>
       <TableRow>

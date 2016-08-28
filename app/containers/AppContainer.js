@@ -5,21 +5,24 @@ import ui from 'redux-ui'
 import AddThingContainer from './AddThingContainer'
 import ThingListContainer from './ThingListContainer'
 import ThingEditDialogContainer from './ThingEditDialogContainer'
-import {createThingDialogState} from '../uistate'
+import {defaultUIState, setUpdateUIFunction} from '../uistate'
 
-let App = () => (
-  <div>
-    <AddThingContainer />
-    <ThingListContainer />
-    <ThingEditDialogContainer />
-  </div>
-)
-
-App = ui({
-  state: {
-    thingDialog: createThingDialogState(false)
+@connect()
+@ui({
+  state: defaultUIState
+})
+export default class App extends React.Component {
+  constructor (props) {
+    super(props)
+    setUpdateUIFunction(props.updateUI)
   }
-})(App)
-const AppContainer = connect()(App)
 
-export default AppContainer
+  render () {
+    return (
+      <div>
+        <AddThingContainer />
+        <ThingListContainer />
+        <ThingEditDialogContainer />
+      </div>
+  ) }
+}

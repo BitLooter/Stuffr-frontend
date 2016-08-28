@@ -7,7 +7,7 @@ import TextField from 'material-ui/TextField'
 import ui from 'redux-ui'
 
 import {updateThing} from '../actions'
-import {createThingDialogState} from '../uistate'
+import {hideThingEditDialog} from '../uistate'
 
 @connect(
   (state) => { return {things: state.things.toJS()} }
@@ -17,14 +17,14 @@ export default class ThingEditDialog extends React.Component {
   static proptypes = { dispatch: React.PropTypes.func.isRequired }
 
   close = () => {
-    this.props.updateUI('thingDialog', createThingDialogState(false))
+    hideThingEditDialog()
   }
 
   handleDone = () => {
     // TODO: check that data changed before submitting
     // TODO: verify data
-    const newThing = {name: this.refs.thingName.getValue()}
-    this.props.dispatch(updateThing(this.props.ui.thingDialog.thing.id, newThing))
+    const updateData = {name: this.refs.thingName.getValue()}
+    this.props.dispatch(updateThing(this.props.ui.thingDialog.thing.id, updateData))
     this.close()
   }
 
@@ -33,6 +33,10 @@ export default class ThingEditDialog extends React.Component {
   }
 
   render () {
+    console.log(this.props)
+    console.log(this.props.ui)
+    // console.log(this.props)
+    // console.log(this.props)
     const ui = this.props.ui.thingDialog
     const thing = ui.thing
     const buttons = [
