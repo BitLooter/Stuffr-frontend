@@ -51,6 +51,13 @@ describe('Stuffr API wrapper:', () => {
       expect(response).to.eql(['PUT_TEST'])
     })
 
+    it('Response with no data (HTTP 204)', async function () {
+      fetchMock.get(`${TEST_DOMAIN}/test204`, 204)
+      const response = await api._request('/test204')
+      expect(fetchMock.called(`${TEST_DOMAIN}/test204`)).to.be.true
+      expect(response).to.be.null
+    })
+
     it('Callback function', async function () {
       fetchMock.get(`${TEST_DOMAIN}/testcallback`, ['CALLBACK_TEST'], {name: 'CALLBACK_TEST'})
       const callbackSpy = this.sinon.spy()
@@ -68,8 +75,8 @@ describe('Stuffr API wrapper:', () => {
     })
 
     it('Throws error on 500', () => {
-      fetchMock.get(`${TEST_DOMAIN}/test404`, 404, {name: '404_TEST'})
-      return expect(api._request('/test404')).to.be.rejected
+      fetchMock.get(`${TEST_DOMAIN}/test500`, 500, {name: '500_TEST'})
+      return expect(api._request('/test500')).to.be.rejected
     })
   })
 
@@ -94,17 +101,13 @@ describe('Stuffr API wrapper:', () => {
   })
 
   it('/things/<id> (PUT)', async () => {
-    // const expectedResponse = {
-    //   id: newThingId
-    // }
     const thingId = 3
     const thingsUrlWithId = `${THINGS_URL}/${thingId}`
     fetchMock.put(thingsUrlWithId, {
-      status: 204,
-      body: {}
+      status: 204
     })
     const thingResponse = await api.updateThing(thingId, newThing)
-    expect(thingResponse).to.eql({})
+    expect(thingResponse).to.be.null
     expect(fetchMock.called(thingsUrlWithId)).to.be.true
   })
 })

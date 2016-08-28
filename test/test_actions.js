@@ -5,6 +5,7 @@ import {createAction} from 'redux-actions'
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
+import * as immutable from 'immutable'
 
 import * as actions from '../app/actions'
 import {__GetDependency__} from '../app/actions' // eslint-disable-line no-duplicate-imports
@@ -76,5 +77,27 @@ describe('API thunk actions', () => {
     expect(thunkActions[0].type).to.equal(actions.POST_THING__REQUEST)
     expect(thunkActions[1].type).to.equal(actions.POST_THING__DONE)
     expect(thunkActions[1].payload).to.eql({...newThing, ...newThingResponse})
+  })
+
+  it('Update (PUT) an existing thing', async () => {
+    const thingListAction = actions.updateThing()
+    // Should be a thunk
+    expect(thingListAction).to.be.a('function')
+
+    const updateThingId = testThings[0].id
+    const thingsUrlWithId = `${THINGS_URL}/${updateThingId}`
+    fetchMock.put(thingsUrlWithId, {
+      status: 204
+    })
+
+    const updateData = {name: 'UPDATE'}
+    const store = mockStore(immutable.fromJS(testThings))
+    await store.dispatch(actions.updateThing(updateThingId, updateData))
+    expect(fetchMock.called(thingsUrlWithId)).to.be.true
+    const thunkActions = store.getActions()
+    expect(thunkActions).to.have.length(2)
+    expect(thunkActions[0].type).to.equal(actions.UPDATE_THING__REQUEST)
+    expect(thunkActions[1].type).to.equal(actions.UPDATE_THING__DONE)
+    expect(thunkActions[1].payload).to.eql({id: updateThingId, update: updateData})
   })
 })

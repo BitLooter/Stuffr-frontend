@@ -8,17 +8,20 @@ function genericErrorReducer (state, action) {
 }
 
 function getThingListDoneReducer (state, action) {
-  return immutable.List(action.payload)
+  return immutable.fromJS(action.payload)
 }
 
 function postThingDoneReducer (state, action) {
-  return state.push({id: action.payload.id, name: action.payload.name})
+  return state.push(immutable.fromJS(action.payload))
 }
 
 function updateThingDoneReducer (state, action) {
   // Find existing thing and update it
-  const [index] = state.findEntry((t) => t.id === action.payload.id)
-  return state.set(index, {id: action.payload.id, name: action.payload.name})
+  const [index, thing] = state.findEntry((t) => {
+    // TODO: Handle entry not found
+    return t.get('id') === action.payload.id
+  })
+  return state.set(index, thing.merge(action.payload.update))
 }
 
 const things = handleActions({

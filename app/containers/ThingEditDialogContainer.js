@@ -61,7 +61,7 @@ export default class ThingEditDialog extends React.Component {
 ThingEditDialog = ui()(ThingEditDialog)  // eslint-disable-line no-class-assign
 
 const mapStateToProps = (state) => {
-  return state
+  return {things: state.things.toJS()}
 }
 
 // TODO: Change this to a decorator once it's available in babel

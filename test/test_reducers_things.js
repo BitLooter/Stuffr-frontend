@@ -10,7 +10,7 @@ import {__GetDependency__} from '../app/reducers/things'
 import * as actions from '../app/actions'
 
 const initialState = immutable.List()
-const loadedState = immutable.List(testThings)
+const loadedState = immutable.fromJS(testThings)
 
 describe('Error Reducers:', () => {
   it('Generic error', function () {
@@ -28,8 +28,8 @@ describe('Things reducers:', () => {
   it('Get all things completed', () => {
     const getThingListDoneReducer = __GetDependency__('getThingListDoneReducer')
     const action = actions.getThingListDone(testThings)
-    expect(getThingListDoneReducer(initialState, action))
-      .to.eql(loadedState)
+    expect(getThingListDoneReducer(initialState, action).toJS())
+      .to.eql(loadedState.toJS())
   })
 
   it('Adding a new thing completed', () => {
@@ -38,6 +38,18 @@ describe('Things reducers:', () => {
     const expectedState = immutable.List([newWithId])
     const action = actions.postThingDone(newWithId)
     const newState = postThingDoneReducer(initialState, action)
+    expect(newState.toJS()).to.eql(expectedState.toJS())
+  })
+
+  it('Updating an existing thing completed', () => {
+    const updateThingDoneReducer = __GetDependency__('updateThingDoneReducer')
+    const updateData = {name: 'UPDATED'}
+    // Deep copy test data before changing it
+    let expectedState = immutable.fromJS(testThings).toJS()
+    expectedState[0].name = 'UPDATED'
+    expectedState = immutable.fromJS(expectedState)
+    const action = actions.updateThingDone({id: testThings[0].id, update: updateData})
+    const newState = updateThingDoneReducer(loadedState, action)
     expect(newState.toJS()).to.eql(expectedState.toJS())
   })
 })

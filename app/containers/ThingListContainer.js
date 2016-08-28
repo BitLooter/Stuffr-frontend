@@ -2,12 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import ui from 'redux-ui'
+// import * as immutable from 'immutable'
 
 import {createThingDialogState} from '../uistate'
 
 let ThingList = ({ things, updateUI }) =>
   <Table multiSelectable onCellClick={(row) => {
-    updateUI('thingDialog', createThingDialogState(true, things.get(row)))
+    updateUI('thingDialog', createThingDialogState(true, things[row]))
   }}>
     <TableHeader>
       <TableRow>
@@ -32,7 +33,7 @@ ThingList.proptypes = {
 ThingList = ui({})(ThingList)
 
 const mapStateToProps = (state) => {
-  return state
+  return {things: state.things.toJS()}
 }
 
 // TODO: Change these to decorators once it's available in babel

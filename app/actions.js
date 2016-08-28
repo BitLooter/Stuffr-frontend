@@ -12,7 +12,7 @@ import { createAction } from 'redux-actions'
 // that makes the request. apiFunction is called with the parameters given
 // to the htunk and doneAction is dispatched with the apiFunction's return
 // value.
-function createApiThunk (apiFunction, requestAction, doneAction, errorAction) {
+function createApiThunk (apiFunction, requestAction, doneAction, errorAction, metaCreator) {
   return function (...apiParams) {
     return async function (dispatch) {
       dispatch(requestAction())
@@ -37,6 +37,7 @@ export const GET_THING_LIST__ERROR = 'GET_THING_LIST__ERROR'
 export const getThingListRequest = createAction(GET_THING_LIST__REQUEST)
 export const getThingListDone = createAction(GET_THING_LIST__DONE)
 export const getThingListError = createAction(GET_THING_LIST__ERROR)
+// getThingList - Takes no parameters and returns the list of things
 export const getThingList = createApiThunk(
   async () => { return global.stuffrapi.getThings() },
   getThingListRequest, getThingListDone, getThingListError
@@ -49,10 +50,16 @@ export const POST_THING__ERROR = 'POST_THING__ERROR'
 export const postThingRequest = createAction(POST_THING__REQUEST)
 export const postThingDone = createAction(POST_THING__DONE)
 export const postThingError = createAction(POST_THING__ERROR)
+// postThing
+//  Parameters:
+//   thing: New thing object to post to the server.
+//  Returns:
+//   Original thing merged with new server-souced data such as ID and creation date.
 export const postThing = createApiThunk(
   async function (thing) {
     const thingResponse = await global.stuffrapi.addThing(thing)
-    return {...thing, id: thingResponse.id}
+    console.log(thingResponse)
+    return {...thing, ...thingResponse}
   },
   postThingRequest, postThingDone, postThingError
 )
@@ -64,10 +71,17 @@ export const UPDATE_THING__ERROR = 'UPDATE_THING__ERROR'
 export const updateThingRequest = createAction(UPDATE_THING__REQUEST)
 export const updateThingDone = createAction(UPDATE_THING__DONE)
 export const updateThingError = createAction(UPDATE_THING__ERROR)
+// updateThing
+//  Parameters:
+//   thingId: ID of the thing to update
+//   thingData: Object containing the values to update
+//  Returns:
+//   Object containing the id of the modified thing and an object with the
+//   modified data.
 export const updateThing = createApiThunk(
   async function (thingId, thingData) {
-    const thingResponse = await global.stuffrapi.updateThing(thingId, thingData)
-    return thingResponse
+    await global.stuffrapi.updateThing(thingId, thingData)
+    return {id: thingId, update: thingData}
   },
   updateThingRequest, updateThingDone, updateThingError
 )

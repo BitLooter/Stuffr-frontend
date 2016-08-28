@@ -36,6 +36,8 @@ export class StuffrApi {
     const body = JSON.stringify(parameters)
     const fullUrl = this.urlBase + path
     log.trace(`StuffrApi generic request to ${fullUrl}`)
+
+    // Determine method if not given in parameters
     // Default method is GET, POST if paramater data is given
     if (!method) {
       if (parameters) {
@@ -60,7 +62,14 @@ export class StuffrApi {
       throw new Error(`HTTP response ${response.status} '${response.statusText}' fetching ${fullUrl}`)
     }
 
-    const returnValue = await response.json()
+    let returnValue
+    if (response.status === 204) {
+      // 204 means request was successful but did not return any data
+      returnValue = null
+    } else {
+      returnValue = await response.json()
+    }
+
     if (callback !== undefined) {
       callback(returnValue)
     }
