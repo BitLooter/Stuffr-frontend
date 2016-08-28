@@ -5,6 +5,7 @@ import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 
 import {postThing} from '../actions'
+import {createThing} from '../models'
 
 @connect()
 export default class AddThing extends React.Component {
@@ -12,7 +13,7 @@ export default class AddThing extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    this.props.dispatch(postThing({name: this.refs.thingName.getValue()}))
+    this.props.dispatch(postThing(createThing(this.refs.thingName.getValue())))
   }
 
   render () {

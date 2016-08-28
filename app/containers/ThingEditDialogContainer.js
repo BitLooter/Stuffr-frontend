@@ -29,14 +29,11 @@ export default class ThingEditDialog extends React.Component {
   }
 
   handleCancel = () => {
+    // TODO: Confirm cancel if data changed
     this.close()
   }
 
   render () {
-    console.log(this.props)
-    console.log(this.props.ui)
-    // console.log(this.props)
-    // console.log(this.props)
     const ui = this.props.ui.thingDialog
     const thing = ui.thing
     const buttons = [

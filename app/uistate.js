@@ -1,8 +1,8 @@
+import * as models from './models'
+
 export let updateUI
 
-const placeholderThing = {
-  name: 'PLACEHOLDER'
-}
+const placeholderThing = models.createThing('PLACEHOLDER')
 export const defaultUIState = {
   thingDialog: createThingDialogState(false)
 }
