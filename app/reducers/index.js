@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux'
-import { reducer as uiReducer } from 'redux-ui'
 
 import things from './things'
+import ui from './ui'
 
 const reducers = combineReducers({
   things,
-  ui: uiReducer
+  ui
 })
 
 export default reducers

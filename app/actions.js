@@ -26,9 +26,16 @@ function createApiThunk (apiFunction, requestAction, doneAction, errorAction, me
   }
 }
 
-// export const SHOW_THING_INFO = 'SHOW_THING_INFO'
-//
-// export const showThingInfo = createAction(SHOW_THING_INFO)
+/* UI actions
+*******************/
+
+export const EDIT_THING = 'EDIT_THING'
+export const editThing = createAction(EDIT_THING)
+export const EDIT_THING_DONE = 'EDIT_THING_DONE'
+export const editThingDone = createAction(EDIT_THING_DONE)
+
+/* Server API actions
+*******************/
 
 // Actions to GET things from the server.
 export const GET_THING_LIST__REQUEST = 'GET_THING_LIST__REQUEST'

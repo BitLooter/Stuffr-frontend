@@ -1,13 +1,16 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
-import ui from 'redux-ui'
 
-import {showThingEditDialog} from '../uistate'
+import {editThing} from '../actions'
 
-let ThingList = ({ things, updateUI }) =>
+const mapStateToProps = (state) => {
+  return {things: state.things.toJS()}
+}
+
+const ThingList = ({ dispatch, things, updateUI }) =>
   <Table multiSelectable onCellClick={(row) => {
-    showThingEditDialog('edit', things[row])
+    dispatch(editThing(things[row]))
   }}>
     <TableHeader>
       <TableRow>
@@ -28,11 +31,6 @@ ThingList.proptypes = {
   dispatch: React.PropTypes.func.isRequired,
   things: React.PropTypes.array.isRequired,
   onThingClick: React.PropTypes.func.isRequired
-}
-ThingList = ui({})(ThingList)
-
-const mapStateToProps = (state) => {
-  return {things: state.things.toJS()}
 }
 
 const ThingListContainer = connect(

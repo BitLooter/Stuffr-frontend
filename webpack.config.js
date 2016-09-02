@@ -21,7 +21,7 @@ var copyStaticFilesConfig = new CopyWebpackPlugin(
 )
 
 module.exports = {
-  devtool: 'cheap-eval-source-map',
+  devtool: 'cheap-module-eval-source-map',
   context: appPath,
   entry: [
     'babel-polyfill',

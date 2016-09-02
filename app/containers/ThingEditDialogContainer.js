@@ -4,27 +4,29 @@ import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
-import ui from 'redux-ui'
 
-import {updateThing} from '../actions'
-import {hideThingEditDialog} from '../uistate'
+import {updateThing, editThingDone} from '../actions'
 
 @connect(
-  (state) => { return {things: state.things.toJS()} }
+  (state) => {
+    return {
+      open: state.ui.getIn(['thingDialog', 'mode']) === Symbol.for('ui.THINGDIALOG_EDIT'),
+      thing: state.ui.getIn(['thingDialog', 'thing']).toJS()
+    }
+  }
 )
-@ui()
 export default class ThingEditDialog extends React.Component {
   static proptypes = { dispatch: React.PropTypes.func.isRequired }
 
   close = () => {
-    hideThingEditDialog()
+    this.props.dispatch(editThingDone())
   }
 
   handleDone = () => {
     // TODO: check that data changed before submitting
     // TODO: verify data
     const updateData = {name: this.refs.thingName.getValue()}
-    this.props.dispatch(updateThing(this.props.ui.thingDialog.thing.id, updateData))
+    this.props.dispatch(updateThing(this.props.thing.id, updateData))
     this.close()
   }
 
@@ -34,8 +36,7 @@ export default class ThingEditDialog extends React.Component {
   }
 
   render () {
-    const ui = this.props.ui.thingDialog
-    const thing = ui.thing
+    const thing = this.props.thing
     const buttons = [
       <div>
         <FlatButton
@@ -53,7 +54,7 @@ export default class ThingEditDialog extends React.Component {
       <Dialog
         title={thing.name}
         actions={buttons}
-        open={ui.open}
+        open={this.props.open}
         onRequestClose={this.handleCancel}
       >
         Name: <TextField name='thingName' ref='thingName'

@@ -28,7 +28,6 @@
     "redux-actions": "0.10.1",
     "redux-logger": "2.6.1",
     "redux-thunk": "2.1.0",
-    "redux-ui": "0.0.15",
     "webpack": "1.13.1"
   },
   "devDependencies": {
