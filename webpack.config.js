@@ -7,7 +7,6 @@ var appPath = path.join(__dirname, '/app')
 var htmlWebpackPluginConfig = new HtmlWebpackPlugin({
   title: 'Stuffr',
   template: path.join(__dirname, '/app/index.ejs'),
-  inject: 'body',
   xhtml: true,
   hash: true
 })
@@ -45,7 +44,9 @@ module.exports = {
           presets: ['es2015', 'stage-1', 'react'],
           plugins: ['transform-decorators-legacy']
         }
-      }
+      },
+      { test: /\.css$/, include: appPath, loader: 'style!css' },
+      { test: /\.styl$/, include: appPath, loader: 'style!css!stylus' }
     ]
   },
   output: {
