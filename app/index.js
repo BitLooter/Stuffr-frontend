@@ -17,8 +17,6 @@ import { StuffrApi } from './stuffrapi'
 
 import loadConfig from './config'
 
-require('./style.styl')
-
 injectTapEventPlugin()  // Needed for material-ui
 
 const logger = createLogger({collapsed: true})

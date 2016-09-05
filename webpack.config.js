@@ -25,6 +25,7 @@ module.exports = {
   entry: [
     'babel-polyfill',
     'isomorphic-fetch',
+    './style.styl',
     './index.js'
   ],
   module: {
