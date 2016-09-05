@@ -10,10 +10,10 @@ import {createNewThing} from '../actions'
 export default class App extends React.Component {
   render () {
     return (
-      <div>
+      <div className='app'>
         <ThingListContainer />
         <ThingEditDialogContainer show={false} />
-        <FloatingActionButton onClick={() => this.props.dispatch(createNewThing())}>
+        <FloatingActionButton className='actionButton' onClick={() => this.props.dispatch(createNewThing())}>
           +
         </FloatingActionButton>
       </div>

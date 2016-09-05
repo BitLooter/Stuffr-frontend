@@ -8,8 +8,9 @@ const mapStateToProps = (state) => {
   return {things: state.things.toJS()}
 }
 
+// TODO: Height needs to be set to the height of the window
 const ThingList = ({ dispatch, things, updateUI }) =>
-  <Table multiSelectable onCellClick={(row) => {
+  <Table multiSelectable height='700px' onCellClick={(row) => {
     dispatch(editThing(things[row]))
   }}>
     <TableHeader>
@@ -18,7 +19,7 @@ const ThingList = ({ dispatch, things, updateUI }) =>
         <TableHeaderColumn>Name</TableHeaderColumn>
       </TableRow>
     </TableHeader>
-    <TableBody>
+    <TableBody showRowHover>
       {things.map((thing) =>
         <TableRow key={thing.id}>
           <TableRowColumn>{thing.id}</TableRowColumn>
