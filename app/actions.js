@@ -29,6 +29,8 @@ function createApiThunk (apiFunction, requestAction, doneAction, errorAction, me
 /* UI actions
 *******************/
 
+export const CREATE_NEW_THING = 'CREATE_NEW_THING'
+export const createNewThing = createAction(CREATE_NEW_THING)
 export const EDIT_THING = 'EDIT_THING'
 export const editThing = createAction(EDIT_THING)
 export const EDIT_THING_DONE = 'EDIT_THING_DONE'
@@ -65,7 +67,6 @@ export const postThingError = createAction(POST_THING__ERROR)
 export const postThing = createApiThunk(
   async function (thing) {
     const thingResponse = await global.stuffrapi.addThing(thing)
-    console.log(thingResponse)
     return {...thing, ...thingResponse}
   },
   postThingRequest, postThingDone, postThingError

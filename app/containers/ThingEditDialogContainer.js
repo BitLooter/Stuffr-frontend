@@ -1,16 +1,17 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import log from 'loglevel'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 
-import {updateThing, editThingDone} from '../actions'
+import {postThing, updateThing, editThingDone} from '../actions'
 
 @connect(
   (state) => {
     return {
-      open: state.ui.getIn(['thingDialog', 'mode']) === Symbol.for('ui.THINGDIALOG_EDIT'),
+      mode: state.ui.getIn(['thingDialog', 'mode']),
       thing: state.ui.getIn(['thingDialog', 'thing']).toJS()
     }
   }
@@ -25,8 +26,15 @@ export default class ThingEditDialog extends React.Component {
   handleDone = () => {
     // TODO: check that data changed before submitting
     // TODO: verify data
-    const updateData = {name: this.refs.thingName.getValue()}
-    this.props.dispatch(updateThing(this.props.thing.id, updateData))
+    if (this.props.mode === Symbol.for('ui.THINGDIALOG_EDIT')) {
+      const updateData = {name: this.refs.thingName.getValue()}
+      log.info(`Updating existing thing named ${updateData.name}`)
+      this.props.dispatch(updateThing(this.props.thing.id, updateData))
+    } else if (this.props.mode === Symbol.for('ui.THINGDIALOG_NEW')) {
+      const newData = {name: this.refs.thingName.getValue()}
+      log.info(`Creating new thing named ${newData.name}`)
+      this.props.dispatch(postThing(newData))
+    } // TODO: Error for unknown modes
     this.close()
   }
 
@@ -54,7 +62,7 @@ export default class ThingEditDialog extends React.Component {
       <Dialog
         title={thing.name}
         actions={buttons}
-        open={this.props.open}
+        open={this.props.mode !== Symbol.for('ui.THINGDIALOG_CLOSED')}
         onRequestClose={this.handleCancel}
       >
         Name: <TextField name='thingName' ref='thingName'
