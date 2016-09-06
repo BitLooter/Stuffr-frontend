@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 
-import {postThing, updateThing, editThingDone} from '../actions'
+import {postThing, updateThing, deleteThing, editThingDone} from '../actions'
 
 @connect(
   (state) => {
@@ -38,6 +38,12 @@ export default class ThingEditDialog extends React.Component {
     this.close()
   }
 
+  handleDelete = () => {
+    // TODO: Confirm deletion with user
+    this.props.dispatch(deleteThing(this.props.thing.id))
+    this.close()
+  }
+
   handleCancel = () => {
     // TODO: Confirm cancel if data changed
     this.close()
@@ -47,6 +53,11 @@ export default class ThingEditDialog extends React.Component {
     const thing = this.props.thing
     const buttons = [
       <div>
+        <FlatButton
+          style={{float: 'left'}}
+          label='Delete'
+          onClick={this.handleDelete}
+        />
         <FlatButton
           label='Cancel'
           onClick={this.handleCancel}

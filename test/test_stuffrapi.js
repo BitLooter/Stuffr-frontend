@@ -110,4 +110,15 @@ describe('Stuffr API wrapper:', () => {
     expect(thingResponse).to.be.null
     expect(fetchMock.called(thingsUrlWithId)).to.be.true
   })
+
+  it('/things/<id> (DELETE)', async () => {
+    const thingId = 3
+    const thingsUrlWithId = `${THINGS_URL}/${thingId}`
+    fetchMock.delete(thingsUrlWithId, {
+      status: 204
+    })
+    const thingResponse = await api.deleteThing(thingId)
+    expect(thingResponse).to.be.null
+    expect(fetchMock.called(thingsUrlWithId)).to.be.true
+  })
 })

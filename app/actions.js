@@ -93,3 +93,23 @@ export const updateThing = createApiThunk(
   },
   updateThingRequest, updateThingDone, updateThingError
 )
+
+// Actions to remove a thing on the server.
+export const DELETE_THING__REQUEST = 'DELETE_THING__REQUEST'
+export const DELETE_THING__DONE = 'DELETE_THING__DONE'
+export const DELETE_THING__ERROR = 'DELETE_THING__ERROR'
+export const deleteThingRequest = createAction(DELETE_THING__REQUEST)
+export const deleteThingDone = createAction(DELETE_THING__DONE)
+export const deleteThingError = createAction(DELETE_THING__ERROR)
+// deleteThing
+//  Parameters:
+//   thingId: ID of the thing to delete
+//  Returns:
+//   ID of the thing deleted
+export const deleteThing = createApiThunk(
+  async function (thingId) {
+    await global.stuffrapi.deleteThing(thingId)
+    return thingId
+  },
+  deleteThingRequest, deleteThingDone, deleteThingError
+)

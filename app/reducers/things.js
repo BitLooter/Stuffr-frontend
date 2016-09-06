@@ -24,13 +24,24 @@ function updateThingDoneReducer (state, action) {
   return state.set(index, thing.merge(action.payload.update))
 }
 
+function deleteThingDoneReducer (state, action) {
+  const [index] = state.findEntry((t) => {
+    // TODO: Handle entry not found
+    return t.get('id') === action.payload
+  })
+  const newState = state.delete(index)
+  return newState
+}
+
 const things = handleActions({
   GET_THING_LIST__DONE: getThingListDoneReducer,
   GET_THING_LIST__ERROR: genericErrorReducer,
   POST_THING__DONE: postThingDoneReducer,
   POST_THING__ERROR: genericErrorReducer,
   UPDATE_THING__DONE: updateThingDoneReducer,
-  UPDATE_THING__ERROR: genericErrorReducer
+  UPDATE_THING__ERROR: genericErrorReducer,
+  DELETE_THING__DONE: deleteThingDoneReducer,
+  DELETE_THING__ERROR: genericErrorReducer
 }, immutable.List())
 
 export default things

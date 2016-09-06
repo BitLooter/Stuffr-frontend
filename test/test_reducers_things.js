@@ -1,4 +1,5 @@
 /* eslint-env mocha */
+// TODO: Test error conditions
 
 import {expect} from 'chai'
 import * as immutable from 'immutable'
@@ -50,6 +51,15 @@ describe('Things reducers:', () => {
     expectedState = immutable.fromJS(expectedState)
     const action = actions.updateThingDone({id: testThings[0].id, update: updateData})
     const newState = updateThingDoneReducer(loadedState, action)
+    expect(newState.toJS()).to.eql(expectedState.toJS())
+  })
+
+  it('Deleting a thing completed', () => {
+    const deleteThingDoneReducer = __GetDependency__('deleteThingDoneReducer')
+    const deleteThingId = testThings[0].id
+    const expectedState = immutable.fromJS(testThings).delete(0)
+    const action = actions.deleteThingDone(deleteThingId)
+    const newState = deleteThingDoneReducer(loadedState, action)
     expect(newState.toJS()).to.eql(expectedState.toJS())
   })
 })

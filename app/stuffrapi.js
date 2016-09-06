@@ -23,10 +23,18 @@ export class StuffrApi {
 
   // PUT request to /things/<id>
   async updateThing (thingId, thingData, callback) {
-    log.info('StuffrApi request for updateThing')
+    log.info(`StuffrApi request for updateThing <${thingId}>`)
     return await this._request(`/things/${thingId}`,
         {method: 'PUT',
          parameters: thingData,
+         callback})
+  }
+
+  // DELETE request to /things/<id>
+  async deleteThing (thingId, callback) {
+    log.info(`StuffrApi request for deleteThing <${thingId}>`)
+    return await this._request(`/things/${thingId}`,
+        {method: 'DELETE',
          callback})
   }
 
