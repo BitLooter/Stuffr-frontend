@@ -1,3 +1,4 @@
+import HttpStatus from 'http-status'
 import log from 'loglevel'
 
 export class StuffrApi {
@@ -71,7 +72,7 @@ export class StuffrApi {
     }
 
     let returnValue
-    if (response.status === 204) {
+    if (response.status === HttpStatus.NO_CONTENT) {
       // 204 means request was successful but did not return any data
       returnValue = null
     } else {

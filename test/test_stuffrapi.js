@@ -4,6 +4,7 @@ import chai, {expect} from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import 'mocha-sinon'
 import fetchMock from 'fetch-mock'
+import HttpStatus from 'http-status'
 
 import {StuffrApi} from '../app/stuffrapi'
 import {TEST_DOMAIN, testThings, newThing, newThingId} from './dummydata'
@@ -52,7 +53,7 @@ describe('Stuffr API wrapper:', () => {
     })
 
     it('Response with no data (HTTP 204)', async function () {
-      fetchMock.get(`${TEST_DOMAIN}/test204`, 204)
+      fetchMock.get(`${TEST_DOMAIN}/test204`, HttpStatus.NO_CONTENT)
       const response = await api._request('/test204')
       expect(fetchMock.called(`${TEST_DOMAIN}/test204`)).to.be.true
       expect(response).to.be.null
@@ -70,12 +71,12 @@ describe('Stuffr API wrapper:', () => {
     })
 
     it('Throws error on 404', () => {
-      fetchMock.get(`${TEST_DOMAIN}/test404`, 404, {name: '404_TEST'})
+      fetchMock.get(`${TEST_DOMAIN}/test404`, HttpStatus.NOT_FOUND, {name: '404_TEST'})
       return expect(api._request('/test404')).to.be.rejected
     })
 
     it('Throws error on 500', () => {
-      fetchMock.get(`${TEST_DOMAIN}/test500`, 500, {name: '500_TEST'})
+      fetchMock.get(`${TEST_DOMAIN}/test500`, HttpStatus.INTERNAL_SERVER_ERROR, {name: '500_TEST'})
       return expect(api._request('/test500')).to.be.rejected
     })
   })
