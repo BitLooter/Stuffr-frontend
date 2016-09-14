@@ -8,6 +8,10 @@ import TextField from 'material-ui/TextField'
 
 import {postThing, updateThing, deleteThing, editThingDone} from '../actions'
 
+const THINGDIALOG_NEW = Symbol.for('ui.THINGDIALOG_NEW')
+const THINGDIALOG_EDIT = Symbol.for('ui.THINGDIALOG_EDIT')
+const THINGDIALOG_CLOSED = Symbol.for('ui.THINGDIALOG_CLOSED')
+
 @connect(
   (state) => {
     return {
@@ -26,11 +30,11 @@ export default class ThingEditDialog extends React.Component {
   handleDone = () => {
     // TODO: check that data changed before submitting
     // TODO: verify data
-    if (this.props.mode === Symbol.for('ui.THINGDIALOG_EDIT')) {
+    if (this.props.mode === THINGDIALOG_EDIT) {
       const updateData = {name: this.refs.thingName.getValue()}
       log.info(`Updating existing thing named ${updateData.name}`)
       this.props.dispatch(updateThing(this.props.thing.id, updateData))
-    } else if (this.props.mode === Symbol.for('ui.THINGDIALOG_NEW')) {
+    } else if (this.props.mode === THINGDIALOG_NEW) {
       const newData = {name: this.refs.thingName.getValue()}
       log.info(`Creating new thing named ${newData.name}`)
       this.props.dispatch(postThing(newData))
@@ -73,12 +77,15 @@ export default class ThingEditDialog extends React.Component {
       <Dialog
         title={thing.name}
         actions={buttons}
-        open={this.props.mode !== Symbol.for('ui.THINGDIALOG_CLOSED')}
+        open={this.props.mode !== THINGDIALOG_CLOSED}
         onRequestClose={this.handleCancel}
       >
         Name: <TextField name='thingName' ref='thingName'
           defaultValue={thing.name} /><br />
-        Date added: {thing.date_created}
+        {this.props.mode !== THINGDIALOG_EDIT ? '' : (<div>
+          Date added: {thing.date_created}<br />
+          Last updated: {thing.date_updated}
+        </div>)}
       </Dialog>
     )
   }
