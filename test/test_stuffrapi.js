@@ -7,7 +7,7 @@ import fetchMock from 'fetch-mock'
 import HttpStatus from 'http-status'
 
 import {StuffrApi} from '../app/stuffrapi'
-import {TEST_DOMAIN, testThings, newThing, newThingId} from './dummydata'
+import {TEST_DOMAIN, TEST_THINGS, NEW_THING, NEW_THING_ID} from './dummydata'
 
 const THINGS_URL = `${TEST_DOMAIN}/things`
 
@@ -82,21 +82,22 @@ describe('Stuffr API wrapper:', () => {
   })
 
   it('/things (GET)', async () => {
-    fetchMock.get(THINGS_URL, testThings)
+    fetchMock.get(THINGS_URL, TEST_THINGS)
+    const expectedThings = TEST_THINGS
     const things = await api.getThings()
-    expect(things).to.eql(testThings)
+    expect(things).to.eql(expectedThings)
     expect(fetchMock.called(THINGS_URL)).to.be.true
   })
 
   it('/things (POST)', async () => {
     const expectedResponse = {
-      id: newThingId
+      id: NEW_THING_ID
     }
     fetchMock.post(THINGS_URL, {
       status: 201,
       body: expectedResponse
     })
-    const thingResponse = await api.addThing(newThing)
+    const thingResponse = await api.addThing(NEW_THING)
     expect(thingResponse).to.eql(expectedResponse)
     expect(fetchMock.called(THINGS_URL)).to.be.true
   })
@@ -107,7 +108,7 @@ describe('Stuffr API wrapper:', () => {
     fetchMock.put(thingsUrlWithId, {
       status: 204
     })
-    const thingResponse = await api.updateThing(thingId, newThing)
+    const thingResponse = await api.updateThing(thingId, NEW_THING)
     expect(thingResponse).to.be.null
     expect(fetchMock.called(thingsUrlWithId)).to.be.true
   })

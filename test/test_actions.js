@@ -10,7 +10,7 @@ import 'mocha-sinon'
 import * as actions from '../app/actions'
 import {__GetDependency__} from '../app/actions' // eslint-disable-line no-duplicate-imports
 import {StuffrApi} from '../app/stuffrapi'
-import {TEST_DOMAIN, testThings, newThing, newThingId} from './dummydata'
+import {TEST_DOMAIN, TEST_THINGS, NEW_THING, NEW_THING_ID} from './dummydata'
 
 const mockStore = configureStore([thunk])
 
@@ -47,7 +47,7 @@ describe('API thunk actions:', function () {
     expect(thingListAction).to.be.a('function')
 
     const getThingsStub = this.sinon.stub(global.stuffrapi, 'getThings')
-    getThingsStub.returns(testThings)
+    getThingsStub.returns(TEST_THINGS)
     const store = mockStore({})
 
     await store.dispatch(actions.getThingList())
@@ -56,7 +56,7 @@ describe('API thunk actions:', function () {
     expect(thunkActions).to.have.length(2)
     expect(thunkActions[0].type).to.equal(actions.GET_THING_LIST__REQUEST)
     expect(thunkActions[1].type).to.equal(actions.GET_THING_LIST__DONE)
-    expect(thunkActions[1].payload).to.eql(testThings)
+    expect(thunkActions[1].payload).to.eql(TEST_THINGS)
   })
 
   it('POST a new thing', async function () {
@@ -64,18 +64,18 @@ describe('API thunk actions:', function () {
     // Should be a thunk
     expect(thingListAction).to.be.a('function')
 
-    const newThingResponse = {id: newThingId}
+    const newThingResponse = {id: NEW_THING_ID}
     const addThingStub = this.sinon.stub(global.stuffrapi, 'addThing')
     addThingStub.returns(newThingResponse)
     const store = mockStore({})
 
-    await store.dispatch(actions.postThing(newThing))
-    expect(global.stuffrapi.addThing.calledWith(newThing)).to.be.true
+    await store.dispatch(actions.postThing(NEW_THING))
+    expect(global.stuffrapi.addThing.calledWith(NEW_THING)).to.be.true
     const thunkActions = store.getActions()
     expect(thunkActions).to.have.length(2)
     expect(thunkActions[0].type).to.equal(actions.POST_THING__REQUEST)
     expect(thunkActions[1].type).to.equal(actions.POST_THING__DONE)
-    expect(thunkActions[1].payload).to.eql({...newThing, ...newThingResponse})
+    expect(thunkActions[1].payload).to.eql({...NEW_THING, ...newThingResponse})
   })
 
   it('Update (PUT) an existing thing', async function () {
@@ -83,10 +83,10 @@ describe('API thunk actions:', function () {
     // Should be a thunk
     expect(updateThingAction).to.be.a('function')
 
-    const updateThingId = testThings[0].id
+    const updateThingId = TEST_THINGS[0].id
     const updateData = {name: 'UPDATE'}
     this.sinon.stub(global.stuffrapi, 'updateThing')
-    const store = mockStore(immutable.fromJS(testThings))
+    const store = mockStore(immutable.fromJS(TEST_THINGS))
 
     await store.dispatch(actions.updateThing(updateThingId, updateData))
     expect(global.stuffrapi.updateThing.calledWith(updateThingId)).to.be.true
@@ -102,9 +102,9 @@ describe('API thunk actions:', function () {
     // Should be a thunk
     expect(deleteAction).to.be.a('function')
 
-    const deleteThingId = testThings[0].id
+    const deleteThingId = TEST_THINGS[0].id
     this.sinon.stub(global.stuffrapi, 'deleteThing')
-    const store = mockStore(immutable.fromJS(testThings))
+    const store = mockStore(immutable.fromJS(TEST_THINGS))
 
     await store.dispatch(actions.deleteThing(deleteThingId))
     expect(global.stuffrapi.deleteThing.calledWith(deleteThingId)).to.be.true

@@ -3,15 +3,23 @@
 
 import {expect} from 'chai'
 import * as immutable from 'immutable'
-import 'mocha-sinon'
 import log from 'loglevel'
+import moment from 'moment'
+import 'mocha-sinon'
 
-import {testThings, newThing, newThingId} from './dummydata'
+import {TEST_THINGS, NEW_THING, NEW_THING_ID} from './dummydata'
 import {__GetDependency__} from '../app/reducers/things'
 import * as actions from '../app/actions'
 
 const initialState = immutable.List()
-const loadedState = immutable.fromJS(testThings)
+const loadedStateMutable = []
+for (const rawthing of TEST_THINGS) {
+  const thing = rawthing.asMutable()
+  thing.date_created = moment(thing.date_created)
+  thing.date_updated = moment(thing.date_updated)
+  loadedStateMutable.push(thing)
+}
+const loadedState = immutable.fromJS(loadedStateMutable)
 
 describe('Error Reducers:', () => {
   it('Generic error', function () {
@@ -28,14 +36,14 @@ describe('Error Reducers:', () => {
 describe('Things reducers:', () => {
   it('Get all things completed', () => {
     const getThingListDoneReducer = __GetDependency__('getThingListDoneReducer')
-    const action = actions.getThingListDone(testThings)
+    const action = actions.getThingListDone(TEST_THINGS.asMutable())
     expect(getThingListDoneReducer(initialState, action).toJS())
       .to.eql(loadedState.toJS())
   })
 
   it('Adding a new thing completed', () => {
     const postThingDoneReducer = __GetDependency__('postThingDoneReducer')
-    const newWithId = {id: newThingId, ...newThing}
+    const newWithId = {id: NEW_THING_ID, ...NEW_THING}
     const expectedState = immutable.List([newWithId])
     const action = actions.postThingDone(newWithId)
     const newState = postThingDoneReducer(initialState, action)
@@ -45,19 +53,20 @@ describe('Things reducers:', () => {
   it('Updating an existing thing completed', () => {
     const updateThingDoneReducer = __GetDependency__('updateThingDoneReducer')
     const updateData = {name: 'UPDATED'}
-    // Deep copy test data before changing it
-    let expectedState = immutable.fromJS(testThings).toJS()
+    let expectedState = loadedState.toJS()
     expectedState[0].name = 'UPDATED'
     expectedState = immutable.fromJS(expectedState)
-    const action = actions.updateThingDone({id: testThings[0].id, update: updateData})
+    const action = actions.updateThingDone({id: TEST_THINGS[0].id, update: updateData})
     const newState = updateThingDoneReducer(loadedState, action)
     expect(newState.toJS()).to.eql(expectedState.toJS())
   })
 
   it('Deleting a thing completed', () => {
     const deleteThingDoneReducer = __GetDependency__('deleteThingDoneReducer')
-    const deleteThingId = testThings[0].id
-    const expectedState = immutable.fromJS(testThings).delete(0)
+    const deleteThingId = TEST_THINGS[0].id
+    const newThings = loadedState.toJS()
+    newThings.shift()
+    const expectedState = immutable.fromJS(newThings)
     const action = actions.deleteThingDone(deleteThingId)
     const newState = deleteThingDoneReducer(loadedState, action)
     expect(newState.toJS()).to.eql(expectedState.toJS())

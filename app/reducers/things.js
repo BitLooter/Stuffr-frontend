@@ -1,6 +1,7 @@
 import { handleActions } from 'redux-actions'
 import * as immutable from 'immutable'
 import log from 'loglevel'
+import moment from 'moment'
 
 function genericErrorReducer (state, action) {
   log.error(`${action.type}: ${action.payload}`)
@@ -8,7 +9,14 @@ function genericErrorReducer (state, action) {
 }
 
 function getThingListDoneReducer (state, action) {
-  return immutable.fromJS(action.payload)
+  const things = []
+  for (const rawthing of action.payload) {
+    const thing = {...rawthing}
+    thing.date_created = moment(thing.date_created)
+    thing.date_updated = moment(thing.date_updated)
+    things.push(thing)
+  }
+  return immutable.fromJS(things)
 }
 
 function postThingDoneReducer (state, action) {

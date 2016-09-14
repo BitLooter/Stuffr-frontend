@@ -83,8 +83,8 @@ export default class ThingEditDialog extends React.Component {
         Name: <TextField name='thingName' ref='thingName'
           defaultValue={thing.name} /><br />
         {this.props.mode !== THINGDIALOG_EDIT ? '' : (<div>
-          Date added: {thing.date_created}<br />
-          Last updated: {thing.date_updated}
+          Date added: {thing.date_created.calendar()}<br />
+          Last updated: {thing.date_updated.calendar()}
         </div>)}
       </Dialog>
     )
