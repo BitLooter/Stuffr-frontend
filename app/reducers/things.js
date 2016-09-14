@@ -13,7 +13,7 @@ function getThingListDoneReducer (state, action) {
   for (const rawthing of action.payload) {
     const thing = {...rawthing}
     thing.date_created = moment(thing.date_created)
-    thing.date_updated = moment(thing.date_updated)
+    thing.date_modified = moment(thing.date_modified)
     things.push(thing)
   }
   return immutable.fromJS(things)

@@ -16,7 +16,7 @@ const loadedStateMutable = []
 for (const rawthing of TEST_THINGS) {
   const thing = rawthing.asMutable()
   thing.date_created = moment(thing.date_created)
-  thing.date_updated = moment(thing.date_updated)
+  thing.date_modified = moment(thing.date_modified)
   loadedStateMutable.push(thing)
 }
 const loadedState = immutable.fromJS(loadedStateMutable)
