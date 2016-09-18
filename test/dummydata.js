@@ -11,7 +11,8 @@ export const TEST_THINGS = Immutable([
    date_created: '1970-01-01T00:00:00Z', date_modified: '1970-01-01T00:00:00Z'}
 ])
 
-export const NEW_THING = {
+export const NEW_THING = Immutable({
   name: 'NEWTHING'
-}
+})
+
 export const NEW_THING_ID = 42

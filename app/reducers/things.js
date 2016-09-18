@@ -1,7 +1,6 @@
 import { handleActions } from 'redux-actions'
-import * as immutable from 'immutable'
+import Immutable from 'seamless-immutable'
 import log from 'loglevel'
-import moment from 'moment'
 
 function genericErrorReducer (state, action) {
   log.error(`${action.type}: ${action.payload}`)
@@ -9,35 +8,32 @@ function genericErrorReducer (state, action) {
 }
 
 function getThingListDoneReducer (state, action) {
-  const things = []
-  for (const rawthing of action.payload) {
-    const thing = {...rawthing}
-    thing.date_created = moment(thing.date_created)
-    thing.date_modified = moment(thing.date_modified)
-    things.push(thing)
-  }
-  return immutable.fromJS(things)
+  return Immutable(action.payload)
 }
 
 function postThingDoneReducer (state, action) {
-  return state.push(immutable.fromJS(action.payload))
+  return state.concat(Immutable(action.payload))
 }
 
 function updateThingDoneReducer (state, action) {
-  // Find existing thing and update it
-  const [index, thing] = state.findEntry((t) => {
-    // TODO: Handle entry not found
-    return t.get('id') === action.payload.id
+  const newState = state.flatMap((t) => {
+    if (t.id === action.payload.id) {
+      return t.merge(action.payload.update, {deep: true})
+    } else {
+      return t
+    }
   })
-  return state.set(index, thing.merge(action.payload.update))
+  return newState
 }
 
 function deleteThingDoneReducer (state, action) {
-  const [index] = state.findEntry((t) => {
-    // TODO: Handle entry not found
-    return t.get('id') === action.payload
+  const newState = state.flatMap((t) => {
+    if (t.id === action.payload) {
+      return []
+    } else {
+      return t
+    }
   })
-  const newState = state.delete(index)
   return newState
 }
 
@@ -50,6 +46,6 @@ const things = handleActions({
   UPDATE_THING__ERROR: genericErrorReducer,
   DELETE_THING__DONE: deleteThingDoneReducer,
   DELETE_THING__ERROR: genericErrorReducer
-}, immutable.List())
+}, Immutable([]))
 
 export default things

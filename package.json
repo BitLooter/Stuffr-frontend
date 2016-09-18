@@ -19,7 +19,6 @@
     "http-status": "0.2.3",
     "i18next": "3.4.1",
     "i18next-xhr-backend": "1.0.1",
-    "immutable": "3.8.1",
     "isomorphic-fetch": "2.2.1",
     "material-ui": "0.15.3",
     "moment": "2.15.0",

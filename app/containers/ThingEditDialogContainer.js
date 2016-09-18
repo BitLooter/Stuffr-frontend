@@ -5,6 +5,7 @@ import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
+import moment from 'moment'
 
 import {postThing, updateThing, deleteThing, editThingDone} from '../actions'
 
@@ -15,8 +16,8 @@ const THINGDIALOG_CLOSED = Symbol.for('ui.THINGDIALOG_CLOSED')
 @connect(
   (state) => {
     return {
-      mode: state.ui.getIn(['thingDialog', 'mode']),
-      thing: state.ui.getIn(['thingDialog', 'thing']).toJS()
+      mode: state.ui.thingDialog.mode,
+      thing: state.ui.thingDialog.thing
     }
   }
 )
@@ -75,7 +76,7 @@ export default class ThingEditDialog extends React.Component {
     ]
     return (
       <Dialog
-        title={thing.name}
+        title={this.props.mode === THINGDIALOG_EDIT ? thing.name : 'New thing'}
         actions={buttons}
         open={this.props.mode !== THINGDIALOG_CLOSED}
         onRequestClose={this.handleCancel}
@@ -83,8 +84,8 @@ export default class ThingEditDialog extends React.Component {
         Name: <TextField name='thingName' ref='thingName'
           defaultValue={thing.name} /><br />
         {this.props.mode !== THINGDIALOG_EDIT ? '' : (<div>
-          Date added: {thing.date_created.calendar()}<br />
-          Last updated: {thing.date_modified.calendar()}
+          Date added: {moment(thing.date_created).calendar()}<br />
+          Last updated: {moment(thing.date_modified).calendar()}
         </div>)}
       </Dialog>
     )

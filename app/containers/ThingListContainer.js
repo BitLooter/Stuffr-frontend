@@ -5,7 +5,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import {editThing} from '../actions'
 
 const mapStateToProps = (state) => {
-  return {things: state.things.toJS()}
+  return {things: state.things}
 }
 
 // TODO: Height needs to be set to the height of the window

@@ -1,11 +1,10 @@
 /* eslint-env mocha */
 
 import {expect} from 'chai'
+import 'mocha-sinon'
 import {createAction} from 'redux-actions'
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
-import * as immutable from 'immutable'
-import 'mocha-sinon'
 
 import * as actions from '../app/actions'
 import {__GetDependency__} from '../app/actions' // eslint-disable-line no-duplicate-imports
@@ -86,7 +85,7 @@ describe('API thunk actions:', function () {
     const updateThingId = TEST_THINGS[0].id
     const updateData = {name: 'UPDATE'}
     this.sinon.stub(global.stuffrapi, 'updateThing')
-    const store = mockStore(immutable.fromJS(TEST_THINGS))
+    const store = mockStore(TEST_THINGS)
 
     await store.dispatch(actions.updateThing(updateThingId, updateData))
     expect(global.stuffrapi.updateThing.calledWith(updateThingId)).to.be.true
@@ -104,7 +103,7 @@ describe('API thunk actions:', function () {
 
     const deleteThingId = TEST_THINGS[0].id
     this.sinon.stub(global.stuffrapi, 'deleteThing')
-    const store = mockStore(immutable.fromJS(TEST_THINGS))
+    const store = mockStore(TEST_THINGS)
 
     await store.dispatch(actions.deleteThing(deleteThingId))
     expect(global.stuffrapi.deleteThing.calledWith(deleteThingId)).to.be.true
