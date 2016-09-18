@@ -21,7 +21,7 @@ injectTapEventPlugin()  // Needed for material-ui
 
 const logger = createLogger({collapsed: true})
 
-let store = redux.createStore(stuffrApp, redux.compose(
+const store = redux.createStore(stuffrApp, redux.compose(
   redux.applyMiddleware(thunk, logger),
   // Activate Redux dev tools if installed in browser
   // https://github.com/zalmoxisus/redux-devtools-extension

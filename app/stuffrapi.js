@@ -59,6 +59,7 @@ export class StuffrApi {
       headers.append('Content-Type', 'application/json')
     }
 
+    headers.append('Accept', 'application/json')
     let response
     try {
       response = await fetch(fullUrl, {method, headers, body})
