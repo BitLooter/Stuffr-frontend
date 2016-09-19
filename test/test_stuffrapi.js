@@ -6,7 +6,7 @@ import 'mocha-sinon'
 import fetchMock from 'fetch-mock'
 import HttpStatus from 'http-status'
 
-import {StuffrApi} from '../app/stuffrapi'
+import {createStuffrApi} from '../app/stuffrapi'
 import {TEST_DOMAIN, TEST_THINGS, NEW_THING, NEW_THING_ID} from './dummydata'
 
 const THINGS_URL = `${TEST_DOMAIN}/things`
@@ -16,7 +16,7 @@ chai.use(chaiAsPromised)
 describe('Stuffr API wrapper:', () => {
   let api
   beforeEach(() => {
-    api = new StuffrApi(TEST_DOMAIN)
+    api = createStuffrApi(TEST_DOMAIN)
   })
   afterEach(() => {
     api = undefined

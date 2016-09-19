@@ -1,11 +1,14 @@
-// actions.js -- Contains actions used by the code.
-//
-// Async request actions should follow this pattern:
-// VERB_NOUN__(REQUEST|DONE|ERROR)
-// REQUEST is dispatched when the request is made, DONE when successfully
-// retrieved, and ERROR if any sort of error occured.
+/* actions.js -- Contains actions used by the code.
+
+Async request actions should follow this pattern:
+  VERB_NOUN__(REQUEST|DONE|ERROR)
+REQUEST actions are dispatched when the request is made, DONE when successfully
+retrieved, and ERROR if any sort of error occured.
+/*******************************************************************/
 
 import { createAction } from 'redux-actions'
+
+import stuffrApi from './stuffrapi'
 
 // Generic thunk creator for backend API requests. *Action parameters should
 // be the appropriate action creators, and apiFunction is an async function
@@ -48,7 +51,7 @@ export const getThingListDone = createAction(GET_THING_LIST__DONE)
 export const getThingListError = createAction(GET_THING_LIST__ERROR)
 // getThingList - Takes no parameters and returns the list of things
 export const getThingList = createApiThunk(
-  async () => { return global.stuffrapi.getThings() },
+  async () => { return stuffrApi.getThings() },
   getThingListRequest, getThingListDone, getThingListError
 )
 
@@ -66,7 +69,7 @@ export const postThingError = createAction(POST_THING__ERROR)
 //   Original thing merged with new server-souced data such as ID and creation date.
 export const postThing = createApiThunk(
   async function (thing) {
-    const thingResponse = await global.stuffrapi.addThing(thing)
+    const thingResponse = await stuffrApi.addThing(thing)
     return {...thing, ...thingResponse}
   },
   postThingRequest, postThingDone, postThingError
@@ -88,7 +91,7 @@ export const updateThingError = createAction(UPDATE_THING__ERROR)
 //   modified data.
 export const updateThing = createApiThunk(
   async function (thingId, thingData) {
-    await global.stuffrapi.updateThing(thingId, thingData)
+    await stuffrApi.updateThing(thingId, thingData)
     return {id: thingId, update: thingData}
   },
   updateThingRequest, updateThingDone, updateThingError
@@ -108,7 +111,7 @@ export const deleteThingError = createAction(DELETE_THING__ERROR)
 //   ID of the thing deleted
 export const deleteThing = createApiThunk(
   async function (thingId) {
-    await global.stuffrapi.deleteThing(thingId)
+    await stuffrApi.deleteThing(thingId)
     return thingId
   },
   deleteThingRequest, deleteThingDone, deleteThingError

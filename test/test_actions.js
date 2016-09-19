@@ -8,7 +8,7 @@ import thunk from 'redux-thunk'
 
 import * as actions from '../app/actions'
 import {__GetDependency__} from '../app/actions' // eslint-disable-line no-duplicate-imports
-import {StuffrApi} from '../app/stuffrapi'
+import stuffrApi, {setupApi} from '../app/stuffrapi'
 import {TEST_DOMAIN, TEST_THINGS, NEW_THING, NEW_THING_ID} from './dummydata'
 
 const mockStore = configureStore([thunk])
@@ -28,15 +28,8 @@ describe('Generic action code:', () => {
 })
 
 describe('API thunk actions:', function () {
-  let api
   beforeEach(() => {
-    // TODO: remove this code once stuffr api is refactored to remove global
-    api = new StuffrApi(TEST_DOMAIN)
-    global.stuffrapi = api
-  })
-  afterEach(() => {
-    api = undefined
-    delete global.stuffrapi
+    setupApi(TEST_DOMAIN)
   })
 
   it('GET thing list', async function () {
@@ -45,12 +38,12 @@ describe('API thunk actions:', function () {
     // Should be a thunk
     expect(thingListAction).to.be.a('function')
 
-    const getThingsStub = this.sinon.stub(global.stuffrapi, 'getThings')
+    const getThingsStub = this.sinon.stub(stuffrApi, 'getThings')
     getThingsStub.returns(TEST_THINGS)
     const store = mockStore({})
 
     await store.dispatch(actions.getThingList())
-    expect(global.stuffrapi.getThings.calledOnce).to.be.true
+    expect(stuffrApi.getThings.calledOnce).to.be.true
     const thunkActions = store.getActions()
     expect(thunkActions).to.have.length(2)
     expect(thunkActions[0].type).to.equal(actions.GET_THING_LIST__REQUEST)
@@ -64,12 +57,12 @@ describe('API thunk actions:', function () {
     expect(thingListAction).to.be.a('function')
 
     const newThingResponse = {id: NEW_THING_ID}
-    const addThingStub = this.sinon.stub(global.stuffrapi, 'addThing')
+    const addThingStub = this.sinon.stub(stuffrApi, 'addThing')
     addThingStub.returns(newThingResponse)
     const store = mockStore({})
 
     await store.dispatch(actions.postThing(NEW_THING))
-    expect(global.stuffrapi.addThing.calledWith(NEW_THING)).to.be.true
+    expect(stuffrApi.addThing.calledWith(NEW_THING)).to.be.true
     const thunkActions = store.getActions()
     expect(thunkActions).to.have.length(2)
     expect(thunkActions[0].type).to.equal(actions.POST_THING__REQUEST)
@@ -84,11 +77,11 @@ describe('API thunk actions:', function () {
 
     const updateThingId = TEST_THINGS[0].id
     const updateData = {name: 'UPDATE'}
-    this.sinon.stub(global.stuffrapi, 'updateThing')
+    this.sinon.stub(stuffrApi, 'updateThing')
     const store = mockStore(TEST_THINGS)
 
     await store.dispatch(actions.updateThing(updateThingId, updateData))
-    expect(global.stuffrapi.updateThing.calledWith(updateThingId)).to.be.true
+    expect(stuffrApi.updateThing.calledWith(updateThingId)).to.be.true
     const thunkActions = store.getActions()
     expect(thunkActions).to.have.length(2)
     expect(thunkActions[0].type).to.equal(actions.UPDATE_THING__REQUEST)
@@ -102,11 +95,11 @@ describe('API thunk actions:', function () {
     expect(deleteAction).to.be.a('function')
 
     const deleteThingId = TEST_THINGS[0].id
-    this.sinon.stub(global.stuffrapi, 'deleteThing')
+    this.sinon.stub(stuffrApi, 'deleteThing')
     const store = mockStore(TEST_THINGS)
 
     await store.dispatch(actions.deleteThing(deleteThingId))
-    expect(global.stuffrapi.deleteThing.calledWith(deleteThingId)).to.be.true
+    expect(stuffrApi.deleteThing.calledWith(deleteThingId)).to.be.true
     const thunkActions = store.getActions()
     expect(thunkActions).to.have.length(2)
     expect(thunkActions[0].type).to.equal(actions.DELETE_THING__REQUEST)

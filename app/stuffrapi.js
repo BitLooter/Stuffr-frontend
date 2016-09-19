@@ -1,7 +1,21 @@
+/* stuffrapi.js
+Abstraction for working with Stuffr's backend REST API.
+
+An API object is exported for use in programs. To use, call the setupApi
+function at some point before it in your code, then whereever you need to call
+the Stuffr backend API you can just "import stuffrApi from 'stuffrapi'" to
+access it.
+
+For more complicated setups or if you prefer to manage the API object yourself,
+use the createStuffrApi function, which returns a new instance of the StuffrApi
+class.
+********************************************************************/
+
 import HttpStatus from 'http-status'
 import log from 'loglevel'
+// TODO: do not import loglevel but take a log object on createStuffrApi
 
-export class StuffrApi {
+class StuffrApi {
   constructor (baseUrl) {
     if (baseUrl.endsWith('/')) {
       // Strip trailing slash
@@ -85,4 +99,17 @@ export class StuffrApi {
     }
     return returnValue
   }
+}
+
+// Factory function for creating StuffrApi objects
+export function createStuffrApi (baseUrl) {
+  return new StuffrApi(baseUrl)
+}
+
+// TODO: replace null with dummy object that throws "not initialized" error
+let defaultApi = null
+export {defaultApi as default}
+
+export function setupApi (baseUrl) {
+  defaultApi = createStuffrApi(baseUrl)
 }

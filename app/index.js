@@ -12,8 +12,8 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import stuffrApp from './reducers'
 import AppContainer from './containers/AppContainer'
-import { getThingList } from './actions'
-import { StuffrApi } from './stuffrapi'
+import {getThingList} from './actions'
+import {setupApi} from './stuffrapi'
 
 import loadConfig from './config'
 
@@ -51,7 +51,7 @@ async function runStuffr () {
     log.error(`Error loading configuration file: ${e}`)
   }
 
-  global.stuffrapi = new StuffrApi(config.API_PATH)
+  setupApi(config.API_PATH)
 
   ReactDOM.render(
     <Provider store={store}>
