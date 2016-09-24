@@ -12,6 +12,7 @@ import {postThing, updateThing, deleteThing, editThingDone} from '../actions'
 const THINGDIALOG_NEW = Symbol.for('ui.THINGDIALOG_NEW')
 const THINGDIALOG_EDIT = Symbol.for('ui.THINGDIALOG_EDIT')
 const THINGDIALOG_CLOSED = Symbol.for('ui.THINGDIALOG_CLOSED')
+const MULTILINE_ROWS = 5
 
 @connect(
   (state) => {
@@ -28,15 +29,23 @@ export default class ThingEditDialog extends React.Component {
     this.props.dispatch(editThingDone())
   }
 
+  getThingData = () => {
+    return {
+      name: this.refs.thingName.getValue(),
+      description: this.refs.thingDesc.getValue(),
+      notes: this.refs.thingNotes.getValue()
+    }
+  }
+
   handleDone = () => {
     // TODO: check that data changed before submitting
     // TODO: verify data
     if (this.props.mode === THINGDIALOG_EDIT) {
-      const updateData = {name: this.refs.thingName.getValue()}
+      const updateData = this.getThingData()
       log.info(`Updating existing thing named ${updateData.name}`)
       this.props.dispatch(updateThing(this.props.thing.id, updateData))
     } else if (this.props.mode === THINGDIALOG_NEW) {
-      const newData = {name: this.refs.thingName.getValue()}
+      const newData = this.getThingData()
       log.info(`Creating new thing named ${newData.name}`)
       this.props.dispatch(postThing(newData))
     } // TODO: Error for unknown modes
@@ -81,9 +90,22 @@ export default class ThingEditDialog extends React.Component {
         open={this.props.mode !== THINGDIALOG_CLOSED}
         onRequestClose={this.handleCancel}
       >
-        Name: <TextField name='thingName' ref='thingName'
+        <TextField name='thingName' ref='thingName'
+          floatingLabelText='Name'
           defaultValue={thing.name} /><br />
-        {this.props.mode !== THINGDIALOG_EDIT ? '' : (<div>
+        <TextField name='thingDesc' ref='thingDesc'
+          floatingLabelText='Description'
+          multiLine={true}
+          rows={MULTILINE_ROWS} rowsMax={MULTILINE_ROWS}
+          fullWidth={true}
+          defaultValue={thing.description} /><br />
+        <TextField name='thingNotes' ref='thingNotes'
+          floatingLabelText='Notes'
+          multiLine={true}
+          rows={MULTILINE_ROWS} rowsMax={MULTILINE_ROWS}
+          fullWidth={true}
+          defaultValue={thing.notes} /><br />
+        {this.props.mode !== THINGDIALOG_EDIT ? null : (<div>
           Date added: {moment(thing.date_created).calendar()}<br />
           Last updated: {moment(thing.date_modified).calendar()}
         </div>)}
