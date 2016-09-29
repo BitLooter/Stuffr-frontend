@@ -14,7 +14,7 @@ export default class App extends React.Component {
       <div className='app'>
         <Menubar />
         <ThingListContainer />
-        <ThingEditDialogContainer show={false} />
+        <ThingEditDialogContainer />
         <FloatingActionButton className='actionButton' onClick={() => this.props.dispatch(createNewThing())}>+</FloatingActionButton>
       </div>
   ) }

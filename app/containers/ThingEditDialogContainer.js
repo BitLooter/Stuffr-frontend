@@ -48,7 +48,11 @@ export default class ThingEditDialog extends React.Component {
       const newData = this.getThingData()
       log.info(`Creating new thing named ${newData.name}`)
       this.props.dispatch(postThing(newData))
-    } // TODO: Error for unknown modes
+    } else {
+      const errorMessage = `Unknown mode for ThingEditDialog: ${String(this.props.mode)}`
+      log.error(errorMessage)
+      throw new Error(errorMessage)
+    }
     this.close()
   }
 
