@@ -106,8 +106,16 @@ export function createStuffrApi (baseUrl) {
   return new StuffrApi(baseUrl)
 }
 
-// TODO: replace null with dummy object that throws "not initialized" error
-let defaultApi = null
+// Dummy object to throw an error if the API was used before initalization
+const dummyApi = {
+  get (target, name) {
+    const errorMsg = 'You must call setupApi before using API functions'
+    log.error(errorMsg)
+    throw new Error(errorMsg)
+  }
+}
+
+let defaultApi = new Proxy({}, dummyApi)
 export {defaultApi as default}
 
 export function setupApi (baseUrl) {
