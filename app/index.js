@@ -38,12 +38,22 @@ i18next.use(XHR).init({
   if (error !== undefined) {
     log.error(`Error loading i18n: ${error}`)
   }
-  // TODO: check for errors and display a message instead of a blank page
-  runStuffr()
+  const appElement = document.getElementById('app')
+  runStuffr(appElement).catch((e) => {
+    const errorElement = document.createElement('div')
+    errorElement.innerHTML = `
+      <h1>Whoops!</h1>
+        <p>Something went wrong during setup.</p>
+        <p>Technical details:</p>`
+    const stackTraceElement = document.createElement('pre')
+    stackTraceElement.appendChild(document.createTextNode(e.stack))
+    errorElement.appendChild(stackTraceElement)
+    appElement.parentNode.replaceChild(errorElement, appElement)
+  })
 })
 
 // Wrap init code in a function call to allow for async actions
-async function runStuffr () {
+async function runStuffr (appElement) {
   let config
   try {
     config = await loadConfig()
@@ -59,7 +69,7 @@ async function runStuffr () {
         <AppContainer />
       </MuiThemeProvider>
     </Provider>,
-    document.getElementById('app')
+    appElement
   )
 
   store.dispatch(getThingList())
