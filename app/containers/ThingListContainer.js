@@ -4,10 +4,6 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 
 import {editThing} from '../actions'
 
-const mapStateToProps = (state) => {
-  return {things: state.things}
-}
-
 // TODO: Height needs to be set to the height of the window
 const ThingList = ({ dispatch, things }) =>
   <Table multiSelectable height='700px' onCellClick={(row) => {
@@ -31,6 +27,10 @@ const ThingList = ({ dispatch, things }) =>
 ThingList.proptypes = {
   dispatch: React.PropTypes.func.isRequired,
   things: React.PropTypes.array.isRequired
+}
+
+function mapStateToProps (state) {
+  return {things: state.database.things}
 }
 
 const ThingListContainer = connect(

@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 
-import things from './things'
+import database from './database.js'
 import ui from './ui'
 
 const reducers = combineReducers({
-  things,
+  database,
   ui
 })
 
