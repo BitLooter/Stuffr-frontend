@@ -12,8 +12,8 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import stuffrApp from './reducers'
 import AppContainer from './containers/AppContainer'
-import {getThingList} from './actions'
-import {setupApi} from './stuffrapi'
+import {getInventoryList, getThingList} from './actions'
+import stuffrApi, {setupApi} from './stuffrapi'
 
 import loadConfig from './config'
 
@@ -72,5 +72,7 @@ async function runStuffr (appElement) {
     appElement
   )
 
-  store.dispatch(getThingList())
+  // TODO: Store last used/default inventory ID
+  const inventories = await stuffrApi.getInventories()
+  store.dispatch(getThingList(inventories[0].id))
 }

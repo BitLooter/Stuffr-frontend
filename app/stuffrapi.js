@@ -24,16 +24,23 @@ class StuffrApi {
     this.urlBase = baseUrl
   }
 
-  // GET request to /things
-  async getThings (callback) {
+  // GET request to /inventories
+  async getInventories (callback) {
+    log.info('StuffrApi request for getInventories')
+    return await this._request('/inventories', {callback})
+  }
+
+  // GET request to /inventories/<inventory_id>/things
+  async getThings (inventoryId, callback) {
     log.info('StuffrApi request for getThings')
-    return await this._request('/things', {callback})
+    return await this._request(`/inventories/${inventoryId}/things`, {callback})
   }
 
   // POST request to /things
-  async addThing (parameters, callback) {
+  async addThing (inventoryId, thingData, callback) {
     log.info('StuffrApi request for addThing')
-    return await this._request('/things', {parameters, callback})
+    return await this._request(`/inventories/${inventoryId}/things`,
+        {parameters: thingData, callback})
   }
 
   // PUT request to /things/<id>

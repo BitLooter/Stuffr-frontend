@@ -42,6 +42,21 @@ export const editThingDone = createAction(EDIT_THING_DONE)
 /* Server API actions
 *******************/
 
+// Actions to GET inventories from the server.
+export const GET_INVENTORY_LIST__REQUEST = 'GET_INVENTORY_LIST__REQUEST'
+export const GET_INVENTORY_LIST__DONE = 'GET_INVENTORY_LIST__DONE'
+export const GET_INVENTORY_LIST__ERROR = 'GET_INVENTORY_LIST__ERROR'
+export const getInventoryListRequest = createAction(GET_INVENTORY_LIST__REQUEST)
+export const getInventoryListDone = createAction(GET_INVENTORY_LIST__DONE)
+export const getInventoryListError = createAction(GET_INVENTORY_LIST__ERROR)
+// getInventoryList - Takes no parameters and returns a list of inventories
+export const getInventoryList = createApiThunk(
+  async function () {
+    return stuffrApi.getInventories()
+  },
+  getInventoryListRequest, getInventoryListDone, getInventoryListError
+)
+
 // Actions to GET things from the server.
 export const GET_THING_LIST__REQUEST = 'GET_THING_LIST__REQUEST'
 export const GET_THING_LIST__DONE = 'GET_THING_LIST__DONE'
@@ -49,9 +64,11 @@ export const GET_THING_LIST__ERROR = 'GET_THING_LIST__ERROR'
 export const getThingListRequest = createAction(GET_THING_LIST__REQUEST)
 export const getThingListDone = createAction(GET_THING_LIST__DONE)
 export const getThingListError = createAction(GET_THING_LIST__ERROR)
-// getThingList - Takes no parameters and returns the list of things
+// getThingList - Takes inventory ID and returns the things it contains
 export const getThingList = createApiThunk(
-  async () => { return stuffrApi.getThings() },
+  async function (inventoryId) {
+    return stuffrApi.getThings(inventoryId)
+  },
   getThingListRequest, getThingListDone, getThingListError
 )
 
@@ -69,7 +86,7 @@ export const postThingError = createAction(POST_THING__ERROR)
 //   Original thing merged with new server-souced data such as ID and creation date.
 export const postThing = createApiThunk(
   async function (thing) {
-    const thingResponse = await stuffrApi.addThing(thing)
+    const thingResponse = await stuffrApi.addThing(1, thing)
     return {...thing, ...thingResponse}
   },
   postThingRequest, postThingDone, postThingError
