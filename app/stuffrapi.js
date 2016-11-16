@@ -22,10 +22,19 @@ class StuffrApi {
       baseUrl = baseUrl.replace(/\/$/, '')
     }
     this.urlBase = baseUrl
+    this.token = null
+  }
+
+  // GET request to /userinfo
+  async getUserInfo (callback) {
+    log.info('StuffrApi request for getUserInfo')
+    return await this._request('/userinfo', {callback})
   }
 
   // GET request to /inventories
   async getInventories (callback) {
+    // TODO: server does not seem to produce any errors if no inventories
+    // exist, fix that.
     log.info('StuffrApi request for getInventories')
     return await this._request('/inventories', {callback})
   }
@@ -60,11 +69,23 @@ class StuffrApi {
          callback})
   }
 
+  // Authenticate with server
+  async login (email, password) {
+    // TODO: Stop session cookie generation
+
+    const loginInfo = {email, password}
+    const response = await this._request('/login', {parameters: loginInfo,
+                                                    requestUrlBase: '/auth'})
+    // TODO: error handling
+    this.token = response.response.user.authentication_token
+  }
+
   // Makes request to the server specified in baseUrl
-  async _request (path, {method, parameters, callback} = {}) {
+  async _request (path, {method, parameters, requestUrlBase, callback} = {}) {
+    const urlBase = requestUrlBase || this.urlBase
     const headers = new Headers()
     const body = JSON.stringify(parameters)
-    const fullUrl = this.urlBase + path
+    const fullUrl = urlBase + path
     log.trace(`StuffrApi generic request to ${fullUrl}`)
 
     // Determine method if not given in parameters
@@ -81,6 +102,10 @@ class StuffrApi {
     }
 
     headers.append('Accept', 'application/json')
+    if (this.token) {
+      headers.append('Authentication-Token', this.token)
+    }
+
     let response
     try {
       response = await fetch(fullUrl, {method, headers, body})
@@ -90,7 +115,10 @@ class StuffrApi {
       throw new Error(`Unable to fetch ${fullUrl}`)
     }
     if (!response.ok) {
-      throw new Error(`HTTP response ${response.status} '${response.statusText}' fetching ${fullUrl}`)
+      const message = `HTTP response ${response.status} '${response.statusText}' fetching ${fullUrl}`
+      const e = new Error(message)
+      e.status = response.status
+      throw e
     }
 
     let returnValue

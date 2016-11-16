@@ -28,11 +28,17 @@ function editThingDoneReducer (state, action) {
   return state.setIn(['thingDialog', 'mode'], THINGDIALOG_CLOSED)
 }
 
+function authorizationRequiredReducer (state, action) {
+  return state.set('authorized', false)
+}
+
 const things = handleActions({
   CREATE_NEW_THING: createNewThingReducer,
   EDIT_THING: editThingReducer,
-  EDIT_THING_DONE: editThingDoneReducer
+  EDIT_THING_DONE: editThingDoneReducer,
+  AUTHORIZATION_REQUIRED: authorizationRequiredReducer
 }, Immutable({
+  authorized: true,
   thingDialog: {
     mode: THINGDIALOG_CLOSED,
     thing: placeholderThing

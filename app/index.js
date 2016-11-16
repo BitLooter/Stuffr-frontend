@@ -12,7 +12,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import stuffrApp from './reducers'
 import AppContainer from './containers/AppContainer'
-import {getInventoryList, getThingList} from './actions'
 import {setupApi} from './stuffrapi'
 
 import loadConfig from './config'
@@ -73,13 +72,4 @@ async function runStuffr (appElement) {
   )
 
   // TODO: Store last used/default inventory ID
-  // TODO: Find a better way to do startup actions
-  const startupUnsub = store.subscribe((action) => {
-    const inventories = store.getState().database.inventories
-    if (inventories.length > 0) {
-      startupUnsub()
-      store.dispatch(getThingList(inventories[0].id))
-    }
-  })
-  store.dispatch(getInventoryList())
 }

@@ -7,27 +7,61 @@ retrieved, and ERROR if any sort of error occured.
 /*******************************************************************/
 
 import { createAction } from 'redux-actions'
+import HttpStatus from 'http-status'
 
 import stuffrApi from './stuffrapi'
 
 // Generic thunk creator for backend API requests. *Action parameters should
 // be the appropriate action creators, and apiFunction is an async function
 // that makes the request. apiFunction is called with the parameters given
-// to the htunk and doneAction is dispatched with the apiFunction's return
+// to the thunk and doneAction is dispatched with the apiFunction's return
 // value.
 function createApiThunk (apiFunction, requestAction, doneAction, errorAction, metaCreator) {
   return function (...apiParams) {
-    return async function (dispatch) {
+    return async function (dispatch, getState) {
       dispatch(requestAction())
       try {
-        const response = await apiFunction(...apiParams)
+        const response = await apiFunction(...apiParams, {dispatch, getState})
         dispatch(doneAction(response))
       } catch (error) {
         dispatch(errorAction(error))
+        if (error.status === HttpStatus.UNAUTHORIZED) {
+          dispatch(authorizationRequired())
+        }
       }
     }
   }
 }
+
+/* Task actions
+*******************/
+
+// Actions to log a user into the server
+export const LOGIN_USER__REQUEST = 'LOGIN_USER__REQUEST'
+export const LOGIN_USER__DONE = 'LOGIN_USER__DONE'
+export const LOGIN_USER__ERROR = 'LOGIN_USER__ERROR'
+export const loginUserRequest = createAction(LOGIN_USER__REQUEST)
+export const loginUserDone = createAction(LOGIN_USER__DONE)
+export const loginUserError = createAction(LOGIN_USER__ERROR)
+// loginUser - Perform user login and initial client setup.
+// Parameters:
+//  dispatch: Redux dispatch function. Needed to create further actions.
+//  email: Login ID
+//  password: Make a wild guess
+// Returns:
+//  User info object
+// export function loginUser (email, password) {
+//   return async function (dispatch, getState) {
+export const loginUser = createApiThunk(
+  async function (email, password, {dispatch, getState}) {
+    await stuffrApi.login(email, password)
+    const userInfo = await stuffrApi.getUserInfo()
+    await dispatch(getInventoryList())
+    dispatch(getThingList(getState().database.inventories[0].id))
+    return userInfo
+  },
+  loginUserRequest, loginUserDone, loginUserError
+)
 
 /* UI actions
 *******************/
@@ -38,9 +72,26 @@ export const EDIT_THING = 'EDIT_THING'
 export const editThing = createAction(EDIT_THING)
 export const EDIT_THING_DONE = 'EDIT_THING_DONE'
 export const editThingDone = createAction(EDIT_THING_DONE)
+export const AUTHORIZATION_REQUIRED = 'AUTHORIZATION_REQUIRED'
+export const authorizationRequired = createAction(AUTHORIZATION_REQUIRED)
 
 /* Server API actions
 *******************/
+
+// Actions get the current user's info from the server
+export const GET_USER_INFO__REQUEST = 'GET_USER_INFO__REQUEST'
+export const GET_USER_INFO__DONE = 'GET_USER_INFO__DONE'
+export const GET_USER_INFO__ERROR = 'GET_USER_INFO__ERROR'
+export const getUserInfoRequest = createAction(GET_USER_INFO__REQUEST)
+export const getUserInfoDone = createAction(GET_USER_INFO__DONE)
+export const getUserInfoError = createAction(GET_USER_INFO__ERROR)
+// getUserInfo - Takes no parameters and returns user information
+export const getUserInfo = createApiThunk(
+  async function () {
+    return stuffrApi.getUserInfo()
+  },
+  getUserInfoRequest, getUserInfoDone, getUserInfoError
+)
 
 // Actions to GET inventories from the server.
 export const GET_INVENTORY_LIST__REQUEST = 'GET_INVENTORY_LIST__REQUEST'
@@ -86,6 +137,7 @@ export const postThingError = createAction(POST_THING__ERROR)
 //   Original thing merged with new server-souced data such as ID and creation date.
 export const postThing = createApiThunk(
   async function (thing) {
+    // TODO: Specify inventory ID
     const thingResponse = await stuffrApi.addThing(1, thing)
     return {...thing, ...thingResponse}
   },
