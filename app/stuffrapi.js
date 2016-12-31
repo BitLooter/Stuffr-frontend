@@ -39,6 +39,13 @@ class StuffrApi {
     return await this._request('/inventories', {callback})
   }
 
+  // POST request to /inventories
+  async addInventory (inventoryData, callback) {
+    log.info('StuffrApi request for addInventory')
+    return await this._request('/inventories',
+        {parameters: inventoryData, callback})
+  }
+
   // GET request to /inventories/<inventory_id>/things
   async getThings (inventoryId, callback) {
     log.info('StuffrApi request for getThings')

@@ -7,10 +7,10 @@ import 'mocha-sinon'
 import Immutable from 'seamless-immutable'
 
 import {TEST_THINGS, NEW_THING, NEW_THING_ID} from './dummydata'
-import {__GetDependency__} from '../app/reducers/things'
+import {__GetDependency__} from '../app/reducers/database'
 import * as actions from '../app/actions'
 
-const initialState = Immutable([])
+const initialState = Immutable({user: null, inventories: [], things: []})
 
 describe('Error Reducers:', () => {
   it('Generic error', function () {
@@ -24,17 +24,18 @@ describe('Error Reducers:', () => {
   })
 })
 
-describe('Things reducers:', () => {
+describe('Database reducers:', () => {
   it('Get all things completed', () => {
     const getThingListDoneReducer = __GetDependency__('getThingListDoneReducer')
     const action = actions.getThingListDone(TEST_THINGS.asMutable())
-    expect(getThingListDoneReducer(initialState, action)).to.eql(TEST_THINGS)
+    const expectedState = Immutable({user: null, inventories: [], things: TEST_THINGS})
+    expect(getThingListDoneReducer(initialState, action)).to.eql(expectedState)
   })
 
   it('Adding a new thing completed', () => {
     const postThingDoneReducer = __GetDependency__('postThingDoneReducer')
     const newWithId = {id: NEW_THING_ID, ...NEW_THING}
-    const expectedState = Immutable([newWithId])
+    const expectedState = Immutable({user: null, inventories: [], things: [newWithId]})
     const action = actions.postThingDone(newWithId)
     const newState = postThingDoneReducer(initialState, action)
     expect(newState).to.eql(expectedState)
@@ -45,18 +46,18 @@ describe('Things reducers:', () => {
     const updateData = {name: 'UPDATED'}
     let expectedState = TEST_THINGS.asMutable({deep: true})
     expectedState[0].name = 'UPDATED'
-    expectedState = Immutable(expectedState)
+    expectedState = Immutable({user: null, inventories: [], things: expectedState})
     const action = actions.updateThingDone({id: TEST_THINGS[0].id, update: updateData})
-    const newState = updateThingDoneReducer(TEST_THINGS, action)
+    const newState = updateThingDoneReducer(Immutable({user: null, inventories: [], things: TEST_THINGS}), action)
     expect(newState).to.eql(expectedState)
   })
 
   it('Deleting a thing completed', () => {
     const deleteThingDoneReducer = __GetDependency__('deleteThingDoneReducer')
     const deleteThingId = TEST_THINGS[0].id
-    const expectedState = Immutable([TEST_THINGS[1]])
+    const expectedState = Immutable({user: null, inventories: [], things: [TEST_THINGS[1]]})
     const action = actions.deleteThingDone(deleteThingId)
-    const newState = deleteThingDoneReducer(TEST_THINGS, action)
+    const newState = deleteThingDoneReducer(Immutable({user: null, inventories: [], things: TEST_THINGS}), action)
     expect(newState).to.eql(expectedState)
   })
 })

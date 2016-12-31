@@ -16,7 +16,7 @@ import stuffrApi from './stuffrapi'
 // that makes the request. apiFunction is called with the parameters given
 // to the thunk and doneAction is dispatched with the apiFunction's return
 // value.
-function createApiThunk (apiFunction, requestAction, doneAction, errorAction, metaCreator) {
+function createApiThunk (apiFunction, requestAction, doneAction, errorAction) {
   return function (...apiParams) {
     return async function (dispatch, getState) {
       dispatch(requestAction())
@@ -57,6 +57,8 @@ export const loginUser = createApiThunk(
     await stuffrApi.login(email, password)
     const userInfo = await stuffrApi.getUserInfo()
     await dispatch(getInventoryList())
+    // Inventory list is populated by previous action
+    // TODO: create selectInventory action
     dispatch(getThingList(getState().database.inventories[0].id))
     return userInfo
   },
@@ -108,6 +110,27 @@ export const getInventoryList = createApiThunk(
   getInventoryListRequest, getInventoryListDone, getInventoryListError
 )
 
+// Actions to POST a new inventory to the server.
+export const POST_INVENTORY__REQUEST = 'POST_INVENTORY__REQUEST'
+export const POST_INVENTORY__DONE = 'POST_INVENTORY__DONE'
+export const POST_INVENTORY__ERROR = 'POST_INVENTORY__ERROR'
+export const postInventoryRequest = createAction(POST_INVENTORY__REQUEST)
+export const postInventoryDone = createAction(POST_INVENTORY__DONE)
+export const postInventoryError = createAction(POST_INVENTORY__ERROR)
+// postInventory
+//  Parameters:
+//   thing: New inventory object to post to the server.
+//  Returns:
+//   Original inventory merged with new server-souced data such as ID and creation date.
+export const postInventory = createApiThunk(
+  async function (inventory) {
+    // TODO: Specify inventory ID
+    const inventoryResponse = await stuffrApi.addInventory(inventory)
+    return {...inventory, ...inventoryResponse}
+  },
+  postInventoryRequest, postInventoryDone, postInventoryError
+)
+
 // Actions to GET things from the server.
 export const GET_THING_LIST__REQUEST = 'GET_THING_LIST__REQUEST'
 export const GET_THING_LIST__DONE = 'GET_THING_LIST__DONE'
@@ -136,9 +159,10 @@ export const postThingError = createAction(POST_THING__ERROR)
 //  Returns:
 //   Original thing merged with new server-souced data such as ID and creation date.
 export const postThing = createApiThunk(
-  async function (thing) {
+  async function (inventoryId, thing) {
     // TODO: Specify inventory ID
-    const thingResponse = await stuffrApi.addThing(1, thing)
+    console.log(inventoryId)
+    const thingResponse = await stuffrApi.addThing(inventoryId, thing)
     return {...thing, ...thingResponse}
   },
   postThingRequest, postThingDone, postThingError

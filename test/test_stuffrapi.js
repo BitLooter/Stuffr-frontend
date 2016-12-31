@@ -7,8 +7,13 @@ import fetchMock from 'fetch-mock'
 import HttpStatus from 'http-status'
 
 import {createStuffrApi} from '../app/stuffrapi'
-import {TEST_DOMAIN, TEST_THINGS, NEW_THING, NEW_THING_ID} from './dummydata'
+import {TEST_DOMAIN, TEST_USER, TEST_INVENTORIES, TEST_THINGS,
+        NEW_INVENTORY, NEW_THING, NEW_INVENTORY_ID, NEW_THING_ID}
+        from './dummydata'
 
+const TEST_INVENTORY_ID = 1
+const INVENTORIES_URL = `${TEST_DOMAIN}/inventories`
+const INVENTORIES_THINGS_URL = `${INVENTORIES_URL}/${TEST_INVENTORY_ID}/things`
 const THINGS_URL = `${TEST_DOMAIN}/things`
 
 chai.use(chaiAsPromised)
@@ -23,7 +28,7 @@ describe('Stuffr API wrapper:', () => {
     fetchMock.restore()
   })
 
-  describe('Generic request method', () => {
+  describe('Generic request method:', () => {
     it('Basic GET request', async function () {
       fetchMock.get(`${TEST_DOMAIN}/testget`, ['GET_TEST'], {name: 'GET_TEST'})
       const response = await api._request('/testget')
@@ -79,48 +84,81 @@ describe('Stuffr API wrapper:', () => {
       fetchMock.get(`${TEST_DOMAIN}/test500`, HttpStatus.INTERNAL_SERVER_ERROR, {name: '500_TEST'})
       return expect(api._request('/test500')).to.be.rejected
     })
+
+    it('Throws error on unauthenticated', () => {
+      fetchMock.get(`${TEST_DOMAIN}/test401`, HttpStatus.UNAUTHORIZED, {name: '401_TEST'})
+      return expect(api._request('/test401')).to.be.rejected
+    })
   })
 
-  it('/things (GET)', async () => {
-    fetchMock.get(THINGS_URL, TEST_THINGS)
+  it('/userinfo (GET)', async () => {
+    const url = `${TEST_DOMAIN}/userinfo`
+    fetchMock.get(url, TEST_USER)
+    const userInfo = await api.getUserInfo()
+    expect(fetchMock.called(url)).to.be.true
+    expect(userInfo).to.eql(TEST_USER)
+  })
+
+  it('/inventories (GET)', async () => {
+    fetchMock.get(INVENTORIES_URL, TEST_INVENTORIES)
+    const inventories = await api.getInventories()
+    expect(fetchMock.called(INVENTORIES_URL)).to.be.true
+    expect(inventories).to.eql(TEST_INVENTORIES)
+  })
+
+  it('/inventories (POST)', async () => {
+    const expectedResponse = {
+      id: NEW_INVENTORY_ID
+    }
+    fetchMock.post(INVENTORIES_URL, {
+      status: HttpStatus.CREATED,
+      body: expectedResponse
+    })
+    const response = await api.addInventory(NEW_INVENTORY)
+    expect(fetchMock.called(INVENTORIES_URL)).to.be.true
+    expect(response).to.eql(expectedResponse)
+  })
+
+  it('/inventories/<inv_id>/things (GET)', async () => {
+    fetchMock.get(INVENTORIES_THINGS_URL, TEST_THINGS)
     const expectedThings = TEST_THINGS
-    const things = await api.getThings()
+    const things = await api.getThings(TEST_INVENTORY_ID)
+    expect(fetchMock.called(INVENTORIES_THINGS_URL)).to.be.true
     expect(things).to.eql(expectedThings)
-    expect(fetchMock.called(THINGS_URL)).to.be.true
   })
 
-  it('/things (POST)', async () => {
+  it('/inventories/<inv_id>/things (POST)', async () => {
     const expectedResponse = {
       id: NEW_THING_ID
     }
-    fetchMock.post(THINGS_URL, {
-      status: 201,
+    fetchMock.post(INVENTORIES_THINGS_URL, {
+      status: HttpStatus.CREATED,
       body: expectedResponse
     })
-    const thingResponse = await api.addThing(NEW_THING)
+    const thingResponse = await api.addThing(TEST_INVENTORY_ID, NEW_THING)
+    expect(fetchMock.called(INVENTORIES_THINGS_URL)).to.be.true
     expect(thingResponse).to.eql(expectedResponse)
-    expect(fetchMock.called(THINGS_URL)).to.be.true
   })
 
   it('/things/<id> (PUT)', async () => {
     const thingId = 3
     const thingsUrlWithId = `${THINGS_URL}/${thingId}`
     fetchMock.put(thingsUrlWithId, {
-      status: 204
+      status: HttpStatus.NO_CONTENT
     })
     const thingResponse = await api.updateThing(thingId, NEW_THING)
-    expect(thingResponse).to.be.null
     expect(fetchMock.called(thingsUrlWithId)).to.be.true
+    expect(thingResponse).to.be.null
   })
 
   it('/things/<id> (DELETE)', async () => {
     const thingId = 3
     const thingsUrlWithId = `${THINGS_URL}/${thingId}`
     fetchMock.delete(thingsUrlWithId, {
-      status: 204
+      status: HttpStatus.NO_CONTENT
     })
     const thingResponse = await api.deleteThing(thingId)
-    expect(thingResponse).to.be.null
     expect(fetchMock.called(thingsUrlWithId)).to.be.true
+    expect(thingResponse).to.be.null
   })
 })

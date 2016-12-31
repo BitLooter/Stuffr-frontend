@@ -18,7 +18,8 @@ const MULTILINE_ROWS = 5
   (state) => {
     return {
       mode: state.ui.thingDialog.mode,
-      thing: state.ui.thingDialog.thing
+      thing: state.ui.thingDialog.thing,
+      currentInventoryId: state.database.inventories.length > 0 ? state.database.inventories[0].id : null
     }
   }
 )
@@ -47,7 +48,7 @@ export default class ThingEditDialog extends React.Component {
     } else if (this.props.mode === THINGDIALOG_NEW) {
       const newData = this.getThingData()
       log.info(`Creating new thing named ${newData.name}`)
-      this.props.dispatch(postThing(newData))
+      this.props.dispatch(postThing(this.props.currentInventoryId, newData))
     } else {
       const errorMessage = `Unknown mode for ThingEditDialog: ${String(this.props.mode)}`
       log.error(errorMessage)
