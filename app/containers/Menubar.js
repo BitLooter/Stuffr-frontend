@@ -7,21 +7,23 @@ import Divider from 'material-ui/Divider'
 import Popover from 'material-ui/Popover'
 import RaisedButton from 'material-ui/RaisedButton'
 
-import {loginUser, createNewInventory} from '../actions'
+import {loginUser, createNewInventory, loadInventory} from '../actions'
 
-// PopMenu - Like a dropdown, but with a full menu instead. Child items should
-// be MenuItems.
-class PopMenu extends React.Component {
+@connect()
+class InventoryMenu extends React.Component {
   constructor (props) {
     super(props)
     this.state = {open: false}
   }
+
   handleRequestClose = () => {
     this.setState({
       open: false
     })
   }
+
   render () {
+    const inventories = this.props.inventories
     return (
       <div>
         <RaisedButton label={this.props.title}
@@ -32,7 +34,24 @@ class PopMenu extends React.Component {
         />
         <Popover open={this.state.open} anchorEl={this.state.anchor}
                  onRequestClose={() => { this.setState({open: false}) }}>
-          <Menu>{this.props.children}</Menu>
+          <Menu>
+            {this.props.inventories.map((i) => {
+              const index = inventories.indexOf(i)
+              return (
+                <MenuItem primaryText={i.name} key={index}
+                           onTouchTap={() => {
+                             this.props.dispatch(loadInventory(index))
+                             this.handleRequestClose()
+                           }} />
+              )
+            }) }
+            <Divider />
+            <MenuItem primaryText='Add a new inventory...'
+                      onTouchTap={() => {
+                        this.props.dispatch(createNewInventory())
+                        this.handleRequestClose()
+                      }}/>
+          </Menu>
         </Popover>
       </div>
   ) }
@@ -42,17 +61,7 @@ class PopMenu extends React.Component {
 const Menubar = ({dispatch, inventories, inventoryName, authenticated}) =>
   <Toolbar>
     <ToolbarGroup>
-      <PopMenu title={inventoryName}>
-        {inventories.map((i) =>
-          <MenuItem primaryText={i.name} key={inventories.indexOf(i)}/>
-        ) }
-        <Divider />
-        <MenuItem primaryText='Add a new inventory...'
-                  onTouchTap={() => {
-                    // TOOD: close menu on click
-                    dispatch(createNewInventory())
-                  }}/>
-      </PopMenu>
+      <InventoryMenu title={inventoryName} inventories={inventories} />
     </ToolbarGroup>
     <ToolbarGroup>
       <RaisedButton label={authenticated ? 'Logged in' : 'LOGGED OUT'}
@@ -64,7 +73,7 @@ const Menubar = ({dispatch, inventories, inventoryName, authenticated}) =>
   </Toolbar>
 
 function mapStateToProps (state) {
-  const currentInventory = state.database.inventories[0]
+  const currentInventory = state.database.inventories[state.ui.currentInventory]
   return {
     inventories: state.database.inventories,
     inventoryName: currentInventory ? currentInventory.name : 'Loading...',

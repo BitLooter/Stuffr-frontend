@@ -45,24 +45,39 @@ export const loginUserDone = createAction(LOGIN_USER__DONE)
 export const loginUserError = createAction(LOGIN_USER__ERROR)
 // loginUser - Perform user login and initial client setup.
 // Parameters:
-//  dispatch: Redux dispatch function. Needed to create further actions.
 //  email: Login ID
 //  password: Make a wild guess
 // Returns:
 //  User info object
-// export function loginUser (email, password) {
-//   return async function (dispatch, getState) {
 export const loginUser = createApiThunk(
   async function (email, password, {dispatch, getState}) {
     await stuffrApi.login(email, password)
     const userInfo = await stuffrApi.getUserInfo()
     await dispatch(getInventoryList())
     // Inventory list is populated by previous action
-    // TODO: create selectInventory action
-    dispatch(getThingList(getState().database.inventories[0].id))
+    // TODO: remember last used inventory
+    dispatch(loadInventory(0))
     return userInfo
   },
   loginUserRequest, loginUserDone, loginUserError
+)
+
+// Load an inventory and its things
+export const LOAD_INVENTORY__REQUEST = 'LOAD_INVENTORY__REQUEST'
+export const LOAD_INVENTORY__DONE = 'LOAD_INVENTORY__DONE'
+export const LOAD_INVENTORY__ERROR = 'LOAD_INVENTORY__ERROR'
+export const loadInventoryRequest = createAction(LOAD_INVENTORY__REQUEST)
+export const loadInventoryDone = createAction(LOAD_INVENTORY__DONE)
+export const loadInventoryError = createAction(LOAD_INVENTORY__ERROR)
+// Parameters:
+//  inventoryIndex: Index of the inventory in state.database.inventories
+export const loadInventory = createApiThunk(
+  async function (inventoryIndex, {dispatch, getState}) {
+    const inventoryId = getState().database.inventories[inventoryIndex].id
+    dispatch(setCurrentInventory(inventoryIndex))
+    dispatch(getThingList(inventoryId))
+  },
+  loadInventoryRequest, loadInventoryDone, loadInventoryError
 )
 
 /* UI actions
@@ -80,6 +95,8 @@ export const EDIT_INVENTORY = 'EDIT_INVENTORY'
 export const editInventory = createAction(EDIT_INVENTORY)
 export const EDIT_INVENTORY_DONE = 'EDIT_INVENTORY_DONE'
 export const editInventoryDone = createAction(EDIT_INVENTORY_DONE)
+export const SET_CURRENT_INVENTORY = 'SET_CURRENT_INVENTORY'
+export const setCurrentInventory = createAction(SET_CURRENT_INVENTORY)
 export const AUTHORIZATION_REQUIRED = 'AUTHORIZATION_REQUIRED'
 export const authorizationRequired = createAction(AUTHORIZATION_REQUIRED)
 

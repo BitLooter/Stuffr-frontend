@@ -49,6 +49,10 @@ function editInventoryDoneReducer (state, action) {
   return state.setIn(['inventoryDialog', 'mode'], INVENTORYDIALOG_CLOSED)
 }
 
+function setCurrentInventoryReducer (state, action) {
+  return state.set('currentInventory', action.payload)
+}
+
 function authorizationRequiredReducer (state, action) {
   return state.set('authorized', false)
 }
@@ -60,9 +64,11 @@ const ui = handleActions({
   CREATE_NEW_INVENTORY: createNewInventoryReducer,
   EDIT_INVENTORY: editInventoryReducer,
   EDIT_INVENTORY_DONE: editInventoryDoneReducer,
+  SET_CURRENT_INVENTORY: setCurrentInventoryReducer,
   AUTHORIZATION_REQUIRED: authorizationRequiredReducer
 }, Immutable({
   authorized: true,
+  currentInventory: null,
   thingDialog: {
     mode: THINGDIALOG_CLOSED,
     thing: placeholderThing

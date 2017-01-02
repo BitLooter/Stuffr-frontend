@@ -48,15 +48,18 @@ describe('Actions:', () => {
       expect(stuffrApi.login.calledOnce).to.be.true
       expect(stuffrApi.getUserInfo.calledOnce).to.be.true
       expect(stuffrApi.getInventories.calledOnce).to.be.true
+
       const thunkActions = store.getActions()
-      expect(thunkActions).to.have.length(5)
-      expect(thunkActions[0].type).to.equal(actions.LOGIN_USER__REQUEST)
-      expect(thunkActions[1].type).to.equal(actions.GET_INVENTORY_LIST__REQUEST)
-      expect(thunkActions[2].type).to.equal(actions.GET_INVENTORY_LIST__DONE)
-      expect(thunkActions[3].type).to.equal(actions.GET_THING_LIST__REQUEST)
-      // GET_THING_LIST is dispatched at the end of login, will not complete
-      // before action ends
-      expect(thunkActions[4].type).to.equal(actions.LOGIN_USER__DONE)
+      expect(thunkActions).to.have.length(8)
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes.indexOf(actions.GET_INVENTORY_LIST__DONE)).to.not.equal(-1)
+      expect(actionTypes.indexOf(actions.SET_CURRENT_INVENTORY)).to.not.equal(-1)
+      expect(actionTypes.indexOf(actions.LOGIN_USER__DONE)).to.not.equal(-1)
+      // These actions may not complete before thunk is finished, check they
+      // were started instead.
+      expect(actionTypes.indexOf(actions.GET_THING_LIST__REQUEST)).to.not.equal(-1)
+      expect(actionTypes.indexOf(actions.LOAD_INVENTORY__REQUEST)).to.not.equal(-1)
+
       const state = store.getState()
       expect(state.database.user).to.eql(TEST_USER)
       expect(state.database.inventories).to.eql(TEST_INVENTORIES)
