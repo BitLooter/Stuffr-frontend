@@ -4,6 +4,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 import ThingListContainer from './ThingListContainer'
 import ThingEditDialogContainer from './ThingEditDialogContainer'
+import InventoryEditDialog from './InventoryEditDialogContainer'
 import Menubar from './Menubar'
 import {createNewThing} from '../actions'
 
@@ -15,7 +16,9 @@ export default class App extends React.Component {
         <Menubar />
         <ThingListContainer />
         <ThingEditDialogContainer />
-        <FloatingActionButton className='actionButton' onClick={() => this.props.dispatch(createNewThing())}>+</FloatingActionButton>
+        <InventoryEditDialog />
+        <FloatingActionButton className='actionButton' onClick={() =>
+          this.props.dispatch(createNewThing())}>+</FloatingActionButton>
       </div>
   ) }
 }

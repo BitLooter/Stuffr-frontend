@@ -5,3 +5,9 @@ export function createThing (name) {
     name
   }
 }
+
+export function createInventory (name) {
+  return {
+    name
+  }
+}

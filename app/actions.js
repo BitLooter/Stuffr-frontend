@@ -74,6 +74,12 @@ export const EDIT_THING = 'EDIT_THING'
 export const editThing = createAction(EDIT_THING)
 export const EDIT_THING_DONE = 'EDIT_THING_DONE'
 export const editThingDone = createAction(EDIT_THING_DONE)
+export const CREATE_NEW_INVENTORY = 'CREATE_NEW_INVENTORY'
+export const createNewInventory = createAction(CREATE_NEW_INVENTORY)
+export const EDIT_INVENTORY = 'EDIT_INVENTORY'
+export const editInventory = createAction(EDIT_INVENTORY)
+export const EDIT_INVENTORY_DONE = 'EDIT_INVENTORY_DONE'
+export const editInventoryDone = createAction(EDIT_INVENTORY_DONE)
 export const AUTHORIZATION_REQUIRED = 'AUTHORIZATION_REQUIRED'
 export const authorizationRequired = createAction(AUTHORIZATION_REQUIRED)
 
@@ -124,7 +130,6 @@ export const postInventoryError = createAction(POST_INVENTORY__ERROR)
 //   Original inventory merged with new server-souced data such as ID and creation date.
 export const postInventory = createApiThunk(
   async function (inventory) {
-    // TODO: Specify inventory ID
     const inventoryResponse = await stuffrApi.addInventory(inventory)
     return {...inventory, ...inventoryResponse}
   },
@@ -160,8 +165,6 @@ export const postThingError = createAction(POST_THING__ERROR)
 //   Original thing merged with new server-souced data such as ID and creation date.
 export const postThing = createApiThunk(
   async function (inventoryId, thing) {
-    // TODO: Specify inventory ID
-    console.log(inventoryId)
     const thingResponse = await stuffrApi.addThing(inventoryId, thing)
     return {...thing, ...thingResponse}
   },

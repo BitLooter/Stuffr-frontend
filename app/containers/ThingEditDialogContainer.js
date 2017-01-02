@@ -70,6 +70,7 @@ export default class ThingEditDialog extends React.Component {
 
   render () {
     const thing = this.props.thing
+    // TODO: Hide delete button if mode is NEW
     const buttons = [
       <div>
         <FlatButton
