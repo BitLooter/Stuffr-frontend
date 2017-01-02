@@ -11,7 +11,7 @@ import XHR from 'i18next-xhr-backend'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import stuffrApp from './reducers'
-import AppContainer from './containers/AppContainer'
+import App from './components/App'
 import {setupApi} from './stuffrapi'
 
 import loadConfig from './config'
@@ -65,7 +65,7 @@ async function runStuffr (appElement) {
   ReactDOM.render(
     <Provider store={store}>
       <MuiThemeProvider>
-        <AppContainer />
+        <App />
       </MuiThemeProvider>
     </Provider>,
     appElement
