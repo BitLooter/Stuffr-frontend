@@ -14,12 +14,6 @@ const INVENTORYDIALOG_EDIT = Symbol.for('ui.INVENTORYDIALOG_EDIT')
 const INVENTORYDIALOG_CLOSED = Symbol.for('ui.INVENTORYDIALOG_CLOSED')
 
 @connect(
-  (state) => {
-    return {
-      mode: state.ui.inventoryDialog.mode,
-      inventory: state.ui.inventoryDialog.inventory
-    }
-  }
 )
 export default class InventoryEditDialog extends React.Component {
   static proptypes = { dispatch: React.PropTypes.func.isRequired }

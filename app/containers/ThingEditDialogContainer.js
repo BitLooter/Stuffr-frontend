@@ -17,8 +17,6 @@ const MULTILINE_ROWS = 5
 @connect(
   (state) => {
     return {
-      mode: state.ui.thingDialog.mode,
-      thing: state.ui.thingDialog.thing,
       currentInventoryId: state.database.inventories.length > 0 ? state.database.inventories[0].id : null
     }
   }
