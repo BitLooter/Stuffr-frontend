@@ -41,28 +41,23 @@ describe('Actions:', () => {
 
       const store = mockStore(TEST_STORE)
       this.sinon.stub(stuffrApi, 'login')
-      this.sinon.stub(stuffrApi, 'getUserInfo').returns(TEST_USER)
-      this.sinon.stub(stuffrApi, 'getInventories').returns(TEST_INVENTORIES)
 
+      global.window = {localStorage: {}}
       await store.dispatch(loginUserAction)
       expect(stuffrApi.login.calledOnce).to.be.true
-      expect(stuffrApi.getUserInfo.calledOnce).to.be.true
-      expect(stuffrApi.getInventories.calledOnce).to.be.true
 
       const thunkActions = store.getActions()
-      expect(thunkActions).to.have.length(8)
       const actionTypes = thunkActions.map((a) => a.type)
-      expect(actionTypes).to.include(actions.GET_INVENTORY_LIST__DONE)
-      expect(actionTypes).to.include(actions.SET_CURRENT_INVENTORY)
       expect(actionTypes).to.include(actions.LOGIN_USER__DONE)
       // These actions may not complete before thunk is finished, check they
       // were started instead.
-      expect(actionTypes).to.include(actions.GET_THING_LIST__REQUEST)
-      expect(actionTypes).to.include(actions.LOAD_INVENTORY__REQUEST)
+      expect(actionTypes).to.include(actions.LOAD_USER__REQUEST)
 
       const state = store.getState()
       expect(state.database.user).to.eql(TEST_USER)
       expect(state.database.inventories).to.eql(TEST_INVENTORIES)
+
+      expect(global.window.localStorage.apiToken).to.not.be.undefined
     })
 
     it('Logging in a user with incorrect password', async function () {
@@ -71,7 +66,7 @@ describe('Actions:', () => {
       expect(loginUserAction).to.be.a('function')
 
       const store = mockStore(TEST_STORE)
-      this.sinon.stub(stuffrApi, 'login')
+      this.sinon.stub(stuffrApi, 'login').throws('An error')
 
       await store.dispatch(loginUserAction)
       expect(stuffrApi.login.calledOnce).to.be.true
@@ -79,6 +74,33 @@ describe('Actions:', () => {
       const thunkActions = store.getActions()
       const actionTypes = thunkActions.map((a) => a.type)
       expect(actionTypes).to.include(actions.LOGIN_USER__ERROR)
+    })
+
+    it('Loading a user (loadUser)', async function () {
+      const loadUserAction = actions.loadUser()
+      // Should be a thunk
+      expect(loadUserAction).to.be.a('function')
+
+      const store = mockStore(TEST_STORE)
+      this.sinon.stub(stuffrApi, 'getUserInfo').returns(TEST_USER)
+      this.sinon.stub(stuffrApi, 'getInventories').returns(TEST_INVENTORIES)
+
+      await store.dispatch(loadUserAction)
+      expect(stuffrApi.getUserInfo.calledOnce).to.be.true
+      expect(stuffrApi.getInventories.calledOnce).to.be.true
+
+      const thunkActions = store.getActions()
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.GET_INVENTORY_LIST__DONE)
+      expect(actionTypes).to.include(actions.SET_CURRENT_INVENTORY)
+      expect(actionTypes).to.include(actions.LOAD_USER__DONE)
+      // These actions may not complete before thunk is finished, check they
+      // were started instead.
+      expect(actionTypes).to.include(actions.LOAD_INVENTORY__REQUEST)
+
+      const state = store.getState()
+      expect(state.database.user).to.eql(TEST_USER)
+      expect(state.database.inventories).to.eql(TEST_INVENTORIES)
     })
 
     it('Load an inventory (loadInventory)', async function () {

@@ -10,6 +10,7 @@ import i18next from 'i18next'
 import XHR from 'i18next-xhr-backend'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
+import {loadUser} from './actions'
 import stuffrApp from './reducers'
 import App from './components/App'
 import {setupApi} from './stuffrapi'
@@ -60,7 +61,13 @@ async function runStuffr (appElement) {
     log.error(`Error loading configuration file: ${e}`)
   }
 
-  setupApi(config.API_PATH)
+  const token = window.localStorage.apiToken
+  if (token) {
+    setupApi(config.API_PATH, window.localStorage.apiToken)
+    store.dispatch(loadUser())
+  } else {
+    setupApi(config.API_PATH)
+  }
 
   ReactDOM.render(
     <Provider store={store}>

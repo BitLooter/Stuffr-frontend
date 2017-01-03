@@ -52,6 +52,24 @@ export const loginUserError = createAction(LOGIN_USER__ERROR)
 export const loginUser = createApiThunk(
   async function (email, password, {dispatch, getState}) {
     await stuffrApi.login(email, password)
+    window.localStorage.apiToken = stuffrApi.token
+    return await dispatch(loadUser())
+  },
+  loginUserRequest, loginUserDone, loginUserError
+)
+
+// Actions to load a user and their data after login
+export const LOAD_USER__REQUEST = 'LOAD_USER__REQUEST'
+export const LOAD_USER__DONE = 'LOAD_USER__DONE'
+export const LOAD_USER__ERROR = 'LOAD_USER__ERROR'
+export const loadUserRequest = createAction(LOAD_USER__REQUEST)
+export const loadUserDone = createAction(LOAD_USER__DONE)
+export const loadUserError = createAction(LOAD_USER__ERROR)
+// loadUser - Perform initial client setup.
+// Returns:
+//  User info object
+export const loadUser = createApiThunk(
+  async function ({dispatch, getState}) {
     const userInfo = await stuffrApi.getUserInfo()
     await dispatch(getInventoryList())
     // Inventory list is populated by previous action
@@ -59,7 +77,7 @@ export const loginUser = createApiThunk(
     dispatch(loadInventory(0))
     return userInfo
   },
-  loginUserRequest, loginUserDone, loginUserError
+  loadUserRequest, loadUserDone, loadUserError
 )
 
 // Load an inventory and its things

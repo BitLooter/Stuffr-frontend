@@ -7,7 +7,7 @@ function genericErrorReducer (state, action) {
   return state
 }
 
-function loginUserDoneReducer (state, action) {
+function loadUserDoneReducer (state, action) {
   return state.set('user', Immutable(action.payload))
 }
 
@@ -52,8 +52,9 @@ function deleteThingDoneReducer (state, action) {
 }
 
 const things = handleActions({
-  LOGIN_USER__DONE: loginUserDoneReducer,
   LOGIN_USER__ERROR: genericErrorReducer,
+  LOAD_USER__DONE: loadUserDoneReducer,
+  LOAD_USER__ERROR: genericErrorReducer,
   GET_INVENTORY_LIST__DONE: getInventoryListDoneReducer,
   GET_INVENTORY_LIST__ERROR: genericErrorReducer,
   POST_INVENTORY__DONE: postInventoryDoneReducer,

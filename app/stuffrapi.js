@@ -16,13 +16,17 @@ import log from 'loglevel'
 // TODO: do not import loglevel but take a log object on createStuffrApi
 
 class StuffrApi {
-  constructor (baseUrl) {
+  constructor (baseUrl, token) {
     if (baseUrl.endsWith('/')) {
       // Strip trailing slash
       baseUrl = baseUrl.replace(/\/$/, '')
     }
     this.urlBase = baseUrl
-    this.token = null
+    if (token) {
+      this.token = token
+    } else {
+      this.token = null
+    }
   }
 
   // GET request to /userinfo
@@ -144,8 +148,8 @@ class StuffrApi {
 }
 
 // Factory function for creating StuffrApi objects
-export function createStuffrApi (baseUrl) {
-  return new StuffrApi(baseUrl)
+export function createStuffrApi (baseUrl, token) {
+  return new StuffrApi(baseUrl, token)
 }
 
 // Dummy object to throw an error if the API was used before initalization
@@ -160,6 +164,6 @@ const dummyApi = {
 let defaultApi = new Proxy({}, dummyApi)
 export {defaultApi as default}
 
-export function setupApi (baseUrl) {
-  defaultApi = createStuffrApi(baseUrl)
+export function setupApi (baseUrl, token) {
+  defaultApi = createStuffrApi(baseUrl, token)
 }
