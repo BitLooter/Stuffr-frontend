@@ -5,13 +5,16 @@ import Immutable from 'seamless-immutable'
 
 import {__GetDependency__} from '../app/reducers/ui'
 import * as actions from '../app/actions'
-import {createThing} from '../app/models'
+import {createThing, createInventory} from '../app/models'
 
 const THINGDIALOG_NEW = Symbol.for('ui.THINGDIALOG_NEW')
 const THINGDIALOG_EDIT = Symbol.for('ui.THINGDIALOG_EDIT')
 const THINGDIALOG_CLOSED = Symbol.for('ui.THINGDIALOG_CLOSED')
+const INVENTORYDIALOG_NEW = Symbol.for('ui.INVENTORYDIALOG_NEW')
+const INVENTORYDIALOG_EDIT = Symbol.for('ui.INVENTORYDIALOG_EDIT')
+const INVENTORYDIALOG_CLOSED = Symbol.for('ui.INVENTORYDIALOG_CLOSED')
 
-describe('UI reducers:', () => {
+describe('Reducers - UI:', () => {
   it('Creating a new thing', () => {
     const createNewThingReducer = __GetDependency__('createNewThingReducer')
     const testThing = createThing('')
@@ -23,7 +26,7 @@ describe('UI reducers:', () => {
     expect(createNewThingReducer(oldState, action)).to.eql(expectedState)
   })
 
-  it('Editing an exiting thing', () => {
+  it('Editing an existing thing', () => {
     const editThingReducer = __GetDependency__('editThingReducer')
     const testThing = createThing('TESTTHING')
     const action = actions.editThing(testThing)
@@ -40,5 +43,35 @@ describe('UI reducers:', () => {
     const oldState = Immutable({thingDialog: {mode: THINGDIALOG_EDIT}})
     const expectedState = Immutable({thingDialog: {mode: THINGDIALOG_CLOSED}})
     expect(editThingDoneReducer(oldState, action)).to.eql(expectedState)
+  })
+
+  it('Creating a new inventory', () => {
+    const createNewInventoryReducer = __GetDependency__('createNewInventoryReducer')
+    const testInventory = createInventory('')
+    const action = actions.createNewInventory(testInventory)
+    const oldState = Immutable({inventoryDialog: {mode: INVENTORYDIALOG_CLOSED}})
+    const expectedState = Immutable({inventoryDialog: {
+      mode: INVENTORYDIALOG_NEW, inventory: testInventory
+    }})
+    expect(createNewInventoryReducer(oldState, action)).to.eql(expectedState)
+  })
+
+  it('Editing an existing inventory', () => {
+    const editInventoryReducer = __GetDependency__('editInventoryReducer')
+    const testInventory = createInventory('TESTINVENTORY')
+    const action = actions.editInventory(testInventory)
+    const oldState = Immutable({inventoryDialog: {mode: INVENTORYDIALOG_CLOSED}})
+    const expectedState = Immutable({inventoryDialog: {
+      mode: INVENTORYDIALOG_EDIT, inventory: testInventory
+    }})
+    expect(editInventoryReducer(oldState, action)).to.eql(expectedState)
+  })
+
+  it('Finished working with inventory edit dialog', () => {
+    const editInventoryDoneReducer = __GetDependency__('editInventoryDoneReducer')
+    const action = actions.editInventoryDone()
+    const oldState = Immutable({inventoryDialog: {mode: INVENTORYDIALOG_EDIT}})
+    const expectedState = Immutable({inventoryDialog: {mode: INVENTORYDIALOG_CLOSED}})
+    expect(editInventoryDoneReducer(oldState, action)).to.eql(expectedState)
   })
 })

@@ -52,13 +52,13 @@ describe('Actions:', () => {
       const thunkActions = store.getActions()
       expect(thunkActions).to.have.length(8)
       const actionTypes = thunkActions.map((a) => a.type)
-      expect(actionTypes.indexOf(actions.GET_INVENTORY_LIST__DONE)).to.not.equal(-1)
-      expect(actionTypes.indexOf(actions.SET_CURRENT_INVENTORY)).to.not.equal(-1)
-      expect(actionTypes.indexOf(actions.LOGIN_USER__DONE)).to.not.equal(-1)
+      expect(actionTypes).to.include(actions.GET_INVENTORY_LIST__DONE)
+      expect(actionTypes).to.include(actions.SET_CURRENT_INVENTORY)
+      expect(actionTypes).to.include(actions.LOGIN_USER__DONE)
       // These actions may not complete before thunk is finished, check they
       // were started instead.
-      expect(actionTypes.indexOf(actions.GET_THING_LIST__REQUEST)).to.not.equal(-1)
-      expect(actionTypes.indexOf(actions.LOAD_INVENTORY__REQUEST)).to.not.equal(-1)
+      expect(actionTypes).to.include(actions.GET_THING_LIST__REQUEST)
+      expect(actionTypes).to.include(actions.LOAD_INVENTORY__REQUEST)
 
       const state = store.getState()
       expect(state.database.user).to.eql(TEST_USER)
@@ -71,20 +71,66 @@ describe('Actions:', () => {
       expect(loginUserAction).to.be.a('function')
 
       const store = mockStore(TEST_STORE)
-      // TODO: Figure out how to get a stub for login to raise an error
-      this.sinon.stub(stuffrApi, 'login').throws('Any error')
+      this.sinon.stub(stuffrApi, 'login')
 
       await store.dispatch(loginUserAction)
+      expect(stuffrApi.login.calledOnce).to.be.true
+
       const thunkActions = store.getActions()
-      expect(thunkActions).to.have.length(2)
-      expect(thunkActions[0].type).to.equal(actions.LOGIN_USER__REQUEST)
-      expect(thunkActions[1].type).to.equal(actions.LOGIN_USER__ERROR)
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.LOGIN_USER__ERROR)
+    })
+
+    it('Load an inventory (loadInventory)', async function () {
+      const loadInventoryAction = actions.loadInventory(0)
+      // Should be a thunk
+      expect(loadInventoryAction).to.be.a('function')
+
+      const store = mockStore(TEST_STORE)
+
+      await store.dispatch(loadInventoryAction)
+      const thunkActions = store.getActions()
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.SET_CURRENT_INVENTORY)
+      expect(actionTypes).to.include(actions.LOAD_INVENTORY__DONE)
+    })
+
+    it('Load an invalid inventory', async function () {
+      const invalidIndex = TEST_STORE.database.inventories.length
+      const loadInventoryAction = actions.loadInventory(invalidIndex)
+      // Should be a thunk
+      expect(loadInventoryAction).to.be.a('function')
+
+      const store = mockStore(TEST_STORE)
+
+      await store.dispatch(loadInventoryAction)
+      const thunkActions = store.getActions()
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.LOAD_INVENTORY__ERROR)
     })
   })
 
   describe('API thunk actions:', function () {
     beforeEach(() => {
       setupApi(TEST_DOMAIN)
+    })
+
+    it('GET user info', async function () {
+      // TODO: Test errors
+      const userInfoAction = actions.getUserInfo()
+      // Should be a thunk
+      expect(userInfoAction).to.be.a('function')
+
+      this.sinon.stub(stuffrApi, 'getUserInfo').returns(TEST_USER)
+      const store = mockStore({})
+
+      await store.dispatch(userInfoAction)
+      expect(stuffrApi.getUserInfo.calledOnce).to.be.true
+      const thunkActions = store.getActions()
+      expect(thunkActions).to.have.length(2)
+      expect(thunkActions[0].type).to.equal(actions.GET_USER_INFO__REQUEST)
+      expect(thunkActions[1].type).to.equal(actions.GET_USER_INFO__DONE)
+      expect(thunkActions[1].payload).to.eql(TEST_USER)
     })
 
     it('GET inventory list', async function () {
@@ -182,7 +228,7 @@ describe('Actions:', () => {
       expect(thunkActions[1].payload).to.eql({id: updateThingId, update: updateData})
     })
 
-    it('Delete a thing', async function () {
+    it('DELETE a thing', async function () {
       const deleteAction = actions.deleteThing()
       // Should be a thunk
       expect(deleteAction).to.be.a('function')

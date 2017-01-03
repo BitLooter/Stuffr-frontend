@@ -6,13 +6,14 @@ import log from 'loglevel'
 import 'mocha-sinon'
 import Immutable from 'seamless-immutable'
 
-import {TEST_THINGS, NEW_THING, NEW_THING_ID} from './dummydata'
+import {TEST_THINGS, NEW_THING, NEW_THING_ID,
+        NEW_INVENTORY, NEW_INVENTORY_ID} from './dummydata'
 import {__GetDependency__} from '../app/reducers/database'
 import * as actions from '../app/actions'
 
 const initialState = Immutable({user: null, inventories: [], things: []})
 
-describe('Error Reducers:', () => {
+describe('Reducers - Errors:', () => {
   it('Generic error', function () {
     const genericErrorReducer = __GetDependency__('genericErrorReducer')
     const errorMessage = 'Unit test dummy error'
@@ -24,7 +25,7 @@ describe('Error Reducers:', () => {
   })
 })
 
-describe('Database reducers:', () => {
+describe('Reducers - Database:', () => {
   it('Get all things completed', () => {
     const getThingListDoneReducer = __GetDependency__('getThingListDoneReducer')
     const action = actions.getThingListDone(TEST_THINGS.asMutable())
@@ -58,6 +59,15 @@ describe('Database reducers:', () => {
     const expectedState = Immutable({user: null, inventories: [], things: [TEST_THINGS[1]]})
     const action = actions.deleteThingDone(deleteThingId)
     const newState = deleteThingDoneReducer(Immutable({user: null, inventories: [], things: TEST_THINGS}), action)
+    expect(newState).to.eql(expectedState)
+  })
+
+  it('Adding a new inventory completed', () => {
+    const postInventoryDoneReducer = __GetDependency__('postInventoryDoneReducer')
+    const newWithId = {id: NEW_INVENTORY_ID, ...NEW_INVENTORY}
+    const expectedState = initialState.set('inventories', [newWithId])
+    const action = actions.postInventoryDone(newWithId)
+    const newState = postInventoryDoneReducer(initialState, action)
     expect(newState).to.eql(expectedState)
   })
 })
