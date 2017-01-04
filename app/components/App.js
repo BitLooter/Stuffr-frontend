@@ -6,7 +6,7 @@ import ThingList from './ThingList'
 import ThingEditDialog from './ThingEditDialog'
 import InventoryEditDialog from './InventoryEditDialog'
 import Menubar from './Menubar'
-import {createNewThing} from '../actions'
+import {ui} from '../actions'
 
 const App = ({dispatch, thingDialogMode, thingDialogData,
               inventoryDialogMode, inventoryDialogData}) =>
@@ -16,7 +16,7 @@ const App = ({dispatch, thingDialogMode, thingDialogData,
     <ThingEditDialog mode={thingDialogMode} thing={thingDialogData} />
     <InventoryEditDialog mode={inventoryDialogMode} inventory={inventoryDialogData} />
     <FloatingActionButton className='actionButton' onClick={() =>
-      dispatch(createNewThing())}>+</FloatingActionButton>
+      dispatch(ui.createNewThing())}>+</FloatingActionButton>
   </div>
 
 const AppContainer = connect(

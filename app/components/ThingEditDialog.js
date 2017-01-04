@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import moment from 'moment'
 
-import {postThing, updateThing, deleteThing, editThingDone} from '../actions'
+import {ui, api} from '../actions'
 
 const THINGDIALOG_NEW = Symbol.for('ui.THINGDIALOG_NEW')
 const THINGDIALOG_EDIT = Symbol.for('ui.THINGDIALOG_EDIT')
@@ -25,7 +25,7 @@ export default class ThingEditDialog extends React.Component {
   static proptypes = { dispatch: React.PropTypes.func.isRequired }
 
   close = () => {
-    this.props.dispatch(editThingDone())
+    this.props.dispatch(ui.editThingDone())
   }
 
   getThingData = () => {
@@ -42,11 +42,11 @@ export default class ThingEditDialog extends React.Component {
     if (this.props.mode === THINGDIALOG_EDIT) {
       const updateData = this.getThingData()
       log.info(`Updating existing thing named ${updateData.name}`)
-      this.props.dispatch(updateThing(this.props.thing.id, updateData))
+      this.props.dispatch(api.updateThing(this.props.thing.id, updateData))
     } else if (this.props.mode === THINGDIALOG_NEW) {
       const newData = this.getThingData()
       log.info(`Creating new thing named ${newData.name}`)
-      this.props.dispatch(postThing(this.props.currentInventoryId, newData))
+      this.props.dispatch(api.postThing(this.props.currentInventoryId, newData))
     } else {
       const errorMessage = `Unknown mode for ThingEditDialog: ${String(this.props.mode)}`
       log.error(errorMessage)
@@ -57,7 +57,7 @@ export default class ThingEditDialog extends React.Component {
 
   handleDelete = () => {
     // TODO: Confirm deletion with user
-    this.props.dispatch(deleteThing(this.props.thing.id))
+    this.props.dispatch(api.deleteThing(this.props.thing.id))
     this.close()
   }
 

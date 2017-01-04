@@ -7,7 +7,7 @@ import Divider from 'material-ui/Divider'
 import Popover from 'material-ui/Popover'
 import RaisedButton from 'material-ui/RaisedButton'
 
-import {loginUser, createNewInventory, loadInventory} from '../actions'
+import {ui, loginUser, loadInventory} from '../actions'
 
 @connect()
 class InventoryMenu extends React.Component {
@@ -48,7 +48,7 @@ class InventoryMenu extends React.Component {
             <Divider />
             <MenuItem primaryText='Add a new inventory...'
                       onTouchTap={() => {
-                        this.props.dispatch(createNewInventory())
+                        this.props.dispatch(ui.createNewInventory())
                         this.handleRequestClose()
                       }}/>
           </Menu>

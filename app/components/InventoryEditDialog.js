@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import moment from 'moment'
 
-import {postInventory, updateInventory, editInventoryDone} from '../actions'
+import {ui, api} from '../actions'
 
 const INVENTORYDIALOG_NEW = Symbol.for('ui.INVENTORYDIALOG_NEW')
 const INVENTORYDIALOG_EDIT = Symbol.for('ui.INVENTORYDIALOG_EDIT')
@@ -19,7 +19,7 @@ export default class InventoryEditDialog extends React.Component {
   static proptypes = { dispatch: React.PropTypes.func.isRequired }
 
   close = () => {
-    this.props.dispatch(editInventoryDone())
+    this.props.dispatch(ui.editInventoryDone())
   }
 
   getInventoryData = () => {
@@ -34,11 +34,11 @@ export default class InventoryEditDialog extends React.Component {
     if (this.props.mode === INVENTORYDIALOG_EDIT) {
       const updateData = this.getInventoryData()
       log.info(`Updating existing inventory named ${updateData.name}`)
-      this.props.dispatch(updateInventory(this.props.thing.id, updateData))
+      this.props.dispatch(api.updateInventory(this.props.thing.id, updateData))
     } else if (this.props.mode === INVENTORYDIALOG_NEW) {
       const newData = this.getInventoryData()
       log.info(`Creating new inventory named ${newData.name}`)
-      this.props.dispatch(postInventory(newData))
+      this.props.dispatch(api.postInventory(newData))
     } else {
       const errorMessage = `Unknown mode for InventoryEditDialog: ${String(this.props.mode)}`
       log.error(errorMessage)

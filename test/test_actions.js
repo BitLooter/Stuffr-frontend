@@ -91,8 +91,8 @@ describe('Actions:', () => {
 
       const thunkActions = store.getActions()
       const actionTypes = thunkActions.map((a) => a.type)
-      expect(actionTypes).to.include(actions.GET_INVENTORY_LIST__DONE)
-      expect(actionTypes).to.include(actions.SET_CURRENT_INVENTORY)
+      expect(actionTypes).to.include(actions.api.GET_INVENTORY_LIST__DONE)
+      expect(actionTypes).to.include(actions.ui.SET_CURRENT_INVENTORY)
       expect(actionTypes).to.include(actions.LOAD_USER__DONE)
       // These actions may not complete before thunk is finished, check they
       // were started instead.
@@ -113,7 +113,7 @@ describe('Actions:', () => {
       await store.dispatch(loadInventoryAction)
       const thunkActions = store.getActions()
       const actionTypes = thunkActions.map((a) => a.type)
-      expect(actionTypes).to.include(actions.SET_CURRENT_INVENTORY)
+      expect(actionTypes).to.include(actions.ui.SET_CURRENT_INVENTORY)
       expect(actionTypes).to.include(actions.LOAD_INVENTORY__DONE)
     })
 
@@ -139,7 +139,7 @@ describe('Actions:', () => {
 
     it('GET user info', async function () {
       // TODO: Test errors
-      const userInfoAction = actions.getUserInfo()
+      const userInfoAction = actions.api.getUserInfo()
       // Should be a thunk
       expect(userInfoAction).to.be.a('function')
 
@@ -150,14 +150,14 @@ describe('Actions:', () => {
       expect(stuffrApi.getUserInfo.calledOnce).to.be.true
       const thunkActions = store.getActions()
       expect(thunkActions).to.have.length(2)
-      expect(thunkActions[0].type).to.equal(actions.GET_USER_INFO__REQUEST)
-      expect(thunkActions[1].type).to.equal(actions.GET_USER_INFO__DONE)
+      expect(thunkActions[0].type).to.equal(actions.api.GET_USER_INFO__REQUEST)
+      expect(thunkActions[1].type).to.equal(actions.api.GET_USER_INFO__DONE)
       expect(thunkActions[1].payload).to.eql(TEST_USER)
     })
 
     it('GET inventory list', async function () {
       // TODO: Test errors
-      const inventoryListAction = actions.getInventoryList()
+      const inventoryListAction = actions.api.getInventoryList()
       // Should be a thunk
       expect(inventoryListAction).to.be.a('function')
 
@@ -168,13 +168,13 @@ describe('Actions:', () => {
       expect(stuffrApi.getInventories.calledOnce).to.be.true
       const thunkActions = store.getActions()
       expect(thunkActions).to.have.length(2)
-      expect(thunkActions[0].type).to.equal(actions.GET_INVENTORY_LIST__REQUEST)
-      expect(thunkActions[1].type).to.equal(actions.GET_INVENTORY_LIST__DONE)
+      expect(thunkActions[0].type).to.equal(actions.api.GET_INVENTORY_LIST__REQUEST)
+      expect(thunkActions[1].type).to.equal(actions.api.GET_INVENTORY_LIST__DONE)
       expect(thunkActions[1].payload).to.eql(TEST_INVENTORIES)
     })
 
     it('POST a new inventory', async function () {
-      const inventoryListAction = actions.postInventory(NEW_INVENTORY)
+      const inventoryListAction = actions.api.postInventory(NEW_INVENTORY)
       // Should be a thunk
       expect(inventoryListAction).to.be.a('function')
 
@@ -188,14 +188,14 @@ describe('Actions:', () => {
       expect(stuffrApi.addInventory.calledWith(NEW_INVENTORY)).to.be.true
       const thunkActions = store.getActions()
       expect(thunkActions).to.have.length(2)
-      expect(thunkActions[0].type).to.equal(actions.POST_INVENTORY__REQUEST)
-      expect(thunkActions[1].type).to.equal(actions.POST_INVENTORY__DONE)
+      expect(thunkActions[0].type).to.equal(actions.api.POST_INVENTORY__REQUEST)
+      expect(thunkActions[1].type).to.equal(actions.api.POST_INVENTORY__DONE)
       expect(thunkActions[1].payload).to.eql({...NEW_INVENTORY, ...newInventoryResponse})
     })
 
     it('GET thing list', async function () {
       // TODO: Test errors
-      const thingListAction = actions.getThingList()
+      const thingListAction = actions.api.getThingList()
       // Should be a thunk
       expect(thingListAction).to.be.a('function')
 
@@ -206,13 +206,13 @@ describe('Actions:', () => {
       expect(stuffrApi.getThings.calledOnce).to.be.true
       const thunkActions = store.getActions()
       expect(thunkActions).to.have.length(2)
-      expect(thunkActions[0].type).to.equal(actions.GET_THING_LIST__REQUEST)
-      expect(thunkActions[1].type).to.equal(actions.GET_THING_LIST__DONE)
+      expect(thunkActions[0].type).to.equal(actions.api.GET_THING_LIST__REQUEST)
+      expect(thunkActions[1].type).to.equal(actions.api.GET_THING_LIST__DONE)
       expect(thunkActions[1].payload).to.eql(TEST_THINGS)
     })
 
     it('POST a new thing', async function () {
-      const thingListAction = actions.postThing()
+      const thingListAction = actions.api.postThing(TEST_INVENTORIES[0].id, NEW_THING)
       // Should be a thunk
       expect(thingListAction).to.be.a('function')
 
@@ -221,50 +221,50 @@ describe('Actions:', () => {
       addThingStub.returns(newThingResponse)
       const store = mockStore({})
 
-      await store.dispatch(actions.postThing(TEST_INVENTORIES[0].id, NEW_THING))
+      await store.dispatch(thingListAction)
       // TODO: update this test once multiple inventories are implemented
       expect(stuffrApi.addThing.calledWith(TEST_INVENTORIES[0].id, NEW_THING)).to.be.true
       const thunkActions = store.getActions()
       expect(thunkActions).to.have.length(2)
-      expect(thunkActions[0].type).to.equal(actions.POST_THING__REQUEST)
-      expect(thunkActions[1].type).to.equal(actions.POST_THING__DONE)
+      expect(thunkActions[0].type).to.equal(actions.api.POST_THING__REQUEST)
+      expect(thunkActions[1].type).to.equal(actions.api.POST_THING__DONE)
       expect(thunkActions[1].payload).to.eql({...NEW_THING, ...newThingResponse})
     })
 
     it('Update (PUT) an existing thing', async function () {
-      const updateThingAction = actions.updateThing()
+      const updateThingId = TEST_THINGS[0].id
+      const updateData = {name: 'UPDATE'}
+      const updateThingAction = actions.api.updateThing(updateThingId, updateData)
       // Should be a thunk
       expect(updateThingAction).to.be.a('function')
 
-      const updateThingId = TEST_THINGS[0].id
-      const updateData = {name: 'UPDATE'}
       this.sinon.stub(stuffrApi, 'updateThing')
       const store = mockStore(TEST_THINGS)
 
-      await store.dispatch(actions.updateThing(updateThingId, updateData))
+      await store.dispatch(updateThingAction)
       expect(stuffrApi.updateThing.calledWith(updateThingId)).to.be.true
       const thunkActions = store.getActions()
       expect(thunkActions).to.have.length(2)
-      expect(thunkActions[0].type).to.equal(actions.UPDATE_THING__REQUEST)
-      expect(thunkActions[1].type).to.equal(actions.UPDATE_THING__DONE)
+      expect(thunkActions[0].type).to.equal(actions.api.UPDATE_THING__REQUEST)
+      expect(thunkActions[1].type).to.equal(actions.api.UPDATE_THING__DONE)
       expect(thunkActions[1].payload).to.eql({id: updateThingId, update: updateData})
     })
 
     it('DELETE a thing', async function () {
-      const deleteAction = actions.deleteThing()
+      const deleteThingId = TEST_THINGS[0].id
+      const deleteAction = actions.api.deleteThing(deleteThingId)
       // Should be a thunk
       expect(deleteAction).to.be.a('function')
 
-      const deleteThingId = TEST_THINGS[0].id
       this.sinon.stub(stuffrApi, 'deleteThing')
       const store = mockStore(TEST_THINGS)
 
-      await store.dispatch(actions.deleteThing(deleteThingId))
+      await store.dispatch(deleteAction)
       expect(stuffrApi.deleteThing.calledWith(deleteThingId)).to.be.true
       const thunkActions = store.getActions()
       expect(thunkActions).to.have.length(2)
-      expect(thunkActions[0].type).to.equal(actions.DELETE_THING__REQUEST)
-      expect(thunkActions[1].type).to.equal(actions.DELETE_THING__DONE)
+      expect(thunkActions[0].type).to.equal(actions.api.DELETE_THING__REQUEST)
+      expect(thunkActions[1].type).to.equal(actions.api.DELETE_THING__DONE)
     })
   })
 })

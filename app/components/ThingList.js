@@ -2,12 +2,12 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 
-import {editThing} from '../actions'
+import {ui} from '../actions'
 
 // TODO: Height needs to be set to the height of the window
 const ThingList = ({ dispatch, things }) =>
   <Table multiSelectable height='700px' onCellClick={(row) => {
-    dispatch(editThing(things[row]))
+    dispatch(ui.editThing(things[row]))
   }}>
     <TableHeader>
       <TableRow>
