@@ -17,7 +17,9 @@ const MULTILINE_ROWS = 5
 @connect(
   (state) => {
     return {
-      currentInventoryId: state.database.inventories.length > 0 ? state.database.inventories[0].id : null
+      currentInventoryId: state.database.inventories.length > 0
+        ? state.database.inventories[state.ui.currentInventory].id
+        : null
     }
   }
 )
