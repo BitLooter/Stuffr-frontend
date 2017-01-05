@@ -70,4 +70,13 @@ describe('Reducers - Database:', () => {
     const newState = postInventoryDoneReducer(initialState, action)
     expect(newState).to.eql(expectedState)
   })
+
+  it('Purging user data', () => {
+    const purgeUserReducer = __GetDependency__('purgeUserReducer')
+    const action = actions.purgeUser()
+    const newState = purgeUserReducer(initialState, action)
+    expect(newState.things).to.be.empty
+    expect(newState.inventories).to.be.empty
+    expect(newState.user).to.be.null
+  })
 })

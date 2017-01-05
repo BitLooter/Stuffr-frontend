@@ -2,6 +2,11 @@ import { handleActions } from 'redux-actions'
 import Immutable from 'seamless-immutable'
 import log from 'loglevel'
 
+// Constants
+const emptyDatabase = Immutable({user: null, inventories: [], things: []})
+
+// Reducers
+
 function genericErrorReducer (state, action) {
   log.error(`${action.type}: ${action.payload}`)
   return state
@@ -9,6 +14,10 @@ function genericErrorReducer (state, action) {
 
 function loadUserDoneReducer (state, action) {
   return state.set('user', Immutable(action.payload))
+}
+
+function purgeUserReducer (state, action) {
+  return emptyDatabase
 }
 
 function getInventoryListDoneReducer (state, action) {
@@ -55,6 +64,7 @@ const things = handleActions({
   LOGIN_USER__ERROR: genericErrorReducer,
   LOAD_USER__DONE: loadUserDoneReducer,
   LOAD_USER__ERROR: genericErrorReducer,
+  PURGE_USER: purgeUserReducer,
   GET_INVENTORY_LIST__DONE: getInventoryListDoneReducer,
   GET_INVENTORY_LIST__ERROR: genericErrorReducer,
   POST_INVENTORY__DONE: postInventoryDoneReducer,
@@ -67,6 +77,6 @@ const things = handleActions({
   UPDATE_THING__ERROR: genericErrorReducer,
   DELETE_THING__DONE: deleteThingDoneReducer,
   DELETE_THING__ERROR: genericErrorReducer
-}, Immutable({user: null, inventories: [], things: []}))
+}, Immutable(emptyDatabase))
 
 export default things

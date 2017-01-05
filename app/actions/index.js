@@ -62,6 +62,19 @@ export const loginUser = createApiThunk(
   loginUserRequest, loginUserDone, loginUserError
 )
 
+// Actions to log a user out
+export const PURGE_USER = 'PURGE_USER'
+export const purgeUser = createAction(PURGE_USER)
+// logoutUser - Log the user out and clean up
+export const logoutUser = function () {
+  return function (dispatch) {
+    stuffrApi.logout()
+    delete window.localStorage.apiToken
+    // Reducers use purgeUser to clean user data from state
+    dispatch(purgeUser())
+  }
+}
+
 // Actions to load a user and their data after login
 export const LOAD_USER__REQUEST = 'LOAD_USER__REQUEST'
 export const LOAD_USER__DONE = 'LOAD_USER__DONE'

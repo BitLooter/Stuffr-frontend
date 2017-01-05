@@ -74,4 +74,13 @@ describe('Reducers - UI:', () => {
     const expectedState = Immutable({inventoryDialog: {mode: INVENTORYDIALOG_CLOSED}})
     expect(editInventoryDoneReducer(oldState, action)).to.eql(expectedState)
   })
+
+  it('Purge user data', () => {
+    const purgeUserReducer = __GetDependency__('purgeUserReducer')
+    const action = actions.purgeUser()
+    const oldState = Immutable({authorized: true, currentInventory: 6})
+    const newState = purgeUserReducer(oldState, action)
+    expect(newState.authorized).to.be.false
+    expect(newState.currentInventory).to.be.null
+  })
 })

@@ -61,13 +61,9 @@ async function runStuffr (appElement) {
     log.error(`Error loading configuration file: ${e}`)
   }
 
-  const token = window.localStorage.apiToken
-  if (token) {
-    setupApi(config.API_PATH, window.localStorage.apiToken)
-    store.dispatch(loadUser())
-  } else {
-    setupApi(config.API_PATH)
-  }
+  // If no token is available loadUser will trigger a login
+  setupApi(config.API_PATH, config.AUTH_PATH, window.localStorage.apiToken)
+  store.dispatch(loadUser())
 
   ReactDOM.render(
     <Provider store={store}>

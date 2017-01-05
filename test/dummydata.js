@@ -3,6 +3,7 @@
 import Immutable from 'seamless-immutable'
 
 export const TEST_DOMAIN = 'https://example.com'
+export const TEST_AUTH_URL = `${TEST_DOMAIN}/auth`
 
 export const TEST_TIME = '1970-01-01T00:00:00Z'
 

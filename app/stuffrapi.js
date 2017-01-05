@@ -16,12 +16,18 @@ import log from 'loglevel'
 // TODO: do not import loglevel but take a log object on createStuffrApi
 
 class StuffrApi {
-  constructor (baseUrl, token) {
+  constructor (baseUrl, authBaseUrl, token) {
     if (baseUrl.endsWith('/')) {
       // Strip trailing slash
       baseUrl = baseUrl.replace(/\/$/, '')
     }
     this.urlBase = baseUrl
+    if (authBaseUrl.endsWith('/')) {
+      // Strip trailing slash
+      authBaseUrl = authBaseUrl.replace(/\/$/, '')
+    }
+    this.authUrlBase = authBaseUrl
+
     if (token) {
       this.token = token
     } else {
@@ -86,9 +92,22 @@ class StuffrApi {
 
     const loginInfo = {email, password}
     const response = await this._request('/login', {parameters: loginInfo,
-                                                    requestUrlBase: '/auth'})
-    // TODO: error handling
-    this.token = response.response.user.authentication_token
+                                                    requestUrlBase: this.authUrlBase})
+    // TODO: better error handling
+    // TODO: Flask-Security is leaking user data with too much info in errors,
+    // fix that
+    if (response.meta.code === HttpStatus.OK) {
+      this.token = response.response.user.authentication_token
+    } else if (response.meta.code === HttpStatus.BAD_REQUEST) {
+      throw new Error('Bad username or password')
+    } else {
+      throw new Error('Unknown error logging in')
+    }
+  }
+
+  // Log out and purge local user data
+  logout () {
+    this.token = null
   }
 
   // Makes request to the server specified in baseUrl
@@ -148,8 +167,8 @@ class StuffrApi {
 }
 
 // Factory function for creating StuffrApi objects
-export function createStuffrApi (baseUrl, token) {
-  return new StuffrApi(baseUrl, token)
+export function createStuffrApi (baseUrl, authBaseUrl, token) {
+  return new StuffrApi(baseUrl, authBaseUrl, token)
 }
 
 // Dummy object to throw an error if the API was used before initalization
@@ -164,6 +183,6 @@ const dummyApi = {
 let defaultApi = new Proxy({}, dummyApi)
 export {defaultApi as default}
 
-export function setupApi (baseUrl, token) {
-  defaultApi = createStuffrApi(baseUrl, token)
+export function setupApi (baseUrl, authBaseUrl, token) {
+  defaultApi = createStuffrApi(baseUrl, authBaseUrl, token)
 }

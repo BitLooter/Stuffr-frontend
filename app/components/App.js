@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 import ThingList from './ThingList'
+import LoginDialog from './LoginDialog'
 import ThingEditDialog from './ThingEditDialog'
 import InventoryEditDialog from './InventoryEditDialog'
 import Menubar from './Menubar'
@@ -13,10 +14,12 @@ const App = ({dispatch, thingDialogMode, thingDialogData,
   <div className='app'>
     <Menubar />
     <ThingList />
-    <ThingEditDialog mode={thingDialogMode} thing={thingDialogData} />
-    <InventoryEditDialog mode={inventoryDialogMode} inventory={inventoryDialogData} />
     <FloatingActionButton className='actionButton' onClick={() =>
       dispatch(ui.createNewThing())}>+</FloatingActionButton>
+    {/* Dialogs (normally hidden) */}
+    <ThingEditDialog mode={thingDialogMode} thing={thingDialogData} />
+    <InventoryEditDialog mode={inventoryDialogMode} inventory={inventoryDialogData} />
+    <LoginDialog />
   </div>
 
 const AppContainer = connect(

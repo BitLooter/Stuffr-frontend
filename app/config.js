@@ -2,7 +2,8 @@
 // if available.
 
 const defaultConfig = {
-  API_PATH: '/api'
+  API_PATH: '/api',
+  AUTH_PATH: '/auth'
 }
 
 // Tries to download a local configuration file from the server and apply it

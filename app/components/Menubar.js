@@ -7,7 +7,7 @@ import Divider from 'material-ui/Divider'
 import Popover from 'material-ui/Popover'
 import RaisedButton from 'material-ui/RaisedButton'
 
-import {ui, loginUser, loadInventory} from '../actions'
+import {ui, logoutUser, loadInventory} from '../actions'
 
 @connect()
 class InventoryMenu extends React.Component {
@@ -64,10 +64,10 @@ const Menubar = ({dispatch, inventories, inventoryName, authenticated}) =>
       <InventoryMenu title={inventoryName} inventories={inventories} />
     </ToolbarGroup>
     <ToolbarGroup>
-      <RaisedButton label={authenticated ? 'Logged in' : 'LOGGED OUT'}
+      <RaisedButton label='Logout'
                     primary={authenticated} secondary={!authenticated}
                     onTouchTap={() => {
-                      dispatch(loginUser('default@example.com', 'password'))
+                      dispatch(logoutUser())
                     }} />
     </ToolbarGroup>
   </Toolbar>

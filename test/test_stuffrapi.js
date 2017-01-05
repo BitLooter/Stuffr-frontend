@@ -7,7 +7,7 @@ import fetchMock from 'fetch-mock'
 import HttpStatus from 'http-status'
 
 import {createStuffrApi} from '../app/stuffrapi'
-import {TEST_DOMAIN, TEST_USER, TEST_INVENTORIES, TEST_THINGS,
+import {TEST_DOMAIN, TEST_AUTH_URL, TEST_USER, TEST_INVENTORIES, TEST_THINGS,
         NEW_INVENTORY, NEW_THING, NEW_INVENTORY_ID, NEW_THING_ID}
         from './dummydata'
 
@@ -15,13 +15,14 @@ const TEST_INVENTORY_ID = 1
 const INVENTORIES_URL = `${TEST_DOMAIN}/inventories`
 const INVENTORIES_THINGS_URL = `${INVENTORIES_URL}/${TEST_INVENTORY_ID}/things`
 const THINGS_URL = `${TEST_DOMAIN}/things`
+const LOGIN_URL = `${TEST_DOMAIN}/auth/login`
 
 chai.use(chaiAsPromised)
 
 describe('Stuffr API wrapper:', () => {
   let api
   beforeEach(() => {
-    api = createStuffrApi(TEST_DOMAIN)
+    api = createStuffrApi(TEST_DOMAIN, TEST_AUTH_URL)
   })
   afterEach(() => {
     api = undefined
@@ -91,74 +92,105 @@ describe('Stuffr API wrapper:', () => {
     })
   })
 
-  it('/userinfo (GET)', async () => {
-    const url = `${TEST_DOMAIN}/userinfo`
-    fetchMock.get(url, TEST_USER)
-    const userInfo = await api.getUserInfo()
-    expect(fetchMock.called(url)).to.be.true
-    expect(userInfo).to.eql(TEST_USER)
-  })
-
-  it('/inventories (GET)', async () => {
-    fetchMock.get(INVENTORIES_URL, TEST_INVENTORIES)
-    const inventories = await api.getInventories()
-    expect(fetchMock.called(INVENTORIES_URL)).to.be.true
-    expect(inventories).to.eql(TEST_INVENTORIES)
-  })
-
-  it('/inventories (POST)', async () => {
-    const expectedResponse = {
-      id: NEW_INVENTORY_ID
-    }
-    fetchMock.post(INVENTORIES_URL, {
-      status: HttpStatus.CREATED,
-      body: expectedResponse
+  describe('API methods:', () => {
+    it('/userinfo (GET)', async () => {
+      const url = `${TEST_DOMAIN}/userinfo`
+      fetchMock.get(url, TEST_USER)
+      const userInfo = await api.getUserInfo()
+      expect(fetchMock.called(url)).to.be.true
+      expect(userInfo).to.eql(TEST_USER)
     })
-    const response = await api.addInventory(NEW_INVENTORY)
-    expect(fetchMock.called(INVENTORIES_URL)).to.be.true
-    expect(response).to.eql(expectedResponse)
-  })
 
-  it('/inventories/<inv_id>/things (GET)', async () => {
-    fetchMock.get(INVENTORIES_THINGS_URL, TEST_THINGS)
-    const expectedThings = TEST_THINGS
-    const things = await api.getThings(TEST_INVENTORY_ID)
-    expect(fetchMock.called(INVENTORIES_THINGS_URL)).to.be.true
-    expect(things).to.eql(expectedThings)
-  })
-
-  it('/inventories/<inv_id>/things (POST)', async () => {
-    const expectedResponse = {
-      id: NEW_THING_ID
-    }
-    fetchMock.post(INVENTORIES_THINGS_URL, {
-      status: HttpStatus.CREATED,
-      body: expectedResponse
+    it('/inventories (GET)', async () => {
+      fetchMock.get(INVENTORIES_URL, TEST_INVENTORIES)
+      const inventories = await api.getInventories()
+      expect(fetchMock.called(INVENTORIES_URL)).to.be.true
+      expect(inventories).to.eql(TEST_INVENTORIES)
     })
-    const thingResponse = await api.addThing(TEST_INVENTORY_ID, NEW_THING)
-    expect(fetchMock.called(INVENTORIES_THINGS_URL)).to.be.true
-    expect(thingResponse).to.eql(expectedResponse)
+
+    it('/inventories (POST)', async () => {
+      const expectedResponse = {
+        id: NEW_INVENTORY_ID
+      }
+      fetchMock.post(INVENTORIES_URL, {
+        status: HttpStatus.CREATED,
+        body: expectedResponse
+      })
+      const response = await api.addInventory(NEW_INVENTORY)
+      expect(fetchMock.called(INVENTORIES_URL)).to.be.true
+      expect(response).to.eql(expectedResponse)
+    })
+
+    it('/inventories/<inv_id>/things (GET)', async () => {
+      fetchMock.get(INVENTORIES_THINGS_URL, TEST_THINGS)
+      const expectedThings = TEST_THINGS
+      const things = await api.getThings(TEST_INVENTORY_ID)
+      expect(fetchMock.called(INVENTORIES_THINGS_URL)).to.be.true
+      expect(things).to.eql(expectedThings)
+    })
+
+    it('/inventories/<inv_id>/things (POST)', async () => {
+      const expectedResponse = {
+        id: NEW_THING_ID
+      }
+      fetchMock.post(INVENTORIES_THINGS_URL, {
+        status: HttpStatus.CREATED,
+        body: expectedResponse
+      })
+      const thingResponse = await api.addThing(TEST_INVENTORY_ID, NEW_THING)
+      expect(fetchMock.called(INVENTORIES_THINGS_URL)).to.be.true
+      expect(thingResponse).to.eql(expectedResponse)
+    })
+
+    it('/things/<id> (PUT)', async () => {
+      const thingId = 3
+      const thingsUrlWithId = `${THINGS_URL}/${thingId}`
+      fetchMock.put(thingsUrlWithId, {
+        status: HttpStatus.NO_CONTENT
+      })
+      const thingResponse = await api.updateThing(thingId, NEW_THING)
+      expect(fetchMock.called(thingsUrlWithId)).to.be.true
+      expect(thingResponse).to.be.null
+    })
+
+    it('/things/<id> (DELETE)', async () => {
+      const thingId = 3
+      const thingsUrlWithId = `${THINGS_URL}/${thingId}`
+      fetchMock.delete(thingsUrlWithId, {
+        status: HttpStatus.NO_CONTENT
+      })
+      const thingResponse = await api.deleteThing(thingId)
+      expect(fetchMock.called(thingsUrlWithId)).to.be.true
+      expect(thingResponse).to.be.null
+    })
   })
 
-  it('/things/<id> (PUT)', async () => {
-    const thingId = 3
-    const thingsUrlWithId = `${THINGS_URL}/${thingId}`
-    fetchMock.put(thingsUrlWithId, {
-      status: HttpStatus.NO_CONTENT
+  it('Logging in', async () => {
+    fetchMock.post(LOGIN_URL, {
+      status: HttpStatus.OK,
+      body: {
+        meta: {code: 200},
+        response: {user: {authentication_token: 'token'}}
+      }
     })
-    const thingResponse = await api.updateThing(thingId, NEW_THING)
-    expect(fetchMock.called(thingsUrlWithId)).to.be.true
-    expect(thingResponse).to.be.null
+    await api.login('testuser@example.com', 'password')
+    expect(api.token).to.equal('token')
   })
 
-  it('/things/<id> (DELETE)', async () => {
-    const thingId = 3
-    const thingsUrlWithId = `${THINGS_URL}/${thingId}`
-    fetchMock.delete(thingsUrlWithId, {
-      status: HttpStatus.NO_CONTENT
+  it('Logging in with incorrect password', () => {
+    fetchMock.post(LOGIN_URL, {
+      status: HttpStatus.OK,
+      body: {
+        meta: {code: 400},
+        response: {errors: {password: 'Invalid password'}}
+      }
     })
-    const thingResponse = await api.deleteThing(thingId)
-    expect(fetchMock.called(thingsUrlWithId)).to.be.true
-    expect(thingResponse).to.be.null
+    const loginPromise = api.login('testuser@example.com', 'notrealpassword')
+    return expect(loginPromise).to.eventually.be.rejected
+  })
+
+  it('Logging out', () => {
+    api.logout()
+    expect(api.token).to.be.null
   })
 })
