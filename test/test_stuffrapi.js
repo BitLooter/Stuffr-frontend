@@ -8,7 +8,7 @@ import HttpStatus from 'http-status'
 
 import {createStuffrApi} from '../app/stuffrapi'
 import {TEST_DOMAIN, TEST_AUTH_URL, TEST_USER, TEST_INVENTORIES, TEST_THINGS,
-        NEW_INVENTORY, NEW_THING, NEW_INVENTORY_ID, NEW_THING_ID}
+        NEW_INVENTORY, NEW_THING, NEW_INVENTORY_ID, NEW_THING_ID, NEW_USER, NEW_USER_ID}
         from './dummydata'
 
 const TEST_INVENTORY_ID = 1
@@ -16,6 +16,7 @@ const INVENTORIES_URL = `${TEST_DOMAIN}/inventories`
 const INVENTORIES_THINGS_URL = `${INVENTORIES_URL}/${TEST_INVENTORY_ID}/things`
 const THINGS_URL = `${TEST_DOMAIN}/things`
 const LOGIN_URL = `${TEST_DOMAIN}/auth/login`
+const REGISTER_URL = `${TEST_DOMAIN}/auth/register`
 
 chai.use(chaiAsPromised)
 
@@ -187,6 +188,43 @@ describe('Stuffr API wrapper:', () => {
     })
     const loginPromise = api.login('testuser@example.com', 'notrealpassword')
     return expect(loginPromise).to.eventually.be.rejected
+  })
+
+  it('Registering new user', async () => {
+    fetchMock.post(REGISTER_URL, {
+      status: HttpStatus.OK,
+      body: {
+        meta: {code: 200},
+        response: {user: {authentication_token: 'token', id: NEW_USER_ID}}
+      }
+    })
+    await api.registerUser(NEW_USER)
+    expect(api.token).to.equal('token')
+  })
+
+  // TODO: enable these tests after error handling is implemented in frontend
+  it.skip('Registering with nonmatching passwords', () => {
+    fetchMock.post(REGISTER_URL, {
+      status: HttpStatus.OK,
+      body: {
+        meta: {code: 400},
+        response: {errors: {password: 'Passwords do not match'}}
+      }
+    })
+    const registerPromise = api.registerUser(NEW_USER.set('password_confirm', 'WRONGPASS'))
+    return expect(registerPromise).to.eventually.be.rejected
+  })
+
+  it.skip('Registering with missing name', () => {
+    fetchMock.post(REGISTER_URL, {
+      status: HttpStatus.OK,
+      body: {
+        meta: {code: 400},
+        response: {errors: {password: 'FILL ERROR LATER'}}
+      }
+    })
+    const registerPromise = api.registerUser(NEW_USER.without('name_first'))
+    return expect(registerPromise).to.eventually.be.rejected
   })
 
   it('Logging out', () => {

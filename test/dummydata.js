@@ -48,6 +48,12 @@ export const TEST_STORE = Immutable({
   database: TEST_DATABASE
 })
 
+export const NEW_USER = Immutable({
+  'email': 'default@example.com',
+  'name_first': 'NEW',
+  'name_last': 'USER'
+})
+
 export const NEW_INVENTORY = Immutable({
   name: 'NEWINVENTORY'
 })
@@ -58,5 +64,6 @@ export const NEW_THING = Immutable({
   notes: 'NEWNOTES'
 })
 
+export const NEW_USER_ID = 84
 export const NEW_THING_ID = 42
 export const NEW_INVENTORY_ID = 21

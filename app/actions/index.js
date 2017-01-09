@@ -37,6 +37,11 @@ export function createApiThunk (apiFunction, requestAction, doneAction, errorAct
   }
 }
 
+// Places the API token where it can be retrieved for later sessions
+function storeToken (token) {
+  window.localStorage.apiToken = token
+}
+
 /* Task actions
 *******************/
 
@@ -56,13 +61,36 @@ export const loginUserError = createAction(LOGIN_USER__ERROR)
 export const loginUser = createApiThunk(
   async function (email, password, {dispatch, getState}) {
     await stuffrApi.login(email, password)
-    window.localStorage.apiToken = stuffrApi.token
+    storeToken(stuffrApi.token)
     return await dispatch(loadUser())
   },
   loginUserRequest, loginUserDone, loginUserError
 )
 
-// Actions to log a user out
+// Actions to register a new user
+export const REGISTER_USER__REQUEST = 'REGISTER_USER__REQUEST'
+export const REGISTER_USER__DONE = 'REGISTER_USER__DONE'
+export const REGISTER_USER__ERROR = 'REGISTER_USER__ERROR'
+export const registerUserRequest = createAction(REGISTER_USER__REQUEST)
+export const registerUserDone = createAction(REGISTER_USER__DONE)
+export const registerUserError = createAction(REGISTER_USER__ERROR)
+// registerUser - Perform user registration
+// Parameters:
+//  email: Login ID
+//  password: Make a wild guess
+// Returns:
+//  User info object
+export const registerUser = createApiThunk(
+  async function (newUserData, {dispatch, getState}) {
+    // TODO: Handle register errors
+    await stuffrApi.registerUser(newUserData)
+    storeToken(stuffrApi.token)
+    dispatch(loadUser())
+  },
+  registerUserRequest, registerUserDone, registerUserError
+)
+
+// Actions to log a user out and remove all their data from the client
 export const PURGE_USER = 'PURGE_USER'
 export const purgeUser = createAction(PURGE_USER)
 // logoutUser - Log the user out and clean up

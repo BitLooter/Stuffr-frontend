@@ -107,7 +107,29 @@ class StuffrApi {
 
   // Log out and purge local user data
   logout () {
+    // TODO: make a request to /logout
     this.token = null
+  }
+
+  async registerUser (newUserInfo) {
+    const response = await this._request('/register',
+                                         {parameters: newUserInfo,
+                                          requestUrlBase: this.authUrlBase})
+    // TODO: better error handling
+    if (response.meta.code === HttpStatus.OK) {
+      this.token = response.response.user.authentication_token
+    } else {
+      const responseErrors = response.response.errors
+      let msg
+      if (responseErrors.email) {
+        msg = responseErrors.email
+      } else if (responseErrors.password) {
+        msg = responseErrors.password
+      } else {
+        msg = 'Unknown error registering'
+      }
+      throw new Error(`Register: ${msg}`)
+    }
   }
 
   // Makes request to the server specified in baseUrl

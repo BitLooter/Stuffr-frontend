@@ -10,7 +10,7 @@ import * as actions from '../app/actions'
 import {__GetDependency__} from '../app/actions' // eslint-disable-line no-duplicate-imports
 import stuffrApi, {setupApi} from '../app/stuffrapi'
 import {TEST_DOMAIN, TEST_AUTH_URL, TEST_STORE, TEST_USER, TEST_INVENTORIES, TEST_THINGS,
-        NEW_INVENTORY, NEW_INVENTORY_ID, NEW_THING, NEW_THING_ID} from './dummydata'
+        NEW_INVENTORY, NEW_INVENTORY_ID, NEW_THING, NEW_THING_ID, NEW_USER} from './dummydata'
 
 const mockStore = configureStore([thunk])
 
@@ -92,6 +92,48 @@ describe('Actions:', () => {
       expect(actionTypes).to.include(actions.PURGE_USER)
 
       expect(stuffrApi.token).to.be.null
+    })
+
+    it('Registering a new user (registerUser)', async function () {
+      const registerUserAction = actions.registerUser(NEW_USER)
+      // Should be a thunk
+      expect(registerUserAction).to.be.a('function')
+
+      const store = mockStore(TEST_STORE)
+      this.sinon.stub(stuffrApi, 'registerUser')
+
+      global.window = {localStorage: {}}
+      await store.dispatch(registerUserAction)
+      expect(stuffrApi.registerUser.calledOnce).to.be.true
+
+      const thunkActions = store.getActions()
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.REGISTER_USER__DONE)
+      // These actions may not complete before thunk is finished, check they
+      // were started instead.
+      expect(actionTypes).to.include(actions.LOAD_USER__REQUEST)
+
+      const state = store.getState()
+      expect(state.database.user).to.eql(TEST_USER)
+      expect(state.database.inventories).to.eql(TEST_INVENTORIES)
+
+      expect(global.window.localStorage.apiToken).to.not.be.undefined
+    })
+
+    it('Registering a new user with invalid data', async function () {
+      const registerUserAction = actions.registerUser('testmail@example.com', 'badpass')
+      // Should be a thunk
+      expect(registerUserAction).to.be.a('function')
+
+      const store = mockStore(TEST_STORE)
+      this.sinon.stub(stuffrApi, 'registerUser').throws('An error')
+
+      await store.dispatch(registerUserAction)
+      expect(stuffrApi.registerUser.calledOnce).to.be.true
+
+      const thunkActions = store.getActions()
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.REGISTER_USER__ERROR)
     })
 
     it('Loading a user (loadUser)', async function () {

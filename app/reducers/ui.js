@@ -58,7 +58,7 @@ function authorizationRequiredReducer (state, action) {
   return state.set('authorized', false)
 }
 
-function loginUserDoneReducer (state, action) {
+function userAuthenticatedReducer (state, action) {
   return state.set('authorized', true)
 }
 
@@ -75,7 +75,8 @@ const ui = handleActions({
   EDIT_INVENTORY_DONE: editInventoryDoneReducer,
   SET_CURRENT_INVENTORY: setCurrentInventoryReducer,
   AUTHORIZATION_REQUIRED: authorizationRequiredReducer,
-  LOGIN_USER__DONE: loginUserDoneReducer,
+  LOGIN_USER__DONE: userAuthenticatedReducer,
+  REGISTER_USER__DONE: userAuthenticatedReducer,
   PURGE_USER: purgeUserReducer
 }, Immutable({
   authorized: true,
