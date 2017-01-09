@@ -40,6 +40,7 @@ i18next.use(XHR).init({
   }
   const appElement = document.getElementById('app')
   runStuffr(appElement).catch((e) => {
+    // TODO: make this error display prettier
     const errorElement = document.createElement('div')
     errorElement.innerHTML = `
       <h1>Whoops!</h1>

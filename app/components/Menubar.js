@@ -9,6 +9,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 
 import {ui, logoutUser, loadInventory} from '../actions'
 
+// BUG: inventory menu gets screwy when no inventories exist
+
 @connect()
 class InventoryMenu extends React.Component {
   constructor (props) {
@@ -76,6 +78,7 @@ function mapStateToProps (state) {
   const currentInventory = state.database.inventories[state.ui.currentInventory]
   return {
     inventories: state.database.inventories,
+    // TODO: Put something other than 'Loading...' when logged out
     inventoryName: currentInventory ? currentInventory.name : 'Loading...',
     authenticated: state.database.user !== null
   }
