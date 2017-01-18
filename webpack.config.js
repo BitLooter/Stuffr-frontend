@@ -4,11 +4,30 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 var appPath = path.join(__dirname, '/app')
 
+var defaultConfig = {
+  apiPath: '/api',
+  authPath: '/auth'
+}
+var localConfig = defaultConfig
+if (process.env.NODE_ENV) {
+  try {
+    localConfig = require(`config.${process.env.NODE_ENV}.js`)
+  } catch (e) {
+    // No local config exists, ignore
+  }
+}
+// TODO: use spread operator when available, general cleanup
+var siteConfig = {
+  apiPath: localConfig.apiPath || defaultConfig.apiPath,
+  authPath: localConfig.authPath || defaultConfig.authPath
+}
+
 var htmlWebpackPluginConfig = new HtmlWebpackPlugin({
   title: 'Stuffr',
   template: path.join(__dirname, '/app/index.ejs'),
   xhtml: true,
-  hash: true
+  hash: true,
+  siteConfig: JSON.stringify(siteConfig)
 })
 
 var copyStaticFilesConfig = new CopyWebpackPlugin(

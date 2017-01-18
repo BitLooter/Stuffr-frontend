@@ -15,8 +15,6 @@ import stuffrApp from './reducers'
 import App from './components/App'
 import {setupApi} from './stuffrapi'
 
-import loadConfig from './config'
-
 injectTapEventPlugin()  // Needed for material-ui
 
 const logger = createLogger({collapsed: true})
@@ -55,15 +53,9 @@ i18next.use(XHR).init({
 
 // Wrap init code in a function call to allow for async actions
 async function runStuffr (appElement) {
-  let config
-  try {
-    config = await loadConfig()
-  } catch (e) {
-    log.error(`Error loading configuration file: ${e}`)
-  }
-
   // If no token is available loadUser will trigger a login
-  setupApi(config.API_PATH, config.AUTH_PATH, window.localStorage.apiToken)
+  setupApi(window.siteConfig.apiPath, window.siteConfig.authPath,
+           window.localStorage.apiToken)
   store.dispatch(loadUser())
 
   ReactDOM.render(
