@@ -56,7 +56,8 @@ class InventoryMenu extends React.Component {
           </Menu>
         </Popover>
       </div>
-  ) }
+    )
+  }
 }
 
 // TODO: disable inventory menu when logged out

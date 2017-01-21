@@ -111,14 +111,14 @@ export default class LoginDialog extends React.Component {
   // Utility methods
   getLoginInfo () {
     return {email: this.refs.email.getValue(),
-            password: this.refs.password.getValue()}
+      password: this.refs.password.getValue()}
   }
 
   getRegisterInfo () {
     return {email: this.refs.email.getValue(),
-            password: this.refs.password.getValue(),
-            name_last: this.refs.name_last.getValue(),
-            name_first: this.refs.name_first.getValue()}
+      password: this.refs.password.getValue(),
+      name_last: this.refs.name_last.getValue(),
+      name_first: this.refs.name_first.getValue()}
   }
 
   // TODO: Show an error if wrong credentials are used

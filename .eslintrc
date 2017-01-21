@@ -11,8 +11,6 @@
   ],
   "rules": {
     "no-console": "off",
-    "generator-star-spacing": "off",
-    "babel/generator-star-spacing": "error",
     "react/prop-types": "off"
   }
 }

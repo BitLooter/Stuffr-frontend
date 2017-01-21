@@ -1,14 +1,15 @@
-var path = require('path')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
-var CopyWebpackPlugin = require('copy-webpack-plugin')
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
-var appPath = path.join(__dirname, '/app')
+const appPath = path.join(__dirname, '/app')
 
-var defaultConfig = {
+const defaultConfig = {
   apiPath: '/api',
   authPath: '/auth'
 }
-var localConfig = defaultConfig
+
+let localConfig = defaultConfig
 if (process.env.NODE_ENV) {
   try {
     localConfig = require(`config.${process.env.NODE_ENV}.js`)
@@ -17,12 +18,12 @@ if (process.env.NODE_ENV) {
   }
 }
 // TODO: use spread operator when available, general cleanup
-var siteConfig = {
+const siteConfig = {
   apiPath: localConfig.apiPath || defaultConfig.apiPath,
   authPath: localConfig.authPath || defaultConfig.authPath
 }
 
-var htmlWebpackPluginConfig = new HtmlWebpackPlugin({
+const htmlWebpackPluginConfig = new HtmlWebpackPlugin({
   title: 'Stuffr',
   template: path.join(__dirname, '/app/index.ejs'),
   xhtml: true,
@@ -30,7 +31,7 @@ var htmlWebpackPluginConfig = new HtmlWebpackPlugin({
   siteConfig: JSON.stringify(siteConfig)
 })
 
-var copyStaticFilesConfig = new CopyWebpackPlugin(
+const copyStaticFilesConfig = new CopyWebpackPlugin(
   [{
     from: 'locales',
     to: 'locales'
@@ -48,25 +49,40 @@ module.exports = {
     './index.js'
   ],
   module: {
-    preLoaders: [
+    rules: [
       {
         test: /\.js?$/,
         include: appPath,
-        loader: 'eslint'
-      }
-    ],
-    loaders: [
+        enforce: 'pre',
+        loader: 'eslint-loader'
+      },
       {
         test: /\.js?$/,
         include: appPath,
         loader: 'babel-loader',
-        query: {
-          presets: ['es2015', 'stage-1', 'react'],
+        options: {
+          presets: [['es2015', {modules: false}], 'stage-1', 'react'],
           plugins: ['transform-decorators-legacy']
+          // modules: false
         }
       },
-      { test: /\.css$/, include: appPath, loader: 'style!css' },
-      { test: /\.styl$/, include: appPath, loader: 'style!css!stylus' }
+      {
+        test: /\.css$/,
+        include: appPath,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      },
+      {
+        test: /\.styl$/,
+        include: appPath,
+        use: [
+          'style-loader',
+          'css-loader',
+          'stylus-loader'
+        ]
+      }
     ]
   },
   output: {

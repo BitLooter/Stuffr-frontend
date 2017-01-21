@@ -73,17 +73,17 @@ class StuffrApi {
   async updateThing (thingId, thingData, callback) {
     log.info(`StuffrApi request for updateThing <${thingId}>`)
     return await this._request(`/things/${thingId}`,
-        {method: 'PUT',
-         parameters: thingData,
-         callback})
+      {method: 'PUT',
+        parameters: thingData,
+        callback})
   }
 
   // DELETE request to /things/<id>
   async deleteThing (thingId, callback) {
     log.info(`StuffrApi request for deleteThing <${thingId}>`)
     return await this._request(`/things/${thingId}`,
-        {method: 'DELETE',
-         callback})
+      {method: 'DELETE',
+        callback})
   }
 
   // Authenticate with server
@@ -92,7 +92,7 @@ class StuffrApi {
 
     const loginInfo = {email, password}
     const response = await this._request('/login', {parameters: loginInfo,
-                                                    requestUrlBase: this.authUrlBase})
+      requestUrlBase: this.authUrlBase})
     // TODO: better error handling
     // TODO: Flask-Security is leaking user data with too much info in errors,
     // fix that
@@ -113,8 +113,8 @@ class StuffrApi {
 
   async registerUser (newUserInfo) {
     const response = await this._request('/register',
-                                         {parameters: newUserInfo,
-                                          requestUrlBase: this.authUrlBase})
+      {parameters: newUserInfo,
+        requestUrlBase: this.authUrlBase})
     // TODO: better error handling
     if (response.meta.code === HttpStatus.OK) {
       this.token = response.response.user.authentication_token

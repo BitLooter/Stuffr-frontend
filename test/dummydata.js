@@ -16,26 +16,28 @@ export const TEST_USER = {
 
 export const TEST_INVENTORIES = [
   {'id': 1,
-   'name': 'Test inventory 1',
-   'user_id': 1,
-   'date_created': TEST_TIME},
+    'name': 'Test inventory 1',
+    'user_id': 1,
+    'date_created': TEST_TIME},
   {'id': 2,
-   'name': 'Test inventory 2',
-   'user_id': 1,
-   'date_created': TEST_TIME}
+    'name': 'Test inventory 2',
+    'user_id': 1,
+    'date_created': TEST_TIME}
 ]
 
 export const TEST_THINGS = Immutable([
-  {id: 1, name: 'THING1',
-   date_created: TEST_TIME,
-   date_modified: TEST_TIME,
-   description: 'THING1_DESC',
-   notes: 'THING1_NOTES'},
-  {id: 2, name: 'THING2',
-   date_created: TEST_TIME,
-   date_modified: TEST_TIME,
-   description: 'THING2_DESC',
-   notes: 'THING2_NOTES'}
+  {id: 1,
+    name: 'THING1',
+    date_created: TEST_TIME,
+    date_modified: TEST_TIME,
+    description: 'THING1_DESC',
+    notes: 'THING1_NOTES'},
+  {id: 2,
+    name: 'THING2',
+    date_created: TEST_TIME,
+    date_modified: TEST_TIME,
+    description: 'THING2_DESC',
+    notes: 'THING2_NOTES'}
 ])
 
 export const TEST_DATABASE = Immutable({
