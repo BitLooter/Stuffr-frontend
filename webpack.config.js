@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
@@ -7,6 +8,14 @@ const appPath = path.join(__dirname, '/app')
 const defaultConfig = {
   apiPath: '/api',
   authPath: '/auth'
+}
+
+let overlayMessage
+try {
+  // eslint-disable-next-line no-sync
+  overlayMessage = fs.readFileSync(path.join(__dirname, '/overlay.html'))
+} catch (e) {
+  // No overlay.html file, ignore error
 }
 
 let localConfig = defaultConfig
@@ -28,7 +37,8 @@ const htmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: path.join(__dirname, '/app/index.ejs'),
   xhtml: true,
   hash: true,
-  siteConfig: JSON.stringify(siteConfig)
+  siteConfig: JSON.stringify(siteConfig),
+  overlayMessage
 })
 
 const copyStaticFilesConfig = new CopyWebpackPlugin(
@@ -61,7 +71,7 @@ module.exports = {
         include: appPath,
         loader: 'babel-loader',
         options: {
-          presets: [['es2015', {modules: false}], 'stage-1', 'react'],
+          presets: [['es2015'], 'stage-1', 'react'],
           plugins: ['transform-decorators-legacy']
           // modules: false
         }

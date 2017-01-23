@@ -15,4 +15,8 @@
   <!-- TODO: Better loading screen -->
   <div id='app'>Stuffr is now loading...</div>
   <noscript>Javascript is disabled. You must enable Javascript to use Stuffr.</noscript>
+
+  <% if (htmlWebpackPlugin.options.overlayMessage) { %>
+    <div class='overlayMessage'><%= htmlWebpackPlugin.options.overlayMessage %></div>
+  <% } %>
 </html>

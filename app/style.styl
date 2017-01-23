@@ -3,10 +3,21 @@ body
     padding: 0
 
 .app
-    position: absolute
     height: 100%
+    position: absolute
 
 .actionButton
+    bottom: 1em
     position: fixed
     right: 1em
-    bottom: 1em
+
+.overlayMessage
+    bottom: 0
+    font-family: sans-serif
+    font-size: 5em
+    opacity: .25
+    pointer-events: none
+    position: fixed
+    text-align: center
+    width: 100%
+    z-index: 9999
