@@ -15,21 +15,28 @@ const THINGDIALOG_CLOSED = Symbol.for('ui.THINGDIALOG_CLOSED')
 const MULTILINE_ROWS = 5
 
 @connect(
-  (state) => {
+  function mapStateToProps (state) {
     return {
       currentInventoryId: state.database.inventories.length > 0
         ? state.database.inventories[state.ui.currentInventory].id
         : null
     }
+  },
+  function mapDispatchToProps (dispatch) {
+    return {
+      createThing: (inventoryId, data) => {
+        dispatch(api.postThing(inventoryId, data))
+      },
+      updateThing: (thingId, data) => {
+        dispatch(api.updateThing(thingId, data))
+      },
+      closeDialog: () => {
+        dispatch(ui.editThingDone())
+      }
+    }
   }
 )
 export default class ThingEditDialog extends React.Component {
-  static proptypes = { dispatch: React.PropTypes.func.isRequired }
-
-  close = () => {
-    this.props.dispatch(ui.editThingDone())
-  }
-
   getThingData = () => {
     return {
       name: this.refs.thingName.getValue(),
@@ -44,28 +51,28 @@ export default class ThingEditDialog extends React.Component {
     if (this.props.mode === THINGDIALOG_EDIT) {
       const updateData = this.getThingData()
       log.info(`Updating existing thing named ${updateData.name}`)
-      this.props.dispatch(api.updateThing(this.props.thing.id, updateData))
+      this.props.updateThing(this.props.thing.id, updateData)
     } else if (this.props.mode === THINGDIALOG_NEW) {
       const newData = this.getThingData()
       log.info(`Creating new thing named ${newData.name}`)
-      this.props.dispatch(api.postThing(this.props.currentInventoryId, newData))
+      this.props.createThing(this.props.currentInventoryId, newData)
     } else {
       const errorMessage = `Unknown mode for ThingEditDialog: ${String(this.props.mode)}`
       log.error(errorMessage)
       throw new Error(errorMessage)
     }
-    this.close()
+    this.props.closeDialog()
   }
 
   handleDelete = () => {
     // TODO: Confirm deletion with user
     this.props.dispatch(api.deleteThing(this.props.thing.id))
-    this.close()
+    this.props.closeDialog()
   }
 
   handleCancel = () => {
     // TODO: Confirm cancel if data changed
-    this.close()
+    this.props.closeDialog()
   }
 
   render () {

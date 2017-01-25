@@ -5,9 +5,9 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import {ui} from '../actions'
 
 // TODO: Height needs to be set to the height of the window
-const ThingList = ({ dispatch, things }) =>
+const ThingList = ({ things, editThing }) =>
   <Table multiSelectable height='700px' onCellClick={(row) => {
-    dispatch(ui.editThing(things[row]))
+    editThing(things[row])
   }}>
     <TableHeader>
       <TableRow>
@@ -29,11 +29,16 @@ ThingList.proptypes = {
   things: React.PropTypes.array.isRequired
 }
 
-function mapStateToProps (state) {
-  return {things: state.database.things}
-}
-
 const ThingListContainer = connect(
-  mapStateToProps
+  function mapStateToProps (state) {
+    return {things: state.database.things}
+  },
+  function mapDispatchToProps (dispatch) {
+    return {
+      editThing: (thing) => {
+        dispatch(ui.editThing(thing))
+      }
+    }
+  }
 )(ThingList)
 export default ThingListContainer

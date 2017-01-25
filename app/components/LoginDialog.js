@@ -12,6 +12,12 @@ import {loginUser, registerUser} from '../actions'
     return {
       authenticated: state.ui.authorized
     }
+  },
+  function mapDispatchToProps (dispatch) {
+    return {
+      login: (email, password) => { dispatch(loginUser(email, password)) },
+      register: (registerInfo) => { dispatch(registerUser(registerInfo)) }
+    }
   }
 )
 export default class LoginDialog extends React.Component {
@@ -46,7 +52,7 @@ export default class LoginDialog extends React.Component {
     // TODO: verify data
     const loginInfo = this.getLoginInfo()
     log.info(`Login request for ${loginInfo.email}`)
-    this.props.dispatch(loginUser(loginInfo.email, loginInfo.password))
+    this.props.login(loginInfo.email, loginInfo.password)
   }
 
   handleRegister = () => {
@@ -54,7 +60,7 @@ export default class LoginDialog extends React.Component {
     // TODO: confirm password
     const registerInfo = this.getRegisterInfo()
     log.info(`Register request for ${registerInfo.email}`)
-    this.props.dispatch(registerUser(registerInfo))
+    this.props.register(registerInfo)
   }
 
   // Forms

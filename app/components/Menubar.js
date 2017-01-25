@@ -11,7 +11,15 @@ import {ui, logoutUser, loadInventory} from '../actions'
 
 // BUG: inventory menu gets screwy when no inventories exist
 
-@connect()
+@connect(
+  undefined,
+  function mapDispatchToProps (dispatch) {
+    return {
+      selectInventory: (index) => { dispatch(loadInventory(index)) },
+      addInventory: () => { dispatch(ui.createNewInventory()) }
+    }
+  }
+)
 class InventoryMenu extends React.Component {
   constructor (props) {
     super(props)
@@ -41,18 +49,18 @@ class InventoryMenu extends React.Component {
               const index = inventories.indexOf(i)
               return (
                 <MenuItem primaryText={i.name} key={index}
-                           onTouchTap={() => {
-                             this.props.dispatch(loadInventory(index))
-                             this.handleRequestClose()
-                           }} />
+                          onTouchTap={() => {
+                            this.handleRequestClose()
+                            this.props.selectInventory(index)
+                          }} />
               )
             }) }
             <Divider />
             <MenuItem primaryText='Add a new inventory...'
-                      onTouchTap={() => {
-                        this.props.dispatch(ui.createNewInventory())
+                      onTouchTap={ () => {
                         this.handleRequestClose()
-                      }}/>
+                        this.props.addInventory()
+                      }} />
           </Menu>
         </Popover>
       </div>
@@ -61,7 +69,7 @@ class InventoryMenu extends React.Component {
 }
 
 // TODO: disable inventory menu when logged out
-const Menubar = ({dispatch, inventories, inventoryName, authenticated}) =>
+const Menubar = ({inventories, inventoryName, authenticated, logOut}) =>
   <Toolbar>
     <ToolbarGroup>
       <InventoryMenu title={inventoryName} inventories={inventories} />
@@ -69,21 +77,24 @@ const Menubar = ({dispatch, inventories, inventoryName, authenticated}) =>
     <ToolbarGroup>
       <RaisedButton label='Logout'
                     primary={authenticated} secondary={!authenticated}
-                    onTouchTap={() => {
-                      dispatch(logoutUser())
-                    }} />
+                    onTouchTap={logOut} />
     </ToolbarGroup>
   </Toolbar>
 
-function mapStateToProps (state) {
-  const currentInventory = state.database.inventories[state.ui.currentInventory]
-  return {
-    inventories: state.database.inventories,
-    // TODO: Put something other than 'Loading...' when logged out
-    inventoryName: currentInventory ? currentInventory.name : 'Loading...',
-    authenticated: state.database.user !== null
+const MenubarContainer = connect(
+  function mapStateToProps (state) {
+    const currentInventory = state.database.inventories[state.ui.currentInventory]
+    return {
+      inventories: state.database.inventories,
+      // TODO: Put something other than 'Loading...' when logged out
+      inventoryName: currentInventory ? currentInventory.name : 'Loading...',
+      authenticated: state.database.user !== null
+    }
+  },
+  function mapDispatchToProps (dispatch) {
+    return {
+      logOut: () => dispatch(logoutUser())
+    }
   }
-}
-
-const MenubarContainer = connect(mapStateToProps)(Menubar)
+)(Menubar)
 export default MenubarContainer
