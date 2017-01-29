@@ -5,5 +5,5 @@ var register = require('babel-core/register')
 var log = require('loglevel')
 log.setLevel(log.levels.SILENT)
 var options = require('../webpack.config.js')
-options.module.loaders[0].query.plugins = ['babel-plugin-rewire']
-register(options.module.loaders[0].query)
+options.module.rules[1].options.plugins = options.module.rules[1].options.plugins.concat(['babel-plugin-rewire'])
+register(options.module.rules[1].options)

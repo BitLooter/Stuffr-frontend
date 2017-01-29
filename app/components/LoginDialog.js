@@ -7,6 +7,41 @@ import TextField from 'material-ui/TextField'
 
 import {loginUser, registerUser} from '../actions'
 
+const MODE_LOGIN = Symbol()
+const MODE_REGISTER = Symbol()
+
+const LoginForm = ({values, onChange, onSubmit}) => <div>
+  <TextField name='email' onChange={onChange}
+    floatingLabelText='Email' /> <br />
+  <TextField name='password' onChange={onChange}
+    floatingLabelText='Password' type='password' /> <br />
+  <RaisedButton
+    primary={true}
+    label='Login'
+    fullWidth={true}
+    onClick={onSubmit}
+  />
+</div>
+
+const RegisterForm = ({values, onChange, onSubmit}) => <div>
+  <TextField name='email' onChange={onChange}
+    floatingLabelText='Email' /> <br />
+  <TextField name='password' onChange={onChange}
+    floatingLabelText='Password' type='password' /> <br />
+  <TextField name='password_confirm' onChange={onChange}
+    floatingLabelText='Password again' type='password' /> <br />
+  <TextField name='name_first' onChange={onChange}
+    floatingLabelText='First name' />
+  <TextField name='name_last' onChange={onChange}
+    floatingLabelText='Last name' /> <br />
+  <RaisedButton
+    primary={true}
+    label='Register'
+    fullWidth={true}
+    onClick={onSubmit}
+  />
+</div>
+
 @connect(
   function mapStateToProps (state) {
     return {
@@ -24,9 +59,18 @@ export default class LoginDialog extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      title: 'Login',
-      form: this.loginForm,
-      buttons: this.loginButtons
+      mode: MODE_LOGIN,
+      login: {
+        email: '',
+        password: ''
+      },
+      register: {
+        email: '',
+        password: '',
+        password_confirm: '',
+        name_first: '',
+        name_last: ''
+      }
     }
   }
 
@@ -35,7 +79,7 @@ export default class LoginDialog extends React.Component {
     // TODO: forms retain data on switch, fix that
     this.setState({
       title: 'Register',
-      form: this.registerForm,
+      mode: MODE_REGISTER,
       buttons: this.registerButtons
     })
   }
@@ -43,39 +87,35 @@ export default class LoginDialog extends React.Component {
   handleSwitchToLogin = () => {
     this.setState({
       title: 'Login',
-      form: this.loginForm,
+      mode: MODE_LOGIN,
       buttons: this.loginButtons
     })
   }
 
-  handleLogin = () => {
+  handleChangeLogin = (e) => {
+    const newData = {[e.target.name]: e.target.value}
+    this.setState({login: {...this.state.login, ...newData}})
+  }
+
+  handleSubmitLogin = () => {
     // TODO: verify data
-    const loginInfo = this.getLoginInfo()
+    const loginInfo = this.state.login
     log.info(`Login request for ${loginInfo.email}`)
     this.props.login(loginInfo.email, loginInfo.password)
   }
 
-  handleRegister = () => {
+  handleChangeRegister = (e) => {
+    const newData = {[e.target.name]: e.target.value}
+    this.setState({register: {...this.state.register, ...newData}})
+  }
+
+  handleSubmitRegister = () => {
     // TODO: verify data
     // TODO: confirm password
-    const registerInfo = this.getRegisterInfo()
+    const registerInfo = this.state.register
     log.info(`Register request for ${registerInfo.email}`)
     this.props.register(registerInfo)
   }
-
-  // Forms
-  loginForm = <div>
-    <TextField name='email' ref='email'
-      floatingLabelText='Email' /> <br />
-    <TextField name='password' ref='password'
-      floatingLabelText='Password' type='password' /> <br />
-    <RaisedButton
-      primary={true}
-      label='Login'
-      fullWidth={true}
-      onClick={this.handleLogin}
-    />
-  </div>
 
   loginButtons = [
     <RaisedButton
@@ -86,25 +126,6 @@ export default class LoginDialog extends React.Component {
     />
   ]
 
-  registerForm = <div>
-    <TextField name='email' ref='email'
-      floatingLabelText='Email' /> <br />
-    <TextField name='password' ref='password'
-      floatingLabelText='Password' type='password' /> <br />
-    <TextField name='password_confirm' ref='password_verify'
-      floatingLabelText='Password again' type='password' /> <br />
-    <TextField name='name_first' ref='name_first'
-      floatingLabelText='First name' />
-    <TextField name='name_last' ref='name_last'
-      floatingLabelText='Last name' /> <br />
-    <RaisedButton
-      primary={true}
-      label='Register'
-      fullWidth={true}
-      onClick={this.handleRegister}
-    />
-  </div>
-
   registerButtons = [
     <RaisedButton
       primary={true}
@@ -114,29 +135,36 @@ export default class LoginDialog extends React.Component {
     />
   ]
 
-  // Utility methods
-  getLoginInfo () {
-    return {email: this.refs.email.getValue(),
-      password: this.refs.password.getValue()}
-  }
-
-  getRegisterInfo () {
-    return {email: this.refs.email.getValue(),
-      password: this.refs.password.getValue(),
-      name_last: this.refs.name_last.getValue(),
-      name_first: this.refs.name_first.getValue()}
-  }
-
   // TODO: Show an error if wrong credentials are used
-  // TODO: Password reset button
+  // TODO: Password reset mode
   render () {
+    let form, title, buttons
+    switch (this.state.mode) {
+      case MODE_LOGIN:
+        form = <LoginForm values={this.state.login}
+                          onChange={this.handleChangeLogin}
+                          onSubmit={this.handleSubmitLogin} />
+        title = 'Login'
+        buttons = this.loginButtons
+        break
+      case MODE_REGISTER:
+        form = <RegisterForm values={this.state.register}
+                             onChange={this.handleChangeRegister}
+                             onSubmit={this.handleSubmitRegister} />
+        title = 'Register'
+        buttons = this.registerButtons
+        break
+      default:
+        // TODO: do something here
+    }
+
     return (
       <Dialog
-        title={this.state.title}
-        actions={this.state.buttons}
+        title={title}
+        actions={buttons}
         open={!this.props.authenticated}
       >
-        {this.state.form}
+        {form}
       </Dialog>
     )
   }

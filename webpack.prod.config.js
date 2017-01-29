@@ -1,6 +1,6 @@
 const CompressionPlugin = require('compression-webpack-plugin')
 const settings = require('./webpack.config')
-
+//
 const prodPlugins = [
   new CompressionPlugin({
     algorithm: 'gzip',
@@ -13,6 +13,5 @@ settings.module.rules = settings.module.rules.filter((rule) => {
 })
 settings.devtool = 'cheap-module-source-map'
 settings.plugins = settings.plugins.concat(prodPlugins)
-settings.output.path = `${settings.output.path}-prod`
 
 module.exports = settings
