@@ -9,13 +9,15 @@ import InventoryEditDialog from './InventoryEditDialog'
 import Menubar from './Menubar'
 import {ui} from '../actions'
 
-const App = ({dispatch, thingDialogMode, thingDialogData,
-              inventoryDialogMode, inventoryDialogData}) =>
+const App = ({thingDialogMode, thingDialogData,
+              inventoryDialogMode, inventoryDialogData,
+              onClickActionButton}) =>
   <div className='app'>
     <Menubar />
     <ThingList />
-    <FloatingActionButton className='actionButton' onClick={() =>
-      dispatch(ui.createNewThing())}>+</FloatingActionButton>
+    {/* TODO: SVG icon in button */}
+    <FloatingActionButton className='actionButton'
+      onClick={onClickActionButton}>+</FloatingActionButton>
     {/* Dialogs (normally hidden) */}
     <ThingEditDialog mode={thingDialogMode} thing={thingDialogData} />
     <InventoryEditDialog mode={inventoryDialogMode} inventory={inventoryDialogData} />
@@ -30,6 +32,12 @@ const AppContainer = connect(
       thingDialogData: state.ui.thingDialog.thing,
       inventoryDialogMode: state.ui.inventoryDialog.mode,
       inventoryDialogData: state.ui.inventoryDialog.inventory
+    }
+  },
+  function mapDispatchToProps (dispatch) {
+    // TODO: ensure only one dialog open
+    return {
+      onClickActionButton: () => { dispatch(ui.createNewThing()) }
     }
   }
 )(App)

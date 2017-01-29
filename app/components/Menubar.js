@@ -5,8 +5,11 @@ import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import Divider from 'material-ui/Divider'
 import Popover from 'material-ui/Popover'
+import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
+import MenuIcon from 'material-ui/svg-icons/navigation/menu'
 
+import Sidebar from './Sidebar'
 import {ui, logoutUser, loadInventory} from '../actions'
 
 // BUG: inventory menu gets screwy when no inventories exist
@@ -69,19 +72,8 @@ class InventoryMenu extends React.Component {
 }
 
 // TODO: disable inventory menu when logged out
-const Menubar = ({inventories, inventoryName, authenticated, logOut}) =>
-  <Toolbar>
-    <ToolbarGroup>
-      <InventoryMenu title={inventoryName} inventories={inventories} />
-    </ToolbarGroup>
-    <ToolbarGroup>
-      <RaisedButton label='Logout'
-                    primary={authenticated} secondary={!authenticated}
-                    onTouchTap={logOut} />
-    </ToolbarGroup>
-  </Toolbar>
 
-const MenubarContainer = connect(
+@connect(
   function mapStateToProps (state) {
     const currentInventory = state.database.inventories[state.ui.currentInventory]
     return {
@@ -96,5 +88,34 @@ const MenubarContainer = connect(
       logOut: () => dispatch(logoutUser())
     }
   }
-)(Menubar)
-export default MenubarContainer
+)
+class Menubar extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {sidebarOpen: false}
+  }
+
+  render () {
+    return (
+      <div>
+        <Sidebar open={this.state.sidebarOpen}
+                 onClose={() => { this.setState({sidebarOpen: false}) }}
+                 onLogout={this.props.logOut}/>
+        <Toolbar>
+          <ToolbarGroup>
+            <FlatButton icon={<MenuIcon />}
+                        onTouchTap={
+                          () => {
+                            this.setState({sidebarOpen: true})
+                          }}
+            />
+            <InventoryMenu title={this.props.inventoryName}
+                           inventories={this.props.inventories} />
+          </ToolbarGroup>
+        </Toolbar>
+      </div>
+    )
+  }
+}
+
+export default Menubar
