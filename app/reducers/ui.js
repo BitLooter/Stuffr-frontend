@@ -16,7 +16,7 @@ const placeholderThing = Immutable(models.createThing('PLACEHOLDER'))
 const placeholderInventory = Immutable(models.createInventory('PLACEHOLDER'))
 const emptyThing = Immutable(models.createThing(''))
 const emptyInventory = Immutable(models.createInventory(''))
-const noUser = Immutable({authorized: false, currentInventory: null})
+const noUser = Immutable({authenticated: false, currentInventory: null})
 
 function createNewThingReducer (state, action) {
   let newState = state.setIn(['thingDialog', 'mode'], THINGDIALOG_NEW)
@@ -55,11 +55,11 @@ function setCurrentInventoryReducer (state, action) {
 }
 
 function authorizationRequiredReducer (state, action) {
-  return state.set('authorized', false)
+  return state.set('authenticated', false)
 }
 
 function userAuthenticatedReducer (state, action) {
-  return state.set('authorized', true)
+  return state.set('authenticated', true)
 }
 
 function purgeUserReducer (state, action) {
@@ -79,7 +79,7 @@ const ui = handleActions({
   REGISTER_USER__DONE: userAuthenticatedReducer,
   PURGE_USER: purgeUserReducer
 }, Immutable({
-  authorized: true,
+  authenticated: true,
   currentInventory: null,
   thingDialog: {
     mode: THINGDIALOG_CLOSED,
