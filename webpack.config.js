@@ -10,6 +10,9 @@ const defaultConfig = {
   authPath: '/auth'
 }
 
+// Need package.json to get current version
+const packageConfig = require('./package.json')
+
 let overlayMessage
 try {
   // eslint-disable-next-line no-sync
@@ -29,7 +32,8 @@ if (process.env.NODE_ENV) {
 // TODO: use spread operator when available, general cleanup
 const siteConfig = {
   apiPath: localConfig.apiPath || defaultConfig.apiPath,
-  authPath: localConfig.authPath || defaultConfig.authPath
+  authPath: localConfig.authPath || defaultConfig.authPath,
+  frontendVersion: packageConfig.version
 }
 
 const htmlWebpackPluginConfig = new HtmlWebpackPlugin({
