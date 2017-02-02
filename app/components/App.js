@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
+import ContentAddIcon from 'material-ui/svg-icons/content/add'
 
 import ThingList from './ThingList'
 import AuthenticationManager from './AuthenticationManager'
@@ -16,9 +17,9 @@ const App = ({thingDialogMode, thingDialogData,
     <AuthenticationManager>
       <Menubar />
       <ThingList />
-      {/* TODO: SVG icon in button */}
       <FloatingActionButton className='actionButton'
-        onClick={onClickActionButton}>+</FloatingActionButton>
+        onTouchTap={onClickActionButton}><ContentAddIcon />
+      </FloatingActionButton>
       {/* Dialogs (normally hidden) */}
       <ThingEditDialog mode={thingDialogMode} thing={thingDialogData} />
       <InventoryEditDialog mode={inventoryDialogMode} inventory={inventoryDialogData} />
