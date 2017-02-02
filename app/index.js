@@ -7,7 +7,7 @@ import createLogger from 'redux-logger'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import log from 'loglevel'
 import i18next from 'i18next'
-import XHR from 'i18next-xhr-backend'
+import i18nextFetch from 'i18next-fetch-backend'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import {loadUser} from './actions'
@@ -26,7 +26,7 @@ const store = redux.createStore(stuffrApp, redux.compose(
   window.devToolsExtension ? window.devToolsExtension() : (f) => f
 ))
 
-i18next.use(XHR).init({
+i18next.use(i18nextFetch).init({
   lng: 'en',
   backend: {
     loadPath: '/locales/{{lng}}.json',
