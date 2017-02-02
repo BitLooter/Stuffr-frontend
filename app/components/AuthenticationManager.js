@@ -13,10 +13,6 @@ const MODE_REGISTER = Symbol('MODE_REGISTER')
     return {
       authenticated: state.ui.authenticated
     }
-  },
-  function mapDispatchToProps (dispatch) {
-    return {
-    }
   }
 )
 export default class AuthenticationManager extends React.Component {
@@ -36,6 +32,7 @@ export default class AuthenticationManager extends React.Component {
     let component
     // TODO: Password reset mode
     if (this.props.authenticated) {
+      // Rest of the UI is only rendered if user is authenticated
       component = <div>{this.props.children}</div>
     } else if (this.state.mode === MODE_LOGIN) {
       component = <LoginDialog
