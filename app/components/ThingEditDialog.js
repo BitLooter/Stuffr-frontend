@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import i18next from 'i18next'
 import log from 'loglevel'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
@@ -82,45 +83,45 @@ export default class ThingEditDialog extends React.Component {
       <div>
         <FlatButton
           style={{float: 'left'}}
-          label='Delete'
+          label={i18next.t('thing.delete')}
           onClick={this.handleDelete}
         />
         <FlatButton
-          label='Cancel'
+          label={i18next.t('common.cancel')}
           onClick={this.handleCancel}
         />
         <RaisedButton
           primary={true}
-          label='Save'
+          label={i18next.t('common.save')}
           onClick={this.handleDone}
         />
       </div>
     ]
     return (
       <Dialog
-        title={this.props.mode === THINGDIALOG_EDIT ? thing.name : 'New thing'}
+        title={this.props.mode === THINGDIALOG_EDIT ? thing.name : i18next.t('thing.newTitle')}
         actions={buttons}
         open={this.props.mode !== THINGDIALOG_CLOSED}
         onRequestClose={this.handleCancel}
       >
         <TextField name='thingName' ref='thingName'
-          floatingLabelText='Name'
+          floatingLabelText={i18next.t('thing.name')}
           defaultValue={thing.name} /><br />
         <TextField name='thingDesc' ref='thingDesc'
-          floatingLabelText='Description'
+          floatingLabelText={i18next.t('thing.description')}
           multiLine={true}
           rows={MULTILINE_ROWS} rowsMax={MULTILINE_ROWS}
           fullWidth={true}
           defaultValue={thing.description} /><br />
         <TextField name='thingNotes' ref='thingNotes'
-          floatingLabelText='Notes'
+          floatingLabelText={i18next.t('thing.notes')}
           multiLine={true}
           rows={MULTILINE_ROWS} rowsMax={MULTILINE_ROWS}
           fullWidth={true}
           defaultValue={thing.notes} /><br />
         {this.props.mode !== THINGDIALOG_EDIT ? null : (<div>
-          Date added: {moment(thing.date_created).calendar()}<br />
-          Last updated: {moment(thing.date_modified).calendar()}
+          {i18next.t('thing.dateAdded')}: {moment(thing.date_created).calendar()}<br />
+          {i18next.t('thing.dateModified')}: {moment(thing.date_modified).calendar()}
         </div>)}
       </Dialog>
     )

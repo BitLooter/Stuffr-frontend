@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import i18next from 'i18next'
 import log from 'loglevel'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
@@ -64,25 +65,25 @@ export default class InventoryEditDialog extends React.Component {
     const buttons = [
       <div>
         <FlatButton
-          label='Cancel'
+          label={i18next.t('common.cancel')}
           onClick={this.handleCancel}
         />
         <RaisedButton
           primary={true}
-          label='Save'
+          label={i18next.t('common.save')}
           onClick={this.handleDone}
         />
       </div>
     ]
     return (
       <Dialog
-        title={this.props.mode === INVENTORYDIALOG_EDIT ? inventory.name : 'New inventory'}
+        title={this.props.mode === INVENTORYDIALOG_EDIT ? inventory.name : i18next.t('inventory.newTitle')}
         actions={buttons}
         open={this.props.mode !== INVENTORYDIALOG_CLOSED}
         onRequestClose={this.handleCancel}
       >
         <TextField name='inventoryName' ref='inventoryName'
-          floatingLabelText='Name'
+          floatingLabelText={i18next.t('inventory.name')}
           defaultValue={inventory.name} /><br />
         {this.props.mode !== INVENTORYDIALOG_EDIT ? null : (<div>
           Date added: {moment(inventory.date_created).calendar()}

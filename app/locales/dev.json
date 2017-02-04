@@ -1,5 +1,45 @@
 {
+  "common": {
+    "cancel": "common.cancel",
+    "close": "common.close",
+    "save": "common.save"
+  },
+  "menu": {
+    "addInventory": "menu.addInventory",
+    "logout": "menu.logout"
+  },
+  "auth": {
+    "loginTitle": "auth.loginTitle",
+    "loginSubmit": "auth.loginSubmit",
+    "switchToRegister": "auth.switchToRegister",
+    "registerTitle": "auth.registerTitle",
+    "registerSubmit": "auth.registerSubmit",
+    "switchToLogin": "auth.switchToLogin",
+    "email": "auth.email",
+    "password": "auth.password",
+    "passwordConfirm": "auth.passwordConfirm",
+    "passwordMismatch": "auth.passwordMismatch",
+    "nameFirst": "auth.nameFirst",
+    "nameLast": "auth.nameLast"
+  },
+  "thingList": {
+    "nameHeader": "thingList.nameHeader",
+    "descHeader": "thingList.descHeader"
+  },
+  "inventory": {
+    "name": "inventory.name",
+    "newTitle": "inventory.newTitle"
+  },
   "thing": {
-    "add": "ADD THING"
+    "name": "thing.name",
+    "description": "thing.description",
+    "notes": "thing.notes",
+    "dateAdded": "thing.dateAdded",
+    "dateModified": "thing.dateModified",
+    "delete": "thing.delete",
+    "newTitle": "thing.newTitle"
+  },
+  "about": {
+    "text": "about.text"
   }
 }

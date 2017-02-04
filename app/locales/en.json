@@ -1,5 +1,46 @@
 {
+  "common": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save"
+  },
+  "menu": {
+    "about": "About Stuffr",
+    "addInventory": "Create new inventory...",
+    "logout": "Log out"
+  },
+  "auth": {
+    "loginTitle": "Log in",
+    "loginSubmit": "Log in",
+    "switchToRegister": "Register new user",
+    "registerTitle": "Register",
+    "registerSubmit": "Register",
+    "switchToLogin": "Log in existing user",
+    "email": "Email",
+    "password": "Password",
+    "passwordConfirm": "Confirm password",
+    "passwordMismatch": "Passwords do not match",
+    "nameFirst": "First name",
+    "nameLast": "Last name"
+  },
+  "thingList": {
+    "nameHeader": "Name",
+    "descHeader": "Description"
+  },
+  "inventory": {
+    "name": "Name",
+    "newTitle": "New inventory"
+  },
   "thing": {
-    "add": "Add thing"
+    "name": "Name",
+    "description": "Description",
+    "notes": "Notes",
+    "dateAdded": "Date added",
+    "dateModified": "Last modified",
+    "delete": "Delete",
+    "newTitle": "New thing"
+  },
+  "about": {
+    "text": "Stuffr frontend v$VERSION"
   }
 }

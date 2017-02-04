@@ -1,5 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import i18next from 'i18next'
+// import {t} from 'i18next'
 import log from 'loglevel'
 import Dialog from 'material-ui/Dialog'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -42,7 +44,7 @@ export default class LoginDialog extends React.Component {
     const loginButtons = [
       <RaisedButton
         primary={true}
-        label='Register new user'
+        label={i18next.t('auth.switchToRegister')}
         fullWidth={true}
         onTouchTap={this.props.onSwitchToRegister}
       />
@@ -50,17 +52,17 @@ export default class LoginDialog extends React.Component {
 
     return (
       <Dialog
-        title='Login'
+        title={i18next.t('auth.loginTitle')}
         actions={loginButtons}
         open={true}
       >
         <TextField name='email' onChange={this.handleChange}
-          floatingLabelText='Email' /> <br />
+          floatingLabelText={i18next.t('auth.email')} /> <br />
         <TextField name='password' onChange={this.handleChange}
-          floatingLabelText='Password' type='password' /> <br />
+          floatingLabelText={i18next.t('auth.password')} type='password' /> <br />
         <RaisedButton
           primary={true}
-          label='Login'
+          label={i18next.t('auth.loginSubmit')}
           fullWidth={true}
           onTouchTap={this.handleSubmit}
         />

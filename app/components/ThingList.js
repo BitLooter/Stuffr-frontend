@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import i18next from 'i18next'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 
 import {ui} from '../actions'
@@ -11,8 +12,8 @@ const ThingList = ({ things, editThing }) =>
   }}>
     <TableHeader>
       <TableRow>
-        <TableHeaderColumn>Name</TableHeaderColumn>
-        <TableHeaderColumn>Description</TableHeaderColumn>
+        <TableHeaderColumn>{i18next.t('thingList.nameHeader')}</TableHeaderColumn>
+        <TableHeaderColumn>{i18next.t('thingList.descHeader')}</TableHeaderColumn>
       </TableRow>
     </TableHeader>
     <TableBody showRowHover>

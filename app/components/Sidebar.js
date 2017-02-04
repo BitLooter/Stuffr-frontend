@@ -1,3 +1,4 @@
+import i18next from 'i18next'
 import React from 'react'
 import Drawer from 'material-ui/Drawer'
 import Dialog from 'material-ui/Dialog'
@@ -7,14 +8,15 @@ import ArrowBackIcon from 'material-ui/svg-icons/navigation/arrow-back'
 
 // Doing a half-assed dynamic template thing here, if more strings like this are done in
 // the future this should be replaced with something like an sprintf library.
-const aboutMessage = 'Stuffr frontend v$VERSION'.replace('$VERSION', window.siteConfig.frontendVersion)
 const AboutDialog = ({open, onClose}) =>
   <Dialog
     open={open}
     modal={true}
-    actions={<RaisedButton label='Close' onTouchTap={onClose} />}
+    actions={<RaisedButton label={i18next.t('common.close')} onTouchTap={onClose} />}
   >
-    {aboutMessage}
+    {/* Doing a half-assed dynamic template thing here, if more strings like this are done in
+        the future this should be replaced with something like an sprintf library. */}
+    {i18next.t('about.text').replace('$VERSION', window.siteConfig.frontendVersion)}
   </Dialog>
 
 // TODO: Show current version somewhere
@@ -40,7 +42,7 @@ export default class Sidebar extends React.Component {
               icon={<ArrowBackIcon />}
               onTouchTap={this.props.onClose}
             />
-            <RaisedButton label='Logout'
+            <RaisedButton label={i18next.t('menu.logout')}
                           onTouchTap={() => {
                             this.props.onClose()
                             this.props.onLogout()
@@ -48,7 +50,7 @@ export default class Sidebar extends React.Component {
           </div>
           <div>
             <FlatButton
-              label='About Stuffr'
+              label={i18next.t('menu.about')}
               onTouchTap={() => this.setState({aboutDialogOpen: true})}
             />
           </div>

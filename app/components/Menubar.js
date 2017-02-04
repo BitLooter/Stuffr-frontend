@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import i18next from 'i18next'
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
@@ -59,7 +60,7 @@ class InventoryMenu extends React.Component {
               )
             }) }
             <Divider />
-            <MenuItem primaryText='Add a new inventory...'
+            <MenuItem primaryText={i18next.t('menu.addInventory')}
                       onTouchTap={ () => {
                         this.handleRequestClose()
                         this.props.addInventory()

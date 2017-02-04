@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import i18next from 'i18next'
 import log from 'loglevel'
 import Dialog from 'material-ui/Dialog'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -49,38 +50,38 @@ export default class RegisterDialog extends React.Component {
     const buttons = [
       <RaisedButton
         primary={true}
-        label='Back to login'
+        label={i18next.t('auth.switchToLogin')}
         fullWidth={true}
         onClick={this.props.onSwitchToLogin}
       />
     ]
 
     const passwordError = this.state.password !== this.state.password_confirm
-      ? 'Passwords do not match'
+      ? i18next.t('auth.passwordMismatch')
       : undefined
 
     return (
       <Dialog
-        title='Register'
+        title={i18next.t('auth.registerTitle')}
         actions={buttons}
         open={true}
       >
         <TextField name='email' onBlur={this.handleChange}
-          floatingLabelText='Email' /> <br />
+          floatingLabelText={i18next.t('auth.email')} /> <br />
         <TextField name='password' onBlur={this.handleChange}
-          floatingLabelText='Password' type='password'
+          floatingLabelText={i18next.t('auth.password')} type='password'
           errorText={passwordError} /> <br />
         {/* TODO: check passwords with onChange to report status without blur */}
         <TextField name='password_confirm' onBlur={this.handleChange}
-          floatingLabelText='Password again' type='password'
+          floatingLabelText={i18next.t('auth.passwordConfirm')} type='password'
           errorText={passwordError} /> <br />
         <TextField name='name_first' onBlur={this.handleChange}
-          floatingLabelText='First name' />
+          floatingLabelText={i18next.t('auth.nameFirst')} />
         <TextField name='name_last' onBlur={this.handleChange}
-          floatingLabelText='Last name' /> <br />
+          floatingLabelText={i18next.t('auth.nameLast')} /> <br />
         <RaisedButton
           primary={true}
-          label='Register'
+          label={i18next.t('auth.registerSubmit')}
           fullWidth={true}
           onClick={this.handleSubmit}
         />
