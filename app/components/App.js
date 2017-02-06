@@ -10,25 +10,32 @@ import InventoryEditDialog from './InventoryEditDialog'
 import Menubar from './Menubar'
 import {ui} from '../actions'
 
+const THINGDIALOG_CLOSED = Symbol.for('ui.THINGDIALOG_CLOSED')
+const INVENTORYDIALOG_CLOSED = Symbol.for('ui.INVENTORYDIALOG_CLOSED')
+
 const App = ({thingDialogMode, thingDialogData,
               inventoryDialogMode, inventoryDialogData,
-              onClickActionButton}) =>
-  <div className='app'>
+              onClickActionButton}) => {
+  let dialog = null
+  if (thingDialogMode !== THINGDIALOG_CLOSED) {
+    dialog = <ThingEditDialog mode={thingDialogMode} thing={thingDialogData} />
+  } else if (inventoryDialogMode !== INVENTORYDIALOG_CLOSED) {
+    dialog = <InventoryEditDialog mode={inventoryDialogMode} inventory={inventoryDialogData} />
+  }
+  return (<div className='app'>
     <AuthenticationManager>
       <Menubar />
       <ThingList />
       <FloatingActionButton className='actionButton'
         onTouchTap={onClickActionButton}><ContentAddIcon />
       </FloatingActionButton>
-      {/* Dialogs (normally hidden) */}
-      <ThingEditDialog mode={thingDialogMode} thing={thingDialogData} />
-      <InventoryEditDialog mode={inventoryDialogMode} inventory={inventoryDialogData} />
+      {dialog   /* Dialogs normally hidden */}
     </AuthenticationManager>
-  </div>
+  </div>)
+}
 
 const AppContainer = connect(
   function mapStateToProps (state) {
-    // TODO: ensure only one dialog open
     return {
       thingDialogMode: state.ui.thingDialog.mode,
       thingDialogData: state.ui.thingDialog.thing,
@@ -37,7 +44,6 @@ const AppContainer = connect(
     }
   },
   function mapDispatchToProps (dispatch) {
-    // TODO: ensure only one dialog open
     return {
       onClickActionButton: () => { dispatch(ui.createNewThing()) }
     }
