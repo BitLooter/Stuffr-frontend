@@ -97,6 +97,7 @@ export const logoutUser = function () {
   return function (dispatch) {
     stuffrApi.logout()
     delete window.localStorage.apiToken
+    delete window.localStorage.lastInventoryId
     // Reducers use purgeUser to clean user data from state
     dispatch(purgeUser())
   }
@@ -117,8 +118,19 @@ export const loadUser = createApiThunk(
     const userInfo = await stuffrApi.getUserInfo()
     await dispatch(api.getInventoryList())
     // Inventory list is populated by previous action
-    // TODO: remember last used inventory
-    dispatch(loadInventory(0))
+    const lastInventoryId = parseInt(window.localStorage.lastInventoryId)
+    const inventories = getState().database.inventories
+    // Autoselect last used inventory
+    let loadIndex = 0
+    if (lastInventoryId) {
+      for (const index in inventories) {
+        if (inventories[index].id === lastInventoryId) {
+          loadIndex = index
+          break
+        }
+      }
+    }
+    dispatch(loadInventory(loadIndex))
     return userInfo
   },
   loadUserRequest, loadUserDone, loadUserError
@@ -136,6 +148,7 @@ export const loadInventoryError = createAction(LOAD_INVENTORY__ERROR)
 export const loadInventory = createApiThunk(
   async function (inventoryIndex, {dispatch, getState}) {
     const inventoryId = getState().database.inventories[inventoryIndex].id
+    window.localStorage.lastInventoryId = inventoryId
     dispatch(ui.setCurrentInventory(inventoryIndex))
     dispatch(api.getThingList(inventoryId))
   },
