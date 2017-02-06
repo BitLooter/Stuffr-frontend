@@ -62,6 +62,15 @@ function userAuthenticatedReducer (state, action) {
   return state.set('authenticated', true)
 }
 
+function userLoginErrorReducer (state, action) {
+  // TODO: make login/register errors more user-friendly
+  return state.set('loginDialogError', action.payload.message)
+}
+
+function userRegisterErrorReducer (state, action) {
+  return state.set('registerDialogError', action.payload.message)
+}
+
 function purgeUserReducer (state, action) {
   return state.merge(noUser)
 }
@@ -76,7 +85,9 @@ const ui = handleActions({
   SET_CURRENT_INVENTORY: setCurrentInventoryReducer,
   AUTHORIZATION_REQUIRED: authorizationRequiredReducer,
   LOGIN_USER__DONE: userAuthenticatedReducer,
+  LOGIN_USER__ERROR: userLoginErrorReducer,
   REGISTER_USER__DONE: userAuthenticatedReducer,
+  REGISTER_USER__ERROR: userRegisterErrorReducer,
   PURGE_USER: purgeUserReducer
 }, Immutable({
   authenticated: true,
@@ -88,7 +99,10 @@ const ui = handleActions({
   inventoryDialog: {
     mode: INVENTORYDIALOG_CLOSED,
     inventory: placeholderInventory
-  }}, {deep: true}
+  },
+  loginDialogError: undefined,
+  registerDialogError: undefined
+}, {deep: true}
 ))
 
 export default ui

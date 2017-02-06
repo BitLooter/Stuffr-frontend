@@ -82,7 +82,6 @@ export const registerUserError = createAction(REGISTER_USER__ERROR)
 //  User info object
 export const registerUser = createApiThunk(
   async function (newUserData, {dispatch, getState}) {
-    // TODO: Handle register errors
     await stuffrApi.registerUser(newUserData)
     storeToken(stuffrApi.token)
     dispatch(loadUser())

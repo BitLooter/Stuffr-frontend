@@ -9,7 +9,11 @@ import TextField from 'material-ui/TextField'
 import {registerUser} from '../actions'
 
 @connect(
-  undefined,
+  function mapStateToProps (state) {
+    return {
+      errorMessage: state.ui.registerDialogError
+    }
+  },
   function mapDispatchToProps (dispatch) {
     return {
       register: (registerInfo) => { dispatch(registerUser(registerInfo)) }
@@ -66,6 +70,7 @@ export default class RegisterDialog extends React.Component {
         actions={buttons}
         open={true}
       >
+        {this.props.errorMessage ? <div>{this.props.errorMessage}</div> : null}
         <TextField name='email' onBlur={this.handleChange}
           floatingLabelText={i18next.t('auth.email')} /> <br />
         <TextField name='password' onBlur={this.handleChange}

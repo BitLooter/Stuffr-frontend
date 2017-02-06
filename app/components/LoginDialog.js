@@ -10,7 +10,11 @@ import TextField from 'material-ui/TextField'
 import {loginUser} from '../actions'
 
 @connect(
-  undefined,
+  function mapStateToProps (state) {
+    return {
+      errorMessage: state.ui.loginDialogError
+    }
+  },
   function mapDispatchToProps (dispatch) {
     return {
       login: (email, password) => { dispatch(loginUser(email, password)) }
@@ -56,6 +60,7 @@ export default class LoginDialog extends React.Component {
         actions={loginButtons}
         open={true}
       >
+        {this.props.errorMessage ? <div>{this.props.errorMessage}</div> : null}
         <TextField name='email' onChange={this.handleChange}
           floatingLabelText={i18next.t('auth.email')} /> <br />
         <TextField name='password' onChange={this.handleChange}
