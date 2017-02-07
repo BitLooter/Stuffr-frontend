@@ -29,10 +29,19 @@ const INVENTORYDIALOG_CLOSED = Symbol.for('ui.INVENTORYDIALOG_CLOSED')
 export default class InventoryEditDialog extends React.Component {
   static proptypes = { dispatch: React.PropTypes.func.isRequired }
 
+  constructor (props) {
+    super(props)
+    this.originalInventory = props.inventory
+  }
+
   getInventoryData = () => {
     return {
       name: this.refs.inventoryName.getValue()
     }
+  }
+
+  dataChanged = () => {
+    const currentData = this.getInventoryData()
   }
 
   handleDone = () => {

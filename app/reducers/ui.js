@@ -12,10 +12,10 @@ const INVENTORYDIALOG_NEW = Symbol.for('ui.INVENTORYDIALOG_NEW')
 const INVENTORYDIALOG_EDIT = Symbol.for('ui.INVENTORYDIALOG_EDIT')
 const INVENTORYDIALOG_CLOSED = Symbol.for('ui.INVENTORYDIALOG_CLOSED')
 
-const placeholderThing = Immutable(models.createThing('PLACEHOLDER'))
+const placeholderThing = Immutable(models.createThing({name: 'PLACEHOLDER'}))
 const placeholderInventory = Immutable(models.createInventory('PLACEHOLDER'))
-const emptyThing = Immutable(models.createThing(''))
-const emptyInventory = Immutable(models.createInventory(''))
+const emptyThing = Immutable(models.createThing())
+const emptyInventory = Immutable(models.createInventory())
 const noUser = Immutable({authenticated: false, currentInventory: null})
 
 function createNewThingReducer (state, action) {

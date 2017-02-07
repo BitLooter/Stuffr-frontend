@@ -2,7 +2,9 @@
   "common": {
     "cancel": "Cancel",
     "close": "Close",
-    "save": "Save"
+    "save": "Save",
+    "yes": "Yes",
+    "no": "No"
   },
   "menu": {
     "about": "About Stuffr",
@@ -38,7 +40,9 @@
     "dateAdded": "Date added",
     "dateModified": "Last modified",
     "delete": "Delete",
-    "newTitle": "New thing"
+    "newTitle": "New thing",
+    "confirmCancelTitle": "Confirm lost changes",
+    "confirmCancelText": "You have made changes. Are you sure you want to lose them?"
   },
   "about": {
     "text": "Stuffr frontend v$VERSION"

@@ -2,7 +2,9 @@
   "common": {
     "cancel": "common.cancel",
     "close": "common.close",
-    "save": "common.save"
+    "save": "common.save",
+    "yes": "common.yes",
+    "no": "common.no"
   },
   "menu": {
     "addInventory": "menu.addInventory",
@@ -37,7 +39,9 @@
     "dateAdded": "thing.dateAdded",
     "dateModified": "thing.dateModified",
     "delete": "thing.delete",
-    "newTitle": "thing.newTitle"
+    "newTitle": "thing.newTitle",
+    "confirmCancelTitle": "thing.confirmCancelTitle",
+    "confirmCancelText": "thing.confirmCancelText"
   },
   "about": {
     "text": "about.text"
