@@ -41,7 +41,8 @@
     "delete": "thing.delete",
     "newTitle": "thing.newTitle",
     "confirmCancelTitle": "thing.confirmCancelTitle",
-    "confirmCancelText": "thing.confirmCancelText"
+    "confirmCancelText": "thing.confirmCancelText",
+    "nameErrorMissing": "thing.name"
   },
   "about": {
     "text": "about.text"

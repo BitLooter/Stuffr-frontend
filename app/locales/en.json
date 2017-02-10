@@ -42,7 +42,8 @@
     "delete": "Delete",
     "newTitle": "New thing",
     "confirmCancelTitle": "Confirm lost changes",
-    "confirmCancelText": "You have made changes. Are you sure you want to lose them?"
+    "confirmCancelText": "You have made changes. Are you sure you want to lose them?",
+    "nameErrorMissing": "Name is required"
   },
   "about": {
     "text": "Stuffr frontend v$VERSION"

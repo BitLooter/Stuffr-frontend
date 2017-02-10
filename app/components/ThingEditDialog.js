@@ -10,6 +10,7 @@ import moment from 'moment'
 
 import {ui, api} from '../actions'
 import ConfirmDialog from './ConfirmDialog'
+import {isString, isEmpty} from '../util'
 
 const THINGDIALOG_NEW = Symbol.for('ui.THINGDIALOG_NEW')
 const THINGDIALOG_EDIT = Symbol.for('ui.THINGDIALOG_EDIT')
@@ -47,10 +48,33 @@ export default class ThingEditDialog extends React.Component {
         description: props.thing.description,
         notes: props.thing.notes
       },
+      errors: {},
       confirm: {
         open: false, title: 'NO TITLE', text: 'ThingEditDialog Confirm placeholder'
       }
     }
+  }
+
+  validateForm = () => {
+    const data = this.state.data
+    const errors = {}
+
+    if (isString(data.name)) {
+      if (data.name.length === 0) {
+        errors.name = i18next.t('thing.nameErrorMissing')
+      }
+    } else {
+      log.error(`Name should be a string, found ${typeof data.name} instead`)
+    }
+    if (data.description !== null && !isString(data.description)) {
+      log.error(`Description should be a string, found ${typeof data.description} instead`)
+    }
+    if (data.notes !== null && !isString(data.notes)) {
+      log.error(`Notes should be a string, found ${typeof data.notes} instead`)
+    }
+
+    this.setState({errors})
+    return isEmpty(errors)
   }
 
   getChangedData = () => {
@@ -78,32 +102,35 @@ export default class ThingEditDialog extends React.Component {
 
   handleDone = () => {
     // TODO: verify data
-    if (this.props.mode === THINGDIALOG_EDIT) {
-      const changedData = this.getChangedData()
-      if (Object.keys(changedData).length > 0) {
-        log.info(`Updating existing thing with id ${this.props.thing.id}`)
-        this.props.updateThing(this.props.thing.id, changedData)
+    if (this.validateForm()) {
+      if (this.props.mode === THINGDIALOG_EDIT) {
+        const changedData = this.getChangedData()
+        if (!isEmpty(changedData)) {
+          log.info(`Updating existing thing with id ${this.props.thing.id}`)
+          this.props.updateThing(this.props.thing.id, changedData)
+        }
+      } else if (this.props.mode === THINGDIALOG_NEW) {
+        const newData = this.state.data
+        log.info(`Creating new thing named ${newData.name}`)
+        this.props.createThing(this.props.currentInventoryId, newData)
+      } else {
+        const errorMessage = `Unknown mode for ThingEditDialog: ${String(this.props.mode)}`
+        log.error(errorMessage)
+        throw new Error(errorMessage)
       }
-    } else if (this.props.mode === THINGDIALOG_NEW) {
-      const newData = this.state.data
-      log.info(`Creating new thing named ${newData.name}`)
-      this.props.createThing(this.props.currentInventoryId, newData)
-    } else {
-      const errorMessage = `Unknown mode for ThingEditDialog: ${String(this.props.mode)}`
-      log.error(errorMessage)
-      throw new Error(errorMessage)
+      this.props.closeDialog()
     }
-    this.props.closeDialog()
   }
 
   handleDelete = () => {
-    // Do not confirm, if a mistake is made it can be retrieved from the trash
+    // Do not confirm, if a mistake is made user can retrieve it from the trash
     this.props.dispatch(api.deleteThing(this.props.thing.id))
     this.props.closeDialog()
   }
 
   handleCancel = () => {
-    if (Object.keys(this.getChangedData()).length > 0) {
+    if (!isEmpty(this.getChangedData())) {
+    // if (Object.keys(this.getChangedData()).length > 0) {
       this.setState({confirm: {
         open: true,
         title: i18next.t('thing.confirmCancelTitle'),
@@ -156,6 +183,7 @@ export default class ThingEditDialog extends React.Component {
         <TextField name='name'
           floatingLabelText={i18next.t('thing.name')}
           defaultValue={thing.name}
+          errorText={this.state.errors.name}
           onBlur={this.handleChange} /><br />
         <TextField name='description'
           floatingLabelText={i18next.t('thing.description')}
