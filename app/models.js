@@ -4,8 +4,6 @@ export function createThing ({name = '', description = null, notes = null} = {})
   return {name, description, notes}
 }
 
-export function createInventory (name) {
-  return {
-    name
-  }
+export function createInventory ({name = ''} = {}) {
+  return {name}
 }

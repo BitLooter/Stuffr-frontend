@@ -2,19 +2,18 @@ import React from 'react'
 import {connect} from 'react-redux'
 import i18next from 'i18next'
 import log from 'loglevel'
-import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import moment from 'moment'
 
 import {ui, api} from '../actions'
-import ConfirmDialog from './ConfirmDialog'
 import {isString, isEmpty} from '../util'
+import FormDialogBase from './FormDialogBase'
+import ConfirmDialog from './ConfirmDialog'
 
 const THINGDIALOG_NEW = Symbol.for('ui.THINGDIALOG_NEW')
 const THINGDIALOG_EDIT = Symbol.for('ui.THINGDIALOG_EDIT')
-const THINGDIALOG_CLOSED = Symbol.for('ui.THINGDIALOG_CLOSED')
 const MULTILINE_ROWS = 3
 
 @connect(
@@ -27,31 +26,42 @@ const MULTILINE_ROWS = 3
   },
   function mapDispatchToProps (dispatch) {
     return {
-      createThing: (inventoryId, data) => {
-        dispatch(api.postThing(inventoryId, data))
-      },
-      updateThing: (thingId, data) => {
-        dispatch(api.updateThing(thingId, data))
-      },
-      closeDialog: () => {
-        dispatch(ui.editThingDone())
-      }
+      createThing: (inventoryId, data) => { dispatch(api.postThing(inventoryId, data)) },
+      updateThing: (thingId, data) => { dispatch(api.updateThing(thingId, data)) },
+      deleteThing: (thingId) => { dispatch(api.deleteThing(thingId)) },
+      closeDialog: () => { dispatch(ui.editThingDone()) }
     }
   }
 )
-export default class ThingEditDialog extends React.Component {
+export default class ThingEditDialog extends FormDialogBase {
+  static fields = ['name', 'description', 'notes']
+
   constructor (props) {
-    super(props)
-    this.state = {
-      data: {
-        name: props.thing.name,
-        description: props.thing.description,
-        notes: props.thing.notes
-      },
-      errors: {},
-      confirm: {
-        open: false, title: 'NO TITLE', text: 'ThingEditDialog Confirm placeholder'
+    super(props, props.thing)
+    const thing = props.thing
+    this.title = this.props.mode === THINGDIALOG_EDIT ? thing.name : i18next.t('thing.newTitle')
+    this.buttons = <div>
+      { /* Hide delete button on new things */
+        props.mode !== THINGDIALOG_NEW
+        ? <FlatButton
+            style={{float: 'left'}}
+            label={i18next.t('thing.delete')}
+            onClick={this.handleDelete} />
+        : null
       }
+      <FlatButton
+        label={i18next.t('common.cancel')}
+        onClick={this.handleCancel}
+      />
+      <RaisedButton
+        primary={true}
+        label={i18next.t('common.save')}
+        onClick={this.handleDone}
+      />
+    </div>
+    // Add confirm dialog info to state built in super()
+    this.state.confirm = {
+      open: false, title: 'NO TITLE', text: 'Confirm placeholder'
     }
   }
 
@@ -75,29 +85,6 @@ export default class ThingEditDialog extends React.Component {
 
     this.setState({errors})
     return isEmpty(errors)
-  }
-
-  getChangedData = () => {
-    const FIELDS = ['name', 'description', 'notes']
-    const currentData = this.state.data
-    const originalData = this.props.thing
-    const changedData = {}
-    for (const field of FIELDS) {
-      const currentField = currentData[field] ? currentData[field] : null
-      // Nullable/undefined field === empty string in editor
-      const originalField = originalData[field] ? originalData[field] : null
-      if (currentField !== originalField) {
-        changedData[field] = currentField
-      }
-    }
-    return changedData
-  }
-
-  handleChange = (e) => {
-    const name = e.target.name
-    const value = e.target.value
-    const newData = {[name]: value}
-    this.setState({data: {...this.state.data, ...newData}})
   }
 
   handleDone = () => {
@@ -124,13 +111,13 @@ export default class ThingEditDialog extends React.Component {
 
   handleDelete = () => {
     // Do not confirm, if a mistake is made user can retrieve it from the trash
-    this.props.dispatch(api.deleteThing(this.props.thing.id))
+    this.props.deleteThing(this.props.thing.id)
     this.props.closeDialog()
   }
 
   handleCancel = () => {
+    // Show confirmation dialog if form data has changed
     if (!isEmpty(this.getChangedData())) {
-    // if (Object.keys(this.getChangedData()).length > 0) {
       this.setState({confirm: {
         open: true,
         title: i18next.t('thing.confirmCancelTitle'),
@@ -145,6 +132,7 @@ export default class ThingEditDialog extends React.Component {
 
   render () {
     const thing = this.props.thing
+    const title = this.props.mode === THINGDIALOG_EDIT ? thing.name : i18next.t('thing.newTitle')
     const confirmDialog = this.state.confirm.open
       ? <ConfirmDialog
           open={this.state.confirm.open}
@@ -153,58 +141,32 @@ export default class ThingEditDialog extends React.Component {
           onYes={() => { this.state.confirm.handleYes() }}
           onNo={() => { this.state.confirm.handleNo() }} />
       : null
-    const buttons = <div>
-      { /* Hide delete button on new things */
-        this.props.mode !== THINGDIALOG_NEW
-        ? <FlatButton
-            style={{float: 'left'}}
-            label={i18next.t('thing.delete')}
-            onClick={this.handleDelete} />
-        : null
-      }
-      <FlatButton
-        label={i18next.t('common.cancel')}
-        onClick={this.handleCancel}
-      />
-      <RaisedButton
-        primary={true}
-        label={i18next.t('common.save')}
-        onClick={this.handleDone}
-      />
+    const form = <div>
+      <TextField name='name'
+        floatingLabelText={i18next.t('thing.name')}
+        defaultValue={thing.name}
+        errorText={this.state.errors.name}
+        onBlur={this.handleChange} /><br />
+      <TextField name='description'
+        floatingLabelText={i18next.t('thing.description')}
+        multiLine={true}
+        rows={MULTILINE_ROWS} rowsMax={MULTILINE_ROWS}
+        fullWidth={true}
+        defaultValue={thing.description}
+        onBlur={this.handleChange} /><br />
+      <TextField name='notes'
+        floatingLabelText={i18next.t('thing.notes')}
+        multiLine={true}
+        rows={MULTILINE_ROWS} rowsMax={MULTILINE_ROWS}
+        fullWidth={true}
+        defaultValue={thing.notes}
+        onBlur={this.handleChange} /><br />
+      {this.props.mode !== THINGDIALOG_EDIT ? null : (<div>
+        {i18next.t('thing.dateAdded')}: {moment(thing.date_created).calendar()}<br />
+        {i18next.t('thing.dateModified')}: {moment(thing.date_modified).calendar()}
+      </div>)}
+      {confirmDialog}
     </div>
-
-    return (
-      <Dialog
-        title={this.props.mode === THINGDIALOG_EDIT ? thing.name : i18next.t('thing.newTitle')}
-        actions={buttons}
-        open={this.props.mode !== THINGDIALOG_CLOSED}
-        onRequestClose={this.handleCancel}
-      >
-        <TextField name='name'
-          floatingLabelText={i18next.t('thing.name')}
-          defaultValue={thing.name}
-          errorText={this.state.errors.name}
-          onBlur={this.handleChange} /><br />
-        <TextField name='description'
-          floatingLabelText={i18next.t('thing.description')}
-          multiLine={true}
-          rows={MULTILINE_ROWS} rowsMax={MULTILINE_ROWS}
-          fullWidth={true}
-          defaultValue={thing.description}
-          onBlur={this.handleChange} /><br />
-        <TextField name='notes'
-          floatingLabelText={i18next.t('thing.notes')}
-          multiLine={true}
-          rows={MULTILINE_ROWS} rowsMax={MULTILINE_ROWS}
-          fullWidth={true}
-          defaultValue={thing.notes}
-          onBlur={this.handleChange} /><br />
-        {this.props.mode !== THINGDIALOG_EDIT ? null : (<div>
-          {i18next.t('thing.dateAdded')}: {moment(thing.date_created).calendar()}<br />
-          {i18next.t('thing.dateModified')}: {moment(thing.date_modified).calendar()}
-        </div>)}
-        {confirmDialog}
-      </Dialog>
-    )
+    return this.renderDialog(title, this.buttons, form, this.handleCancel)
   }
 }

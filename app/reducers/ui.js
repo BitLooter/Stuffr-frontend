@@ -5,15 +5,14 @@ import Immutable from 'seamless-immutable'
 
 import * as models from '../models'
 
+const DIALOG_CLOSED = Symbol.for('ui.DIALOG_CLOSED')
 const THINGDIALOG_NEW = Symbol.for('ui.THINGDIALOG_NEW')
 const THINGDIALOG_EDIT = Symbol.for('ui.THINGDIALOG_EDIT')
-const THINGDIALOG_CLOSED = Symbol.for('ui.THINGDIALOG_CLOSED')
 const INVENTORYDIALOG_NEW = Symbol.for('ui.INVENTORYDIALOG_NEW')
 const INVENTORYDIALOG_EDIT = Symbol.for('ui.INVENTORYDIALOG_EDIT')
-const INVENTORYDIALOG_CLOSED = Symbol.for('ui.INVENTORYDIALOG_CLOSED')
 
 const placeholderThing = Immutable(models.createThing({name: 'PLACEHOLDER'}))
-const placeholderInventory = Immutable(models.createInventory('PLACEHOLDER'))
+const placeholderInventory = Immutable(models.createInventory({name: 'PLACEHOLDER'}))
 const emptyThing = Immutable(models.createThing())
 const emptyInventory = Immutable(models.createInventory())
 const noUser = Immutable({authenticated: false, currentInventory: null})
@@ -31,7 +30,7 @@ function editThingReducer (state, action) {
 }
 
 function editThingDoneReducer (state, action) {
-  return state.setIn(['thingDialog', 'mode'], THINGDIALOG_CLOSED)
+  return state.setIn(['thingDialog', 'mode'], DIALOG_CLOSED)
 }
 
 function createNewInventoryReducer (state, action) {
@@ -47,7 +46,7 @@ function editInventoryReducer (state, action) {
 }
 
 function editInventoryDoneReducer (state, action) {
-  return state.setIn(['inventoryDialog', 'mode'], INVENTORYDIALOG_CLOSED)
+  return state.setIn(['inventoryDialog', 'mode'], DIALOG_CLOSED)
 }
 
 function setCurrentInventoryReducer (state, action) {
@@ -93,11 +92,11 @@ const ui = handleActions({
   authenticated: true,
   currentInventory: null,
   thingDialog: {
-    mode: THINGDIALOG_CLOSED,
+    mode: DIALOG_CLOSED,
     thing: placeholderThing
   },
   inventoryDialog: {
-    mode: INVENTORYDIALOG_CLOSED,
+    mode: DIALOG_CLOSED,
     inventory: placeholderInventory
   },
   loginDialogError: undefined,

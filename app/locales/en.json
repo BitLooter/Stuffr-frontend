@@ -31,7 +31,8 @@
   },
   "inventory": {
     "name": "Name",
-    "newTitle": "New inventory"
+    "newTitle": "New inventory",
+    "nameErrorMissing": "Name is required"
   },
   "thing": {
     "name": "Name",

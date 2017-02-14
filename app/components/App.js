@@ -10,16 +10,15 @@ import InventoryEditDialog from './InventoryEditDialog'
 import Menubar from './Menubar'
 import {ui} from '../actions'
 
-const THINGDIALOG_CLOSED = Symbol.for('ui.THINGDIALOG_CLOSED')
-const INVENTORYDIALOG_CLOSED = Symbol.for('ui.INVENTORYDIALOG_CLOSED')
+const DIALOG_CLOSED = Symbol.for('ui.DIALOG_CLOSED')
 
 const App = ({thingDialogMode, thingDialogData,
               inventoryDialogMode, inventoryDialogData,
               onClickActionButton}) => {
   let dialog = null
-  if (thingDialogMode !== THINGDIALOG_CLOSED) {
+  if (thingDialogMode !== DIALOG_CLOSED) {
     dialog = <ThingEditDialog mode={thingDialogMode} thing={thingDialogData} />
-  } else if (inventoryDialogMode !== INVENTORYDIALOG_CLOSED) {
+  } else if (inventoryDialogMode !== DIALOG_CLOSED) {
     dialog = <InventoryEditDialog mode={inventoryDialogMode} inventory={inventoryDialogData} />
   }
   return (<div className='app'>
