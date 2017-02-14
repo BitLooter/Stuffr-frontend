@@ -12,8 +12,8 @@ import {isString, isEmpty} from '../util'
 import FormDialogBase from './FormDialogBase'
 import ConfirmDialog from './ConfirmDialog'
 
-const THINGDIALOG_NEW = Symbol.for('ui.THINGDIALOG_NEW')
-const THINGDIALOG_EDIT = Symbol.for('ui.THINGDIALOG_EDIT')
+const DIALOG_NEW = Symbol.for('ui.DIALOG_NEW')
+const DIALOG_EDIT = Symbol.for('ui.DIALOG_EDIT')
 const MULTILINE_ROWS = 3
 
 @connect(
@@ -39,10 +39,10 @@ export default class ThingEditDialog extends FormDialogBase {
   constructor (props) {
     super(props, props.thing)
     const thing = props.thing
-    this.title = this.props.mode === THINGDIALOG_EDIT ? thing.name : i18next.t('thing.newTitle')
+    this.title = this.props.mode === DIALOG_EDIT ? thing.name : i18next.t('thing.newTitle')
     this.buttons = <div>
       { /* Hide delete button on new things */
-        props.mode !== THINGDIALOG_NEW
+        props.mode !== DIALOG_NEW
         ? <FlatButton
             style={{float: 'left'}}
             label={i18next.t('thing.delete')}
@@ -90,13 +90,13 @@ export default class ThingEditDialog extends FormDialogBase {
   handleDone = () => {
     // TODO: verify data
     if (this.validateForm()) {
-      if (this.props.mode === THINGDIALOG_EDIT) {
+      if (this.props.mode === DIALOG_EDIT) {
         const changedData = this.getChangedData()
         if (!isEmpty(changedData)) {
           log.info(`Updating existing thing with id ${this.props.thing.id}`)
           this.props.updateThing(this.props.thing.id, changedData)
         }
-      } else if (this.props.mode === THINGDIALOG_NEW) {
+      } else if (this.props.mode === DIALOG_NEW) {
         const newData = this.state.data
         log.info(`Creating new thing named ${newData.name}`)
         this.props.createThing(this.props.currentInventoryId, newData)
@@ -132,7 +132,7 @@ export default class ThingEditDialog extends FormDialogBase {
 
   render () {
     const thing = this.props.thing
-    const title = this.props.mode === THINGDIALOG_EDIT ? thing.name : i18next.t('thing.newTitle')
+    const title = this.props.mode === DIALOG_EDIT ? thing.name : i18next.t('thing.newTitle')
     const confirmDialog = this.state.confirm.open
       ? <ConfirmDialog
           open={this.state.confirm.open}
@@ -161,7 +161,7 @@ export default class ThingEditDialog extends FormDialogBase {
         fullWidth={true}
         defaultValue={thing.notes}
         onBlur={this.handleChange} /><br />
-      {this.props.mode !== THINGDIALOG_EDIT ? null : (<div>
+      {this.props.mode !== DIALOG_EDIT ? null : (<div>
         {i18next.t('thing.dateAdded')}: {moment(thing.date_created).calendar()}<br />
         {i18next.t('thing.dateModified')}: {moment(thing.date_modified).calendar()}
       </div>)}

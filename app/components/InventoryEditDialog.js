@@ -25,7 +25,7 @@ const DIALOG_EDIT = Symbol.for('ui.DIALOG_EDIT')
   }
 )
 export default class InventoryEditDialog extends FormDialogBase {
-  static proptypes = { dispatch: React.PropTypes.func.isRequired }
+  static fields = ['name']
 
   constructor (props) {
     super(props, props.inventory)
@@ -40,12 +40,6 @@ export default class InventoryEditDialog extends FormDialogBase {
           onClick={this.handleDone}
         />
       </div>
-    this.state = {
-      data: {
-        name: props.inventory.name
-      },
-      errors: {}
-    }
   }
 
   validateForm = () => {
@@ -66,7 +60,7 @@ export default class InventoryEditDialog extends FormDialogBase {
 
   handleDone = () => {
     if (this.validateForm()) {
-      if (this.props.mode === DIALOG_NEW) {
+      if (this.props.mode === DIALOG_EDIT) {
         const changedData = this.getChangedData()
         if (!isEmpty(changedData)) {
           log.info(`Updating existing inventory with id ${this.props.inventory.id}`)
