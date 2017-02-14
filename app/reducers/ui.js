@@ -6,10 +6,8 @@ import Immutable from 'seamless-immutable'
 import * as models from '../models'
 
 const DIALOG_CLOSED = Symbol.for('ui.DIALOG_CLOSED')
-const THINGDIALOG_NEW = Symbol.for('ui.THINGDIALOG_NEW')
-const THINGDIALOG_EDIT = Symbol.for('ui.THINGDIALOG_EDIT')
-const INVENTORYDIALOG_NEW = Symbol.for('ui.INVENTORYDIALOG_NEW')
-const INVENTORYDIALOG_EDIT = Symbol.for('ui.INVENTORYDIALOG_EDIT')
+const DIALOG_NEW = Symbol.for('ui.DIALOG_NEW')
+const DIALOG_EDIT = Symbol.for('ui.DIALOG_EDIT')
 
 const placeholderThing = Immutable(models.createThing({name: 'PLACEHOLDER'}))
 const placeholderInventory = Immutable(models.createInventory({name: 'PLACEHOLDER'}))
@@ -18,13 +16,13 @@ const emptyInventory = Immutable(models.createInventory())
 const noUser = Immutable({authenticated: false, currentInventory: null})
 
 function createNewThingReducer (state, action) {
-  let newState = state.setIn(['thingDialog', 'mode'], THINGDIALOG_NEW)
+  let newState = state.setIn(['thingDialog', 'mode'], DIALOG_NEW)
   newState = newState.setIn(['thingDialog', 'thing'], emptyThing)
   return newState
 }
 
 function editThingReducer (state, action) {
-  let newState = state.setIn(['thingDialog', 'mode'], THINGDIALOG_EDIT)
+  let newState = state.setIn(['thingDialog', 'mode'], DIALOG_EDIT)
   newState = newState.setIn(['thingDialog', 'thing'], Immutable(action.payload))
   return newState
 }
@@ -34,13 +32,13 @@ function editThingDoneReducer (state, action) {
 }
 
 function createNewInventoryReducer (state, action) {
-  let newState = state.setIn(['inventoryDialog', 'mode'], INVENTORYDIALOG_NEW)
+  let newState = state.setIn(['inventoryDialog', 'mode'], DIALOG_NEW)
   newState = newState.setIn(['inventoryDialog', 'inventory'], emptyInventory)
   return newState
 }
 
 function editInventoryReducer (state, action) {
-  let newState = state.setIn(['inventoryDialog', 'mode'], INVENTORYDIALOG_EDIT)
+  let newState = state.setIn(['inventoryDialog', 'mode'], DIALOG_EDIT)
   newState = newState.setIn(['inventoryDialog', 'inventory'], Immutable(action.payload))
   return newState
 }
