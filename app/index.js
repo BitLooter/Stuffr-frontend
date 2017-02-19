@@ -27,7 +27,7 @@ const store = redux.createStore(stuffrApp, redux.compose(
 ))
 
 i18next.use(i18nextFetch).init({
-  lng: 'en',
+  fallbackLng: 'en',
   backend: {
     loadPath: '/locales/{{lng}}.json',
     addPath: '/locales/add/{{lng}}'
