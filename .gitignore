@@ -1,6 +1,7 @@
 dist*
 node_modules
 .eslintcache
+npm-debug.log
 
-config.*
+config.local.js
 overlay.html

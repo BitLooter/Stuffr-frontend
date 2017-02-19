@@ -1,110 +1,25 @@
 const path = require('path')
-const fs = require('fs')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const webpack = require('webpack')
+const settings = require('./webpack.common.config')
+const config = require('./config')
 
 const appPath = path.join(__dirname, '/app')
 
-const defaultConfig = {
-  apiPath: '/api',
-  authPath: '/auth'
-}
-
-// Need package.json to get current version
-const packageConfig = require('./package.json')
-
-let overlayMessage
-try {
-  // eslint-disable-next-line no-sync
-  overlayMessage = fs.readFileSync(path.join(__dirname, '/overlay.html'))
-} catch (e) {
-  // No overlay.html file, ignore error
-}
-
-let localConfig = defaultConfig
-if (process.env.NODE_ENV) {
-  try {
-    localConfig = require(`config.${process.env.NODE_ENV}.js`)
-  } catch (e) {
-    // No local config exists, ignore
-  }
-}
-// TODO: use spread operator when available, general cleanup
-const siteConfig = {
-  apiPath: localConfig.apiPath || defaultConfig.apiPath,
-  authPath: localConfig.authPath || defaultConfig.authPath,
-  frontendVersion: packageConfig.version
-}
-
-const htmlWebpackPluginConfig = new HtmlWebpackPlugin({
-  title: 'Stuffr',
-  template: path.join(__dirname, '/app/index.ejs'),
-  xhtml: true,
-  hash: true,
-  siteConfig: JSON.stringify(siteConfig),
-  overlayMessage
+settings.devtool = 'eval-source-map'
+// Enable hot reloading
+settings.entry.splice(-1, 0,
+  `webpack-dev-server/client?http://${config.clientServerHost}:${config.devServerPort}`,
+  'webpack/hot/only-dev-server')
+settings.module.rules[0].use.unshift({loader: 'react-hot-loader'})
+settings.plugins.push(
+  new webpack.HotModuleReplacementPlugin(),
+  new webpack.NamedModulesPlugin())
+// Run linter on build
+settings.module.rules.unshift({
+  test: /\.js?$/,
+  include: appPath,
+  enforce: 'pre',
+  loader: 'eslint-loader'
 })
 
-const copyStaticFilesConfig = new CopyWebpackPlugin(
-  [{
-    from: 'locales',
-    to: 'locales'
-  }],
-  {copyUnmodified: true}
-)
-
-module.exports = {
-  devtool: 'eval-source-map',
-  context: appPath,
-  entry: [
-    'babel-polyfill',
-    'isomorphic-fetch',
-    './style.styl',
-    './index.js'
-  ],
-  module: {
-    rules: [
-      {
-        test: /\.js?$/,
-        include: appPath,
-        enforce: 'pre',
-        loader: 'eslint-loader'
-      },
-      {
-        test: /\.js?$/,
-        include: appPath,
-        loader: 'babel-loader',
-        options: {
-          presets: [['es2015'], 'stage-1', 'react'],
-          plugins: ['transform-decorators-legacy']
-          // modules: false
-        }
-      },
-      {
-        test: /\.css$/,
-        include: appPath,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
-      },
-      {
-        test: /\.styl$/,
-        include: appPath,
-        use: [
-          'style-loader',
-          'css-loader',
-          'stylus-loader'
-        ]
-      }
-    ]
-  },
-  output: {
-    filename: 'bundle.js',
-    path: path.join(__dirname, '/dist')
-  },
-  plugins: [
-    htmlWebpackPluginConfig,
-    copyStaticFilesConfig
-  ]
-}
+module.exports = settings
