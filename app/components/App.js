@@ -25,7 +25,7 @@ const App = ({thingDialogMode, thingDialogData,
     <AuthenticationManager>
       <Menubar />
       <ThingList />
-      <FloatingActionButton className='actionButton'
+      <FloatingActionButton style={{position: 'fixed', bottom: '1em', right: '1em'}}
         onTouchTap={onClickActionButton}><ContentAddIcon />
       </FloatingActionButton>
       {dialog   /* Dialogs normally hidden */}

@@ -45,7 +45,6 @@ module.exports = {
   entry: [
     'babel-polyfill',
     'isomorphic-fetch',
-    './style.styl',
     './index'
   ],
   module: {
@@ -60,23 +59,6 @@ module.exports = {
             plugins: ['transform-decorators-legacy']
           }
         }]
-      },
-      {
-        test: /\.css$/,
-        include: appPath,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
-      },
-      {
-        test: /\.styl$/,
-        include: appPath,
-        use: [
-          'style-loader',
-          'css-loader',
-          'stylus-loader'
-        ]
       }
     ]
   },
