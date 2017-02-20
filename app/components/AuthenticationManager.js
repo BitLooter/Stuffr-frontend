@@ -16,8 +16,8 @@ const MODE_REGISTER = Symbol('MODE_REGISTER')
   }
 )
 export default class AuthenticationManager extends React.Component {
-  propTypes = {
-    children: React.PropTypes.element.isRequired,
+  static propTypes = {
+    children: React.PropTypes.node.isRequired,
     authenticated: React.PropTypes.bool.isRequired
   }
 

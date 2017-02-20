@@ -25,7 +25,7 @@ import {ui, logoutUser, loadInventory} from '../actions'
   }
 )
 class InventoryMenu extends React.Component {
-  propTypes = {
+  static propTypes = {
     inventories: React.PropTypes.array.isRequired,
     title: React.PropTypes.string.isRequired,
     addInventory: React.PropTypes.func.isRequired,
@@ -97,7 +97,7 @@ class InventoryMenu extends React.Component {
   }
 )
 class Menubar extends React.Component {
-  propTypes = {
+  static propTypes = {
     inventories: React.PropTypes.array.isRequired,
     inventoryName: React.PropTypes.string.isRequired,
     logOut: React.PropTypes.func.isRequired
