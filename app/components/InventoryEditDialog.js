@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import moment from 'moment'
 
-import {ui, api} from '../actions'
+import {createInventory, ui, api} from '../actions'
 import {isString, isEmpty} from '../util'
 import FormDialogBase from './FormDialogBase'
 
@@ -19,7 +19,7 @@ const DIALOG_EDIT = Symbol.for('ui.DIALOG_EDIT')
   function mapDispatchToProps (dispatch) {
     return {
       updateInventory: (id, data) => { dispatch(api.updateInventory(id, data)) },
-      postInventory: (data) => { dispatch(api.postInventory(data)) },
+      createInventory: (data) => { dispatch(createInventory(data)) },
       closeDialog: () => { dispatch(ui.editInventoryDone()) }
     }
   }
@@ -69,7 +69,7 @@ export default class InventoryEditDialog extends FormDialogBase {
       } else if (this.props.mode === DIALOG_NEW) {
         log.info(`Creating new inventory named ${this.state.data.name}`)
         // TODO: Switch to new inventory after creation
-        this.props.postInventory(this.state.data)
+        this.props.createInventory(this.state.data)
       } else {
         const errorMessage = `Unknown mode for InventoryEditDialog: ${String(this.props.mode)}`
         log.error(errorMessage)

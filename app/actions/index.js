@@ -27,6 +27,7 @@ export function createApiThunk (apiFunction, requestAction, doneAction, errorAct
       try {
         const response = await apiFunction(...apiParams, {dispatch, getState})
         dispatch(doneAction(response))
+        return response
       } catch (error) {
         dispatch(errorAction(error))
         if (error.status === HttpStatus.UNAUTHORIZED) {
@@ -146,6 +147,7 @@ export const loadInventoryError = createAction(LOAD_INVENTORY__ERROR)
 // Parameters:
 //  inventoryIndex: Index of the inventory in state.database.inventories
 export const loadInventory = createApiThunk(
+  // TODO: Load based on ID, not index?
   async function (inventoryIndex, {dispatch, getState}) {
     const inventoryId = getState().database.inventories[inventoryIndex].id
     window.localStorage.lastInventoryId = inventoryId
@@ -153,4 +155,24 @@ export const loadInventory = createApiThunk(
     dispatch(api.getThingList(inventoryId))
   },
   loadInventoryRequest, loadInventoryDone, loadInventoryError
+)
+
+// Load an inventory and its things
+export const CREATE_INVENTORY__REQUEST = 'CREATE_INVENTORY__REQUEST'
+export const CREATE_INVENTORY__DONE = 'CREATE_INVENTORY__DONE'
+export const CREATE_INVENTORY__ERROR = 'CREATE_INVENTORY__ERROR'
+export const createInventoryRequest = createAction(CREATE_INVENTORY__REQUEST)
+export const createInventoryDone = createAction(CREATE_INVENTORY__DONE)
+export const createInventoryError = createAction(CREATE_INVENTORY__ERROR)
+// Parameters:
+//  inventoryIndex: Index of the inventory in state.database.inventories
+export const createInventory = createApiThunk(
+  async function (inventoryData, {dispatch, getState}) {
+    const newInventory = await dispatch(api.postInventory(inventoryData))
+    const newInventoryIndex = getState().database.inventories.findIndex((v) =>
+      v.id === newInventory.id)
+    dispatch(loadInventory(newInventoryIndex))
+    return newInventory
+  },
+  createInventoryRequest, createInventoryDone, createInventoryError
 )
