@@ -25,8 +25,8 @@ const ThingList = ({ things, editThing }) =>
       )}
     </TableBody>
   </Table>
-ThingList.proptypes = {
-  dispatch: React.PropTypes.func.isRequired,
+ThingList.propTypes = {
+  editThing: React.PropTypes.func.isRequired,
   things: React.PropTypes.array.isRequired
 }
 

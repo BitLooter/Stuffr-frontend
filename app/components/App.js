@@ -32,6 +32,13 @@ const App = ({thingDialogMode, thingDialogData,
     </AuthenticationManager>
   </div>)
 }
+App.propTypes = {
+  thingDialogMode: React.PropTypes.symbol.isRequired,
+  thingDialogData: React.PropTypes.object.isRequired,
+  inventoryDialogMode: React.PropTypes.symbol.isRequired,
+  inventoryDialogData: React.PropTypes.object.isRequired,
+  onClickActionButton: React.PropTypes.func.isRequired
+}
 
 const AppContainer = connect(
   function mapStateToProps (state) {

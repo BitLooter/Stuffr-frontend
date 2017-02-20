@@ -18,9 +18,19 @@ const AboutDialog = ({open, onClose}) =>
         the future this should be replaced with something like an sprintf library. */}
     {i18next.t('about.text').replace('$VERSION', window.siteConfig.frontendVersion)}
   </Dialog>
+AboutDialog.propTypes = {
+  open: React.PropTypes.bool.isRequired,
+  onClose: React.PropTypes.func.isRequired
+}
 
 // TODO: Show current version somewhere
 export default class Sidebar extends React.Component {
+  propTypes = {
+    open: React.PropTypes.bool.isRequired,
+    onClose: React.PropTypes.func.isRequired,
+    onLogout: React.PropTypes.func.isRequired
+  }
+
   constructor (props) {
     super(props)
     this.state = {

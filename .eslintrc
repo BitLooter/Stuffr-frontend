@@ -8,8 +8,5 @@
   },
   "plugins": [
     "react", "babel"
-  ],
-  "rules": {
-    "react/prop-types": "off"
-  }
+  ]
 }

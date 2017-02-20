@@ -14,5 +14,12 @@ const ConfirmDialog = ({open = true, title, text, onYes, onNo}) =>
   >
     {text}
   </Dialog>
+ConfirmDialog.propTypes = {
+  open: React.PropTypes.bool,
+  text: React.PropTypes.string.isRequired,
+  title: React.PropTypes.string.isRequired,
+  onYes: React.PropTypes.func.isrequired,
+  onNo: React.PropTypes.func.isrequired
+}
 
 export default ConfirmDialog
