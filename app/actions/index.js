@@ -120,18 +120,7 @@ export const loadUser = createApiThunk(
     await dispatch(api.getInventoryList())
     // Inventory list is populated by previous action
     const lastInventoryId = parseInt(window.localStorage.lastInventoryId)
-    const inventories = getState().database.inventories
-    // Autoselect last used inventory
-    let loadIndex = 0
-    if (lastInventoryId) {
-      for (const index in inventories) {
-        if (inventories[index].id === lastInventoryId) {
-          loadIndex = index
-          break
-        }
-      }
-    }
-    dispatch(loadInventory(loadIndex))
+    dispatch(loadInventory(lastInventoryId))
     return userInfo
   },
   loadUserRequest, loadUserDone, loadUserError
@@ -147,9 +136,8 @@ export const loadInventoryError = createAction(LOAD_INVENTORY__ERROR)
 // Parameters:
 //  inventoryIndex: Index of the inventory in state.database.inventories
 export const loadInventory = createApiThunk(
-  // TODO: Load based on ID, not index?
-  async function (inventoryIndex, {dispatch, getState}) {
-    const inventoryId = getState().database.inventories[inventoryIndex].id
+  async function (inventoryId, {dispatch, getState}) {
+    const inventoryIndex = getState().database.inventories.findIndex((v) => v.id === inventoryId)
     window.localStorage.lastInventoryId = inventoryId
     dispatch(ui.setCurrentInventory(inventoryIndex))
     dispatch(api.getThingList(inventoryId))
@@ -169,9 +157,7 @@ export const createInventoryError = createAction(CREATE_INVENTORY__ERROR)
 export const createInventory = createApiThunk(
   async function (inventoryData, {dispatch, getState}) {
     const newInventory = await dispatch(api.postInventory(inventoryData))
-    const newInventoryIndex = getState().database.inventories.findIndex((v) =>
-      v.id === newInventory.id)
-    dispatch(loadInventory(newInventoryIndex))
+    dispatch(loadInventory(newInventory.id))
     return newInventory
   },
   createInventoryRequest, createInventoryDone, createInventoryError

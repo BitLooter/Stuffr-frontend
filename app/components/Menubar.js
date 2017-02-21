@@ -19,7 +19,7 @@ import {ui, logoutUser, loadInventory} from '../actions'
   undefined,
   function mapDispatchToProps (dispatch) {
     return {
-      selectInventory: (index) => { dispatch(loadInventory(index)) },
+      selectInventory: (id) => { dispatch(loadInventory(id)) },
       addInventory: () => { dispatch(ui.createNewInventory()) }
     }
   }
@@ -43,7 +43,6 @@ class InventoryMenu extends React.Component {
   }
 
   render () {
-    const inventories = this.props.inventories
     return (
       <div>
         <RaisedButton label={this.props.title}
@@ -55,13 +54,12 @@ class InventoryMenu extends React.Component {
         <Popover open={this.state.open} anchorEl={this.state.anchor}
                  onRequestClose={() => { this.setState({open: false}) }}>
           <Menu>
-            {this.props.inventories.map((i) => {
-              const index = inventories.indexOf(i)
+            {this.props.inventories.map((inventory) => {
               return (
-                <MenuItem primaryText={i.name} key={index}
+                <MenuItem primaryText={inventory.name} key={inventory.id}
                           onTouchTap={() => {
                             this.handleRequestClose()
-                            this.props.selectInventory(index)
+                            this.props.selectInventory(inventory.id)
                           }} />
               )
             }) }
