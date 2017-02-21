@@ -98,7 +98,6 @@ export default class RegisterDialog extends FormDialogBase {
     }
   }
 
-  // TODO: Password reset mode
   render () {
     const form = <div>
       {this.props.errorMessage ? <div>{this.props.errorMessage}</div> : null}

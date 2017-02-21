@@ -43,8 +43,7 @@ class StuffrApi {
 
   // GET request to /inventories
   async getInventories (callback) {
-    // TODO: server does not seem to produce any errors if no inventories
-    // exist, fix that.
+    // TODO: server does not seem to produce any errors if no inventories exist, fix that.
     log.info('StuffrApi request for getInventories')
     return await this._request('/inventories', {callback})
   }
@@ -94,8 +93,7 @@ class StuffrApi {
     const response = await this._request('/login', {parameters: loginInfo,
       requestUrlBase: this.authUrlBase})
     // TODO: better error handling
-    // TODO: Flask-Security is leaking user data with too much info in errors,
-    // fix that
+    // TODO: Flask-Security is leaking user data with too much info in errors, fix that
     if (response.meta.code === HttpStatus.OK) {
       this.token = response.response.user.authentication_token
     } else if (response.meta.code === HttpStatus.BAD_REQUEST) {

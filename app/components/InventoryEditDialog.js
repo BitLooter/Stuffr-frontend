@@ -68,7 +68,6 @@ export default class InventoryEditDialog extends FormDialogBase {
         }
       } else if (this.props.mode === DIALOG_NEW) {
         log.info(`Creating new inventory named ${this.state.data.name}`)
-        // TODO: Switch to new inventory after creation
         this.props.createInventory(this.state.data)
       } else {
         const errorMessage = `Unknown mode for InventoryEditDialog: ${String(this.props.mode)}`

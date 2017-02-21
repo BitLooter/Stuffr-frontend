@@ -76,14 +76,12 @@ class InventoryMenu extends React.Component {
   }
 }
 
-// TODO: disable inventory menu when logged out
-
 @connect(
   function mapStateToProps (state) {
     const currentInventory = state.database.inventories[state.ui.currentInventory]
     return {
       inventories: state.database.inventories,
-      // TODO: Put something other than 'Loading...' when logged out
+      // TODO: Handle no inventories exist
       inventoryName: currentInventory ? currentInventory.name : 'Loading...',
       authenticated: state.database.user !== null
     }

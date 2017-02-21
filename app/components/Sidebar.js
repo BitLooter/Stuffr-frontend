@@ -23,7 +23,6 @@ AboutDialog.propTypes = {
   onClose: React.PropTypes.func.isRequired
 }
 
-// TODO: Show current version somewhere
 export default class Sidebar extends React.Component {
   static propTypes = {
     open: React.PropTypes.bool.isRequired,

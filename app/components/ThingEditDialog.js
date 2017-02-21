@@ -88,7 +88,6 @@ export default class ThingEditDialog extends FormDialogBase {
   }
 
   handleDone = () => {
-    // TODO: verify data
     if (this.validateForm()) {
       if (this.props.mode === DIALOG_EDIT) {
         const changedData = this.getChangedData()

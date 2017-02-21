@@ -66,6 +66,4 @@ async function runStuffr (appElement) {
     </Provider>,
     appElement
   )
-
-  // TODO: Store last used/default inventory ID
 }
