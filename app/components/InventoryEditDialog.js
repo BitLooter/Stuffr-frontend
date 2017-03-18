@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import moment from 'moment'
 
-import {createInventory, ui, api} from '../actions'
+import {createInventory, createInventoryCancel, api} from '../actions'
 import {isString, isEmpty} from '../util'
 import FormDialogBase from './FormDialogBase'
 
@@ -20,7 +20,7 @@ const DIALOG_EDIT = Symbol.for('ui.DIALOG_EDIT')
     return {
       updateInventory: (id, data) => { dispatch(api.updateInventory(id, data)) },
       createInventory: (data) => { dispatch(createInventory(data)) },
-      closeDialog: () => { dispatch(ui.editInventoryDone()) }
+      closeDialog: () => { dispatch(createInventoryCancel()) }
     }
   }
 )
@@ -74,7 +74,7 @@ export default class InventoryEditDialog extends FormDialogBase {
         log.error(errorMessage)
         throw new Error(errorMessage)
       }
-      this.props.closeDialog()
+      // TODO: some sort of loading animation while waiting on the HTTP request
     }
   }
 

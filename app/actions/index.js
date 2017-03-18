@@ -139,26 +139,23 @@ export const loadInventory = createApiThunk(
   async function (inventoryId, {dispatch, getState}) {
     const inventoryIndex = getState().database.inventories.findIndex((v) => v.id === inventoryId)
     window.localStorage.lastInventoryId = inventoryId
-    dispatch(ui.setCurrentInventory(inventoryIndex))
     dispatch(api.getThingList(inventoryId))
+    return {id: inventoryId, index: inventoryIndex}
   },
   loadInventoryRequest, loadInventoryDone, loadInventoryError
 )
 
-// Load an inventory and its things
-export const CREATE_INVENTORY__REQUEST = 'CREATE_INVENTORY__REQUEST'
-export const CREATE_INVENTORY__DONE = 'CREATE_INVENTORY__DONE'
-export const CREATE_INVENTORY__ERROR = 'CREATE_INVENTORY__ERROR'
-export const createInventoryRequest = createAction(CREATE_INVENTORY__REQUEST)
-export const createInventoryDone = createAction(CREATE_INVENTORY__DONE)
-export const createInventoryError = createAction(CREATE_INVENTORY__ERROR)
-// Parameters:
-//  inventoryIndex: Index of the inventory in state.database.inventories
-export const createInventory = createApiThunk(
-  async function (inventoryData, {dispatch, getState}) {
+export const CREATE_INVENTORY__START = 'CREATE_INVENTORY__START'
+export const createInventoryStart = createAction(CREATE_INVENTORY__START)
+export const CREATE_INVENTORY__FINISH = 'CREATE_INVENTORY__FINISH'
+export const createInventoryFinish = createAction(CREATE_INVENTORY__FINISH)
+export const CREATE_INVENTORY__CANCEL = 'CREATE_INVENTORY__CANCEL'
+export const createInventoryCancel = createAction(CREATE_INVENTORY__CANCEL)
+export function createInventory (inventoryData) {
+  return async function createInventoryThunk (dispatch) {
     const newInventory = await dispatch(api.postInventory(inventoryData))
+    dispatch(createInventoryFinish(newInventory))
     dispatch(loadInventory(newInventory.id))
     return newInventory
-  },
-  createInventoryRequest, createInventoryDone, createInventoryError
-)
+  }
+}

@@ -48,7 +48,7 @@ function editInventoryDoneReducer (state, action) {
 }
 
 function setCurrentInventoryReducer (state, action) {
-  return state.set('currentInventory', action.payload)
+  return state.set('currentInventory', action.payload.index)
 }
 
 function authorizationRequiredReducer (state, action) {
@@ -76,10 +76,11 @@ const ui = handleActions({
   CREATE_NEW_THING: createNewThingReducer,
   EDIT_THING: editThingReducer,
   EDIT_THING_DONE: editThingDoneReducer,
-  CREATE_NEW_INVENTORY: createNewInventoryReducer,
+  CREATE_INVENTORY__START: createNewInventoryReducer,
   EDIT_INVENTORY: editInventoryReducer,
-  EDIT_INVENTORY_DONE: editInventoryDoneReducer,
-  SET_CURRENT_INVENTORY: setCurrentInventoryReducer,
+  CREATE_INVENTORY__CANCEL: editInventoryDoneReducer,
+  CREATE_INVENTORY__FINISH: editInventoryDoneReducer,
+  LOAD_INVENTORY__DONE: setCurrentInventoryReducer,
   AUTHORIZATION_REQUIRED: authorizationRequiredReducer,
   LOGIN_USER__DONE: userAuthenticatedReducer,
   LOGIN_USER__ERROR: userLoginErrorReducer,

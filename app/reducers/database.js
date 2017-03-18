@@ -24,7 +24,7 @@ function getInventoryListDoneReducer (state, action) {
   return state.set('inventories', Immutable(action.payload))
 }
 
-function postInventoryDoneReducer (state, action) {
+function createInventoryDoneReducer (state, action) {
   const newInventories = state.inventories.concat(Immutable(action.payload))
   return state.set('inventories', newInventories)
 }
@@ -67,7 +67,7 @@ const things = handleActions({
   PURGE_USER: purgeUserReducer,
   GET_INVENTORY_LIST__DONE: getInventoryListDoneReducer,
   GET_INVENTORY_LIST__ERROR: genericErrorReducer,
-  POST_INVENTORY__DONE: postInventoryDoneReducer,
+  CREATE_INVENTORY__FINISH: createInventoryDoneReducer,
   POST_INVENTORY__ERROR: genericErrorReducer,
   GET_THING_LIST__DONE: getThingListDoneReducer,
   GET_THING_LIST__ERROR: genericErrorReducer,
