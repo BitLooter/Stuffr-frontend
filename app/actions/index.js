@@ -31,7 +31,7 @@ export function createApiThunk (apiFunction, requestAction, doneAction, errorAct
       } catch (error) {
         dispatch(errorAction(error))
         if (error.status === HttpStatus.UNAUTHORIZED) {
-          dispatch(ui.authorizationRequired())
+          dispatch(authorizationRequired())
         }
       }
     }
@@ -42,6 +42,11 @@ export function createApiThunk (apiFunction, requestAction, doneAction, errorAct
 function storeToken (token) {
   window.localStorage.apiToken = token
 }
+
+/* Event actions
+*******************/
+export const AUTHORIZATION_REQUIRED = 'AUTHORIZATION_REQUIRED'
+export const authorizationRequired = createAction(AUTHORIZATION_REQUIRED)
 
 /* Task actions
 *******************/
