@@ -67,7 +67,7 @@ const things = handleActions({
   PURGE_USER: purgeUserReducer,
   GET_INVENTORY_LIST__DONE: getInventoryListDoneReducer,
   GET_INVENTORY_LIST__ERROR: genericErrorReducer,
-  CREATE_INVENTORY__FINISH: createInventoryDoneReducer,
+  POST_INVENTORY__DONE: createInventoryDoneReducer,
   POST_INVENTORY__ERROR: genericErrorReducer,
   GET_THING_LIST__DONE: getThingListDoneReducer,
   GET_THING_LIST__ERROR: genericErrorReducer,

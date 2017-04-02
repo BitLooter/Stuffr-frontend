@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import moment from 'moment'
 
-import {createInventory, createInventoryCancel, api} from '../actions'
+import {submitInventory, closeInventoryEditor, api} from '../actions'
 import {isString, isEmpty} from '../util'
 import FormDialogBase from './FormDialogBase'
 
@@ -19,8 +19,8 @@ const DIALOG_EDIT = Symbol.for('ui.DIALOG_EDIT')
   function mapDispatchToProps (dispatch) {
     return {
       updateInventory: (id, data) => { dispatch(api.updateInventory(id, data)) },
-      createInventory: (data) => { dispatch(createInventory(data)) },
-      closeDialog: () => { dispatch(createInventoryCancel()) }
+      createInventory: (data) => { dispatch(submitInventory(data)) },
+      closeDialog: () => { dispatch(closeInventoryEditor()) }
     }
   }
 )

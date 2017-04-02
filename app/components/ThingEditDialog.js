@@ -27,7 +27,7 @@ const MULTILINE_ROWS = 3
   function mapDispatchToProps (dispatch) {
     return {
       createThing: (inventoryId, data) => { dispatch(submitThing(inventoryId, data)) },
-      updateThing: (thingId, data) => { dispatch(submitThing(thingId, data, 'update')) },
+      updateThing: (thingId, data) => { dispatch(submitThing(thingId, data, 'updatee')) },
       // deleteThing: (thingId) => { dispatch(api.deleteThing(thingId)) },
       deleteThing: (thingId) => { dispatch(api.deleteThing(thingId)) },
       closeDialog: () => { dispatch(closeThingEditor()) }
@@ -54,6 +54,7 @@ export default class ThingEditDialog extends FormDialogBase {
         label={i18next.t('common.cancel')}
         onClick={this.handleCancel}
       />
+      { /* TODO: Disable button if nothing has been edited */ }
       <RaisedButton
         primary={true}
         label={i18next.t('common.save')}

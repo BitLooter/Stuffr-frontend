@@ -11,7 +11,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import MenuIcon from 'material-ui/svg-icons/navigation/menu'
 
 import Sidebar from './Sidebar'
-import {createInventoryStart, logoutUser, loadInventory} from '../actions'
+import {openInventoryEditor, logoutUser, loadInventory} from '../actions'
 
 // BUG: inventory menu gets screwy when no inventories exist
 
@@ -20,7 +20,7 @@ import {createInventoryStart, logoutUser, loadInventory} from '../actions'
   function mapDispatchToProps (dispatch) {
     return {
       selectInventory: (id) => { dispatch(loadInventory(id)) },
-      addInventory: () => { dispatch(createInventoryStart()) }
+      addInventory: () => { dispatch(openInventoryEditor()) }
     }
   }
 )

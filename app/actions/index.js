@@ -145,25 +145,14 @@ export const loadInventory = createApiThunk(
   loadInventoryRequest, loadInventoryDone, loadInventoryError
 )
 
-export const CREATE_INVENTORY__START = 'CREATE_INVENTORY__START'
-export const createInventoryStart = createAction(CREATE_INVENTORY__START)
-export const CREATE_INVENTORY__FINISH = 'CREATE_INVENTORY__FINISH'
-export const createInventoryFinish = createAction(CREATE_INVENTORY__FINISH)
-export const CREATE_INVENTORY__CANCEL = 'CREATE_INVENTORY__CANCEL'
-export const createInventoryCancel = createAction(CREATE_INVENTORY__CANCEL)
-export function createInventory (inventoryData) {
-  return async function createInventoryThunk (dispatch) {
-    const newInventory = await dispatch(api.postInventory(inventoryData))
-    dispatch(createInventoryFinish(newInventory))
-    dispatch(loadInventory(newInventory.id))
-    return newInventory
-  }
-}
-
 export const OPEN_THING_EDITOR = 'OPEN_THING_EDITOR'
 export const openThingEditor = createAction(OPEN_THING_EDITOR)
 export const CLOSE_THING_EDITOR = 'CLOSE_THING_EDITOR'
 export const closeThingEditor = createAction(CLOSE_THING_EDITOR)
+export const OPEN_INVENTORY_EDITOR = 'OPEN_INVENTORY_EDITOR'
+export const openInventoryEditor = createAction(OPEN_INVENTORY_EDITOR)
+export const CLOSE_INVENTORY_EDITOR = 'CLOSE_INVENTORY_EDITOR'
+export const closeInventoryEditor = createAction(CLOSE_INVENTORY_EDITOR)
 
 export const SUBMIT_THING__FINISH = 'SUBMIT_THING__FINISH'
 export const submitThingFinish = createAction(SUBMIT_THING__FINISH)
@@ -174,7 +163,7 @@ export function submitThing (itemId, thingData, mode) {
   } else if (mode === 'update') {
     apiFunc = api.updateThing
   } else {
-    // TODO: error here about an unknown mode
+    throw Error(`submitThing invalid mode: ${mode}`)
   }
 
   return async function submitThingThunk (dispatch) {
@@ -182,5 +171,26 @@ export function submitThing (itemId, thingData, mode) {
     const newThing = await dispatch(apiFunc(itemId, thingData))
     dispatch(submitThingFinish(newThing))
     return newThing
+  }
+}
+
+export const SUBMIT_INVENTORY__FINISH = 'SUBMIT_INVENTORY__FINISH'
+export const submitInventoryFinish = createAction(SUBMIT_INVENTORY__FINISH)
+export function submitInventory (inventoryData, mode) {
+  let apiFunc
+  if (mode === undefined || mode === 'post') {
+    apiFunc = api.postInventory
+  } else if (mode === 'update') {
+    apiFunc = api.updateInventory
+  } else {
+    throw Error(`submitInventory invalid mode: ${mode}`)
+  }
+
+  return async function submitInventoryThunk (dispatch) {
+    // Note that itemId may be of the inventory or the thing, depending on mode
+    const newInventory = await dispatch(apiFunc(inventoryData))
+    dispatch(submitInventoryFinish(newInventory))
+    dispatch(loadInventory(newInventory.id))
+    return newInventory
   }
 }

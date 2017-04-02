@@ -28,19 +28,16 @@ function closeThingEditorReducer (state, action) {
   return state.setIn(['thingDialog', 'mode'], DIALOG_CLOSED)
 }
 
-function createNewInventoryReducer (state, action) {
-  let newState = state.setIn(['inventoryDialog', 'mode'], DIALOG_NEW)
-  newState = newState.setIn(['inventoryDialog', 'inventory'], emptyInventory)
+function openInventoryEditorReducer (state, action) {
+  // If no payload, it's a new inventory, otherwise edit inventory in payload
+  const inventory = action.payload || emptyInventory
+  const mode = action.payload ? DIALOG_EDIT : DIALOG_NEW
+  let newState = state.setIn(['inventoryDialog', 'mode'], mode)
+  newState = newState.setIn(['inventoryDialog', 'inventory'], Immutable(inventory))
   return newState
 }
 
-function editInventoryReducer (state, action) {
-  let newState = state.setIn(['inventoryDialog', 'mode'], DIALOG_EDIT)
-  newState = newState.setIn(['inventoryDialog', 'inventory'], Immutable(action.payload))
-  return newState
-}
-
-function editInventoryDoneReducer (state, action) {
+function closeInventoryEditorReducer (state, action) {
   return state.setIn(['inventoryDialog', 'mode'], DIALOG_CLOSED)
 }
 
@@ -74,10 +71,9 @@ const ui = handleActions({
   CLOSE_THING_EDITOR: closeThingEditorReducer,
   // TODO: Don't wait for submit to finish
   SUBMIT_THING__FINISH: closeThingEditorReducer,
-  CREATE_INVENTORY__START: createNewInventoryReducer,
-  EDIT_INVENTORY: editInventoryReducer,
-  CREATE_INVENTORY__CANCEL: editInventoryDoneReducer,
-  CREATE_INVENTORY__FINISH: editInventoryDoneReducer,
+  OPEN_INVENTORY_EDITOR: openInventoryEditorReducer,
+  CLOSE_INVENTORY_EDITOR: closeInventoryEditorReducer,
+  SUBMIT_INVENTORY__FINISH: closeInventoryEditorReducer,
   LOAD_INVENTORY__DONE: setCurrentInventoryReducer,
   AUTHORIZATION_REQUIRED: authorizationRequiredReducer,
   LOGIN_USER__DONE: userAuthenticatedReducer,
