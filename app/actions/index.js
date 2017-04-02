@@ -159,3 +159,28 @@ export function createInventory (inventoryData) {
     return newInventory
   }
 }
+
+export const OPEN_THING_EDITOR = 'OPEN_THING_EDITOR'
+export const openThingEditor = createAction(OPEN_THING_EDITOR)
+export const CLOSE_THING_EDITOR = 'CLOSE_THING_EDITOR'
+export const closeThingEditor = createAction(CLOSE_THING_EDITOR)
+
+export const SUBMIT_THING__FINISH = 'SUBMIT_THING__FINISH'
+export const submitThingFinish = createAction(SUBMIT_THING__FINISH)
+export function submitThing (itemId, thingData, mode) {
+  let apiFunc
+  if (mode === undefined || mode === 'post') {
+    apiFunc = api.postThing
+  } else if (mode === 'update') {
+    apiFunc = api.updateThing
+  } else {
+    // TODO: error here about an unknown mode
+  }
+
+  return async function submitThingThunk (dispatch) {
+    // Note that itemId may be of the inventory or the thing, depending on mode
+    const newThing = await dispatch(apiFunc(itemId, thingData))
+    dispatch(submitThingFinish(newThing))
+    return newThing
+  }
+}

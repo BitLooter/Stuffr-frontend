@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import moment from 'moment'
 
-import {ui, api} from '../actions'
+import {closeThingEditor, submitThing, api} from '../actions'
 import {isString, isEmpty} from '../util'
 import FormDialogBase from './FormDialogBase'
 import ConfirmDialog from './ConfirmDialog'
@@ -26,10 +26,11 @@ const MULTILINE_ROWS = 3
   },
   function mapDispatchToProps (dispatch) {
     return {
-      createThing: (inventoryId, data) => { dispatch(api.postThing(inventoryId, data)) },
-      updateThing: (thingId, data) => { dispatch(api.updateThing(thingId, data)) },
+      createThing: (inventoryId, data) => { dispatch(submitThing(inventoryId, data)) },
+      updateThing: (thingId, data) => { dispatch(submitThing(thingId, data, 'update')) },
+      // deleteThing: (thingId) => { dispatch(api.deleteThing(thingId)) },
       deleteThing: (thingId) => { dispatch(api.deleteThing(thingId)) },
-      closeDialog: () => { dispatch(ui.editThingDone()) }
+      closeDialog: () => { dispatch(closeThingEditor()) }
     }
   }
 )
@@ -104,7 +105,6 @@ export default class ThingEditDialog extends FormDialogBase {
         log.error(errorMessage)
         throw new Error(errorMessage)
       }
-      this.props.closeDialog()
     }
   }
 

@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import i18next from 'i18next'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 
-import {ui} from '../actions'
+import {openThingEditor} from '../actions'
 
 // TODO: Height needs to be set to the height of the window
 const ThingList = ({ things, editThing }) =>
@@ -37,7 +37,7 @@ const ThingListContainer = connect(
   function mapDispatchToProps (dispatch) {
     return {
       editThing: (thing) => {
-        dispatch(ui.editThing(thing))
+        dispatch(openThingEditor(thing))
       }
     }
   }

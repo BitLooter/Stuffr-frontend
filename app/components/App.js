@@ -8,7 +8,7 @@ import AuthenticationManager from './AuthenticationManager'
 import ThingEditDialog from './ThingEditDialog'
 import InventoryEditDialog from './InventoryEditDialog'
 import Menubar from './Menubar'
-import {ui} from '../actions'
+import {openThingEditor} from '../actions'
 
 const DIALOG_CLOSED = Symbol.for('ui.DIALOG_CLOSED')
 
@@ -51,7 +51,7 @@ const AppContainer = connect(
   },
   function mapDispatchToProps (dispatch) {
     return {
-      onClickActionButton: () => { dispatch(ui.createNewThing()) }
+      onClickActionButton: () => { dispatch(openThingEditor()) }
     }
   }
 )(App)

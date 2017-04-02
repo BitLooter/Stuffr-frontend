@@ -15,19 +15,16 @@ const emptyThing = Immutable(models.createThing())
 const emptyInventory = Immutable(models.createInventory())
 const noUser = Immutable({authenticated: false, currentInventory: null})
 
-function createNewThingReducer (state, action) {
-  let newState = state.setIn(['thingDialog', 'mode'], DIALOG_NEW)
-  newState = newState.setIn(['thingDialog', 'thing'], emptyThing)
+function openThingEditorReducer (state, action) {
+  // If no payload, it's a new thing, otherwise edit thing in payload
+  const thing = action.payload || emptyThing
+  const mode = action.payload ? DIALOG_EDIT : DIALOG_NEW
+  let newState = state.setIn(['thingDialog', 'mode'], mode)
+  newState = newState.setIn(['thingDialog', 'thing'], Immutable(thing))
   return newState
 }
 
-function editThingReducer (state, action) {
-  let newState = state.setIn(['thingDialog', 'mode'], DIALOG_EDIT)
-  newState = newState.setIn(['thingDialog', 'thing'], Immutable(action.payload))
-  return newState
-}
-
-function editThingDoneReducer (state, action) {
+function closeThingEditorReducer (state, action) {
   return state.setIn(['thingDialog', 'mode'], DIALOG_CLOSED)
 }
 
@@ -73,9 +70,10 @@ function purgeUserReducer (state, action) {
 }
 
 const ui = handleActions({
-  CREATE_NEW_THING: createNewThingReducer,
-  EDIT_THING: editThingReducer,
-  EDIT_THING_DONE: editThingDoneReducer,
+  OPEN_THING_EDITOR: openThingEditorReducer,
+  CLOSE_THING_EDITOR: closeThingEditorReducer,
+  // TODO: Don't wait for submit to finish
+  SUBMIT_THING__FINISH: closeThingEditorReducer,
   CREATE_INVENTORY__START: createNewInventoryReducer,
   EDIT_INVENTORY: editInventoryReducer,
   CREATE_INVENTORY__CANCEL: editInventoryDoneReducer,
