@@ -20,6 +20,7 @@ try {
 const siteConfig = {
   apiPath: config.apiPath,
   authPath: config.authPath,
+  logLevel: config.logLevel,
   frontendVersion: packageConfig.version
 }
 

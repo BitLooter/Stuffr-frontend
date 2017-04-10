@@ -22,6 +22,7 @@
     "password": "Password",
     "passwordConfirm": "Confirm password",
     "passwordMismatch": "Passwords do not match",
+    "passwordErrorMissing": "Password is required",
     "nameFirst": "First name",
     "nameLast": "Last name"
   },

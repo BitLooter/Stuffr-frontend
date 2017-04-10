@@ -18,6 +18,8 @@ import {setupApi} from './stuffrapi'
 injectTapEventPlugin()  // Needed for material-ui
 
 const logger = createLogger({collapsed: true})
+log.setLevel(window.siteConfig.logLevel)
+log.info(`Log level set to ${window.siteConfig.logLevel}`)
 
 const store = redux.createStore(stuffrApp, redux.compose(
   redux.applyMiddleware(thunk, logger),

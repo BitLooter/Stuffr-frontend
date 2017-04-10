@@ -17,5 +17,9 @@ module.exports = {
   /* The address and port of the backend server that the dev server will proxy
      API requests towards. */
   devProxyHost: 'localhost',
-  devProxyPort: 5000
+  devProxyPort: 5000,
+
+  /* The minimum log level to print to console. From low to high 'trace',
+     'debug', 'info', 'warn', and 'error'. */
+  logLevel: 'info'
 }
