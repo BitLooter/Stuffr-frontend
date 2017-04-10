@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import moment from 'moment'
 
-import {submitInventory, closeInventoryEditor, api} from '../actions'
+import {submitInventory, closeInventoryEditor} from '../actions'
 import {isString, isEmpty} from '../util'
 import FormDialogBase from './FormDialogBase'
 
@@ -18,7 +18,7 @@ const DIALOG_EDIT = Symbol.for('ui.DIALOG_EDIT')
   undefined,
   function mapDispatchToProps (dispatch) {
     return {
-      updateInventory: (id, data) => { dispatch(api.updateInventory(id, data)) },
+      updateInventory: (data, id) => { dispatch(submitInventory(data, id)) },
       createInventory: (data) => { dispatch(submitInventory(data)) },
       closeDialog: () => { dispatch(closeInventoryEditor()) }
     }
@@ -64,7 +64,7 @@ export default class InventoryEditDialog extends FormDialogBase {
         const changedData = this.getChangedData()
         if (!isEmpty(changedData)) {
           log.info(`Updating existing inventory with id ${this.props.inventory.id}`)
-          this.props.updateInventory(this.props.thing.id, changedData)
+          this.props.updateInventory(changedData, this.props.thing.id)
         }
       } else if (this.props.mode === DIALOG_NEW) {
         log.info(`Creating new inventory named ${this.state.data.name}`)

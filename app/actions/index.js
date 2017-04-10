@@ -1,31 +1,32 @@
 /* actions.js -- Contains actions used by the code.
 
-Async request actions should follow this pattern:
-  VERB_NOUN__(REQUEST|DONE|ERROR)
-REQUEST actions are dispatched when the request is made, DONE when successfully
-retrieved, and ERROR if any sort of error occured.
-/*******************************************************************/
+Async task actions should follow this pattern:
+  TASK__(START|FINISH|ERROR)
+START actions are dispatched when the task begins, FINISH when successfully
+completed, and ERROR if any sort of error occured.
+*******************************************************************/
 
 import {createAction} from 'redux-actions'
 import HttpStatus from 'http-status'
+import log from 'loglevel'
 
-import * as ui from './ui'
 import * as api from './api'
 import stuffrApi from '../stuffrapi'
 
-export {ui, api}
+export {api}
 
-// Generic thunk creator for backend API requests. *Action parameters should
-// be the appropriate action creators, and apiFunction is an async function
-// that makes the request. apiFunction is called with the parameters given
-// to the thunk and doneAction is dispatched with the apiFunction's return
-// value.
-export function createApiThunk (apiFunction, requestAction, doneAction, errorAction) {
+/* Generic thunk creator for tasks that take a significant amount of time to
+complete, e.g. those that make network requests. *Action parameters should
+be the appropriate action creators, and apiFunction is an async function
+that makes the request. apiFunction is called with the parameters given
+to the thunk and doneAction is dispatched with the apiFunction's return
+value. */
+export function createTaskThunk (apiFunction, requestAction, doneAction, errorAction) {
   return function (...apiParams) {
     return async function (dispatch, getState) {
       dispatch(requestAction())
       try {
-        const response = await apiFunction(...apiParams, {dispatch, getState})
+        const response = await apiFunction({dispatch, getState}, ...apiParams)
         dispatch(doneAction(response))
         return response
       } catch (error) {
@@ -48,6 +49,15 @@ function storeToken (token) {
 export const AUTHORIZATION_REQUIRED = 'AUTHORIZATION_REQUIRED'
 export const authorizationRequired = createAction(AUTHORIZATION_REQUIRED)
 
+export const OPEN_THING_EDITOR = 'OPEN_THING_EDITOR'
+export const openThingEditor = createAction(OPEN_THING_EDITOR)
+export const CLOSE_THING_EDITOR = 'CLOSE_THING_EDITOR'
+export const closeThingEditor = createAction(CLOSE_THING_EDITOR)
+export const OPEN_INVENTORY_EDITOR = 'OPEN_INVENTORY_EDITOR'
+export const openInventoryEditor = createAction(OPEN_INVENTORY_EDITOR)
+export const CLOSE_INVENTORY_EDITOR = 'CLOSE_INVENTORY_EDITOR'
+export const closeInventoryEditor = createAction(CLOSE_INVENTORY_EDITOR)
+
 /* Task actions
 *******************/
 
@@ -64,8 +74,9 @@ export const loginUserError = createAction(LOGIN_USER__ERROR)
 //  password: Make a wild guess
 // Returns:
 //  User info object
-export const loginUser = createApiThunk(
-  async function (email, password, {dispatch, getState}) {
+export const loginUser = createTaskThunk(
+  async function ({dispatch, getState}, email, password) {
+    log.info(`loginUser: Logging in user ${email}`)
     await stuffrApi.login(email, password)
     storeToken(stuffrApi.token)
     return await dispatch(loadUser())
@@ -84,10 +95,9 @@ export const registerUserError = createAction(REGISTER_USER__ERROR)
 // Parameters:
 //  email: Login ID
 //  password: Make a wild guess
-// Returns:
-//  User info object
-export const registerUser = createApiThunk(
-  async function (newUserData, {dispatch, getState}) {
+export const registerUser = createTaskThunk(
+  async function ({dispatch, getState}, newUserData) {
+    log.info('registerUser: Registering new user')
     await stuffrApi.registerUser(newUserData)
     storeToken(stuffrApi.token)
     dispatch(loadUser())
@@ -101,6 +111,7 @@ export const purgeUser = createAction(PURGE_USER)
 // logoutUser - Log the user out and clean up
 export const logoutUser = function () {
   return function (dispatch) {
+    log.info('purgeUser: Purging user data')
     stuffrApi.logout()
     delete window.localStorage.apiToken
     delete window.localStorage.lastInventoryId
@@ -119,13 +130,13 @@ export const loadUserError = createAction(LOAD_USER__ERROR)
 // loadUser - Perform initial client setup.
 // Returns:
 //  User info object
-export const loadUser = createApiThunk(
+export const loadUser = createTaskThunk(
   async function ({dispatch, getState}) {
+    log.info('loadUser: Loading user data')
     const userInfo = await stuffrApi.getUserInfo()
     await dispatch(api.getInventoryList())
     // Inventory list is populated by previous action
-    const lastInventoryId = parseInt(window.localStorage.lastInventoryId)
-    dispatch(loadInventory(lastInventoryId))
+    dispatch(loadInventory())
     return userInfo
   },
   loadUserRequest, loadUserDone, loadUserError
@@ -139,10 +150,32 @@ export const loadInventoryRequest = createAction(LOAD_INVENTORY__REQUEST)
 export const loadInventoryDone = createAction(LOAD_INVENTORY__DONE)
 export const loadInventoryError = createAction(LOAD_INVENTORY__ERROR)
 // Parameters:
-//  inventoryIndex: Index of the inventory in state.database.inventories
-export const loadInventory = createApiThunk(
-  async function (inventoryId, {dispatch, getState}) {
-    const inventoryIndex = getState().database.inventories.findIndex((v) => v.id === inventoryId)
+//  requestedId: ID of the inventory to load. If undefined automatically choose a default.
+export const loadInventory = createTaskThunk(
+  async function ({dispatch, getState}, requestedId) {
+    log.info(`loadInventory: Loading inventory #${requestedId}`)
+    let inventoryId, inventoryIndex
+    // If no ID check localStorage for the last used ID, uses first inventory if not found
+    if (requestedId === undefined) {
+      log.debug(`loadInventory: No requestedId, using lastInventoryId #${window.localStorage.lastInventoryId}`)
+      const lastId = parseInt(window.localStorage.lastInventoryId)
+      inventoryIndex = getState().database.inventories.findIndex((v) => v.id === lastId)
+      if (inventoryIndex === -1) {
+        log.debug(`loadInventory: lastInventoryId #${window.localStorage.lastInventoryId} invalid, loading first inventory`)
+        inventoryIndex = 0
+      }
+      inventoryId = getState().database.inventories[inventoryIndex].id
+    } else {
+      log.debug('loadInventory: Loading specified inventory')
+      inventoryId = requestedId
+      inventoryIndex = getState().database.inventories.findIndex((v) => v.id === requestedId)
+      if (inventoryIndex === -1) {
+        // If a specific inventory is requested but not found something is broken
+        const error = `loadInventory: Could not load #${inventoryId}`
+        log.error(error)
+        throw (Error(error))
+      }
+    }
     window.localStorage.lastInventoryId = inventoryId
     dispatch(api.getThingList(inventoryId))
     return {id: inventoryId, index: inventoryIndex}
@@ -150,52 +183,47 @@ export const loadInventory = createApiThunk(
   loadInventoryRequest, loadInventoryDone, loadInventoryError
 )
 
-export const OPEN_THING_EDITOR = 'OPEN_THING_EDITOR'
-export const openThingEditor = createAction(OPEN_THING_EDITOR)
-export const CLOSE_THING_EDITOR = 'CLOSE_THING_EDITOR'
-export const closeThingEditor = createAction(CLOSE_THING_EDITOR)
-export const OPEN_INVENTORY_EDITOR = 'OPEN_INVENTORY_EDITOR'
-export const openInventoryEditor = createAction(OPEN_INVENTORY_EDITOR)
-export const CLOSE_INVENTORY_EDITOR = 'CLOSE_INVENTORY_EDITOR'
-export const closeInventoryEditor = createAction(CLOSE_INVENTORY_EDITOR)
-
+export const SUBMIT_THING__START = 'SUBMIT_THING__START'
+export const submitThingStart = createAction(SUBMIT_THING__START)
 export const SUBMIT_THING__FINISH = 'SUBMIT_THING__FINISH'
 export const submitThingFinish = createAction(SUBMIT_THING__FINISH)
-export function submitThing (itemId, thingData, mode) {
-  let apiFunc
-  if (mode === undefined || mode === 'post') {
-    apiFunc = api.postThing
-  } else if (mode === 'update') {
-    apiFunc = api.updateThing
-  } else {
-    throw Error(`submitThing invalid mode: ${mode}`)
-  }
+export const SUBMIT_THING__ERROR = 'SUBMIT_THING__ERROR'
+export const submitThingError = createAction(SUBMIT_THING__ERROR)
+export const submitThing = createTaskThunk(
+  async function ({dispatch}, thingData, inventoryId, thingId) {
+    log.info('submitThing: Submitting thing data')
+    let thingResponse
+    if (thingId) {
+      log.debug(`submitThing: Updating existing thing #${thingId}`)
+      thingResponse = await dispatch(api.updateThing(thingData, thingId))
+    } else {
+      log.debug(`submitThing: Adding new thing to inventory #${inventoryId}`)
+      thingResponse = await dispatch(api.postThing(thingData, inventoryId))
+    }
+    return thingResponse
+  },
+  submitThingStart, submitThingFinish, submitThingError
+)
 
-  return async function submitThingThunk (dispatch) {
-    // Note that itemId may be of the inventory or the thing, depending on mode
-    const newThing = await dispatch(apiFunc(itemId, thingData))
-    dispatch(submitThingFinish(newThing))
-    return newThing
-  }
-}
-
+export const SUBMIT_INVENTORY__START = 'SUBMIT_INVENTORY__START'
+export const submitInventoryStart = createAction(SUBMIT_INVENTORY__START)
 export const SUBMIT_INVENTORY__FINISH = 'SUBMIT_INVENTORY__FINISH'
 export const submitInventoryFinish = createAction(SUBMIT_INVENTORY__FINISH)
-export function submitInventory (inventoryData, mode) {
-  let apiFunc
-  if (mode === undefined || mode === 'post') {
-    apiFunc = api.postInventory
-  } else if (mode === 'update') {
-    apiFunc = api.updateInventory
-  } else {
-    throw Error(`submitInventory invalid mode: ${mode}`)
-  }
-
-  return async function submitInventoryThunk (dispatch) {
-    // Note that itemId may be of the inventory or the thing, depending on mode
-    const newInventory = await dispatch(apiFunc(inventoryData))
-    dispatch(submitInventoryFinish(newInventory))
-    dispatch(loadInventory(newInventory.id))
-    return newInventory
-  }
-}
+export const SUBMIT_INVENTORY__ERROR = 'SUBMIT_INVENTORY__ERROR'
+export const submitInventoryError = createAction(SUBMIT_INVENTORY__ERROR)
+export const submitInventory = createTaskThunk(
+  async function ({dispatch}, inventoryData, inventoryId) {
+    log.info('submitInventory: Submitting inventory data')
+    let response
+    if (inventoryId) {
+      log.debug('submitInventory: Updating existing inventory')
+      response = await dispatch(api.updateInventory(inventoryData, inventoryId))
+    } else {
+      log.debug('submitInventory: Adding new inventory')
+      response = await dispatch(api.postInventory(inventoryData))
+      dispatch(loadInventory(response.id))
+    }
+    return response
+  },
+  submitInventoryStart, submitInventoryFinish, submitInventoryError
+)

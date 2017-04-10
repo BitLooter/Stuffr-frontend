@@ -26,8 +26,8 @@ const MULTILINE_ROWS = 3
   },
   function mapDispatchToProps (dispatch) {
     return {
-      createThing: (inventoryId, data) => { dispatch(submitThing(inventoryId, data)) },
-      updateThing: (thingId, data) => { dispatch(submitThing(thingId, data, 'updatee')) },
+      createThing: (data, inventoryId) => { dispatch(submitThing(data, inventoryId)) },
+      updateThing: (data, thingId) => { dispatch(submitThing(data, null, thingId)) },
       // deleteThing: (thingId) => { dispatch(api.deleteThing(thingId)) },
       deleteThing: (thingId) => { dispatch(api.deleteThing(thingId)) },
       closeDialog: () => { dispatch(closeThingEditor()) }
@@ -95,12 +95,12 @@ export default class ThingEditDialog extends FormDialogBase {
         const changedData = this.getChangedData()
         if (!isEmpty(changedData)) {
           log.info(`Updating existing thing with id ${this.props.thing.id}`)
-          this.props.updateThing(this.props.thing.id, changedData)
+          this.props.updateThing(changedData, this.props.thing.id)
         }
       } else if (this.props.mode === DIALOG_NEW) {
         const newData = this.state.data
         log.info(`Creating new thing named ${newData.name}`)
-        this.props.createThing(this.props.currentInventoryId, newData)
+        this.props.createThing(newData, this.props.currentInventoryId)
       } else {
         const errorMessage = `Unknown mode for ThingEditDialog: ${String(this.props.mode)}`
         log.error(errorMessage)
