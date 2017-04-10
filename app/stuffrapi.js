@@ -37,40 +37,40 @@ class StuffrApi {
 
   // GET request to /userinfo
   async getUserInfo (callback) {
-    log.info('StuffrApi request for getUserInfo')
+    log.debug('StuffrApi: Request for getUserInfo')
     return await this._request('/userinfo', {callback})
   }
 
   // GET request to /inventories
   async getInventories (callback) {
     // TODO: server does not seem to produce any errors if no inventories exist, fix that.
-    log.info('StuffrApi request for getInventories')
+    log.debug('StuffrApi: Request for getInventories')
     return await this._request('/inventories', {callback})
   }
 
   // POST request to /inventories
   async addInventory (inventoryData, callback) {
-    log.info('StuffrApi request for addInventory')
+    log.debug('StuffrApi: Request for addInventory')
     return await this._request('/inventories',
         {parameters: inventoryData, callback})
   }
 
   // GET request to /inventories/<inventory_id>/things
   async getThings (inventoryId, callback) {
-    log.info('StuffrApi request for getThings')
+    log.debug('StuffrApi: Request for getThings')
     return await this._request(`/inventories/${inventoryId}/things`, {callback})
   }
 
   // POST request to /inventories/<inventory_id>/things
   async addThing (inventoryId, thingData, callback) {
-    log.info('StuffrApi request for addThing')
+    log.debug('StuffrApi: Request for addThing')
     return await this._request(`/inventories/${inventoryId}/things`,
         {parameters: thingData, callback})
   }
 
   // PUT request to /things/<id>
-  async updateThing (thingId, thingData, callback) {
-    log.info(`StuffrApi request for updateThing <${thingId}>`)
+  async putThing (thingId, thingData, callback) {
+    log.debug(`StuffrApi: Request for putThing <${thingId}>`)
     return await this._request(`/things/${thingId}`,
       {method: 'PUT',
         parameters: thingData,
@@ -79,7 +79,7 @@ class StuffrApi {
 
   // DELETE request to /things/<id>
   async deleteThing (thingId, callback) {
-    log.info(`StuffrApi request for deleteThing <${thingId}>`)
+    log.debug(`StuffrApi: Request for deleteThing <${thingId}>`)
     return await this._request(`/things/${thingId}`,
       {method: 'DELETE',
         callback})
@@ -87,8 +87,8 @@ class StuffrApi {
 
   // Authenticate with server
   async login (email, password) {
+    log.debug(`StuffrApi: Logging in user ${email}`)
     // TODO: Stop session cookie generation
-
     const loginInfo = {email, password}
     const response = await this._request('/login', {parameters: loginInfo,
       requestUrlBase: this.authUrlBase})
@@ -101,15 +101,18 @@ class StuffrApi {
     } else {
       throw new Error('Unknown error logging in')
     }
+    log.info(`StuffrApi: Successfully logged in user ${email}`)
   }
 
   // Log out and purge local user data
   logout () {
     // TODO: make a request to /logout
     this.token = null
+    log.info('StuffrApi: Logged out user')
   }
 
   async registerUser (newUserInfo) {
+    log.debug(`StuffrApi: Registering new user ${newUserInfo.email}`)
     const response = await this._request('/register',
       {parameters: newUserInfo,
         requestUrlBase: this.authUrlBase})
@@ -128,6 +131,7 @@ class StuffrApi {
       }
       throw new Error(`Register: ${msg}`)
     }
+    log.info(`StuffrApi: Successfully registered new user ${newUserInfo.email}`)
   }
 
   // Makes request to the server specified in baseUrl
@@ -136,7 +140,7 @@ class StuffrApi {
     const headers = new Headers()
     const body = JSON.stringify(parameters)
     const fullUrl = urlBase + path
-    log.trace(`StuffrApi generic request to ${fullUrl}`)
+    log.trace(`StuffrApi: Generic request to ${fullUrl}`)
 
     // Determine method if not given in parameters
     // Default method is GET, POST if paramater data is given
@@ -161,7 +165,7 @@ class StuffrApi {
       response = await fetch(fullUrl, {method, headers, body})
     } catch (error) {
       // Throw a more useful error message than the default
-      log.error(`Error fetching ${fullUrl}: ${error}`)
+      log.error(`StuffrApi: Error fetching ${fullUrl}: ${error}`)
       throw new Error(`Unable to fetch ${fullUrl}`)
     }
     if (!response.ok) {
@@ -188,13 +192,14 @@ class StuffrApi {
 
 // Factory function for creating StuffrApi objects
 export function createStuffrApi (baseUrl, authBaseUrl, token) {
+  log.trace(`StuffrApi: Created new API object for ${baseUrl}`)
   return new StuffrApi(baseUrl, authBaseUrl, token)
 }
 
 // Dummy object to throw an error if the API was used before initalization
 const dummyApi = {
   get (target, name) {
-    const errorMsg = 'You must call setupApi before using API functions'
+    const errorMsg = 'StuffrApi: You must call setupApi before using API functions'
     log.error(errorMsg)
     throw new Error(errorMsg)
   }
@@ -204,5 +209,6 @@ let defaultApi = new Proxy({}, dummyApi)
 export {defaultApi as default}
 
 export function setupApi (baseUrl, authBaseUrl, token) {
+  log.info(`StuffrApi: Created new default API object for ${baseUrl}`)
   defaultApi = createStuffrApi(baseUrl, authBaseUrl, token)
 }

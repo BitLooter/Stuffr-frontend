@@ -62,11 +62,11 @@ export const closeInventoryEditor = createAction(CLOSE_INVENTORY_EDITOR)
 *******************/
 
 // Actions to log a user into the server
-export const LOGIN_USER__REQUEST = 'LOGIN_USER__REQUEST'
-export const LOGIN_USER__DONE = 'LOGIN_USER__DONE'
+export const LOGIN_USER__START = 'LOGIN_USER__START'
+export const loginUserStart = createAction(LOGIN_USER__START)
+export const LOGIN_USER__FINISH = 'LOGIN_USER__FINISH'
+export const loginUserFinish = createAction(LOGIN_USER__FINISH)
 export const LOGIN_USER__ERROR = 'LOGIN_USER__ERROR'
-export const loginUserRequest = createAction(LOGIN_USER__REQUEST)
-export const loginUserDone = createAction(LOGIN_USER__DONE)
 export const loginUserError = createAction(LOGIN_USER__ERROR)
 // loginUser - Perform user login and initial client setup.
 // Parameters:
@@ -81,15 +81,15 @@ export const loginUser = createTaskThunk(
     storeToken(stuffrApi.token)
     return await dispatch(loadUser())
   },
-  loginUserRequest, loginUserDone, loginUserError
+  loginUserStart, loginUserFinish, loginUserError
 )
 
 // Actions to register a new user
-export const REGISTER_USER__REQUEST = 'REGISTER_USER__REQUEST'
-export const REGISTER_USER__DONE = 'REGISTER_USER__DONE'
+export const REGISTER_USER__START = 'REGISTER_USER__START'
+export const registerUserStart = createAction(REGISTER_USER__START)
+export const REGISTER_USER__FINISH = 'REGISTER_USER__FINISH'
+export const registerUserFinish = createAction(REGISTER_USER__FINISH)
 export const REGISTER_USER__ERROR = 'REGISTER_USER__ERROR'
-export const registerUserRequest = createAction(REGISTER_USER__REQUEST)
-export const registerUserDone = createAction(REGISTER_USER__DONE)
 export const registerUserError = createAction(REGISTER_USER__ERROR)
 // registerUser - Perform user registration
 // Parameters:
@@ -102,7 +102,7 @@ export const registerUser = createTaskThunk(
     storeToken(stuffrApi.token)
     dispatch(loadUser())
   },
-  registerUserRequest, registerUserDone, registerUserError
+  registerUserStart, registerUserFinish, registerUserError
 )
 
 // Actions to log a user out and remove all their data from the client
@@ -121,11 +121,11 @@ export const logoutUser = function () {
 }
 
 // Actions to load a user and their data after login
-export const LOAD_USER__REQUEST = 'LOAD_USER__REQUEST'
-export const LOAD_USER__DONE = 'LOAD_USER__DONE'
+export const LOAD_USER__START = 'LOAD_USER__START'
+export const loadUserStart = createAction(LOAD_USER__START)
+export const LOAD_USER__FINISH = 'LOAD_USER__FINISH'
+export const loadUserFinish = createAction(LOAD_USER__FINISH)
 export const LOAD_USER__ERROR = 'LOAD_USER__ERROR'
-export const loadUserRequest = createAction(LOAD_USER__REQUEST)
-export const loadUserDone = createAction(LOAD_USER__DONE)
 export const loadUserError = createAction(LOAD_USER__ERROR)
 // loadUser - Perform initial client setup.
 // Returns:
@@ -134,20 +134,20 @@ export const loadUser = createTaskThunk(
   async function ({dispatch, getState}) {
     log.info('loadUser: Loading user data')
     const userInfo = await stuffrApi.getUserInfo()
-    await dispatch(api.getInventoryList())
+    await dispatch(api.getInventories())
     // Inventory list is populated by previous action
     dispatch(loadInventory())
     return userInfo
   },
-  loadUserRequest, loadUserDone, loadUserError
+  loadUserStart, loadUserFinish, loadUserError
 )
 
 // Load an inventory and its things
-export const LOAD_INVENTORY__REQUEST = 'LOAD_INVENTORY__REQUEST'
-export const LOAD_INVENTORY__DONE = 'LOAD_INVENTORY__DONE'
+export const LOAD_INVENTORY__START = 'LOAD_INVENTORY__START'
+export const loadInventoryStart = createAction(LOAD_INVENTORY__START)
+export const LOAD_INVENTORY__FINISH = 'LOAD_INVENTORY__FINISH'
+export const loadInventoryFinish = createAction(LOAD_INVENTORY__FINISH)
 export const LOAD_INVENTORY__ERROR = 'LOAD_INVENTORY__ERROR'
-export const loadInventoryRequest = createAction(LOAD_INVENTORY__REQUEST)
-export const loadInventoryDone = createAction(LOAD_INVENTORY__DONE)
 export const loadInventoryError = createAction(LOAD_INVENTORY__ERROR)
 // Parameters:
 //  requestedId: ID of the inventory to load. If undefined automatically choose a default.
@@ -177,10 +177,10 @@ export const loadInventory = createTaskThunk(
       }
     }
     window.localStorage.lastInventoryId = inventoryId
-    dispatch(api.getThingList(inventoryId))
+    dispatch(api.getThings(inventoryId))
     return {id: inventoryId, index: inventoryIndex}
   },
-  loadInventoryRequest, loadInventoryDone, loadInventoryError
+  loadInventoryStart, loadInventoryFinish, loadInventoryError
 )
 
 export const SUBMIT_THING__START = 'SUBMIT_THING__START'
@@ -195,7 +195,7 @@ export const submitThing = createTaskThunk(
     let thingResponse
     if (thingId) {
       log.debug(`submitThing: Updating existing thing #${thingId}`)
-      thingResponse = await dispatch(api.updateThing(thingData, thingId))
+      thingResponse = await dispatch(api.putThing(thingData, thingId))
     } else {
       log.debug(`submitThing: Adding new thing to inventory #${inventoryId}`)
       thingResponse = await dispatch(api.postThing(thingData, inventoryId))

@@ -20,7 +20,7 @@ function purgeUserReducer (state, action) {
   return emptyDatabase
 }
 
-function getInventoryListDoneReducer (state, action) {
+function getInventoriesDoneReducer (state, action) {
   return state.set('inventories', Immutable(action.payload))
 }
 
@@ -29,7 +29,7 @@ function createInventoryDoneReducer (state, action) {
   return state.set('inventories', newInventories)
 }
 
-function getThingListDoneReducer (state, action) {
+function getThingsDoneReducer (state, action) {
   return state.set('things', Immutable(action.payload))
 }
 
@@ -38,7 +38,7 @@ function postThingDoneReducer (state, action) {
   return state.set('things', newThings)
 }
 
-function updateThingDoneReducer (state, action) {
+function putThingDoneReducer (state, action) {
   const newThings = state.things.flatMap((t) => {
     if (t.id === action.payload.id) {
       return t.merge(action.payload.update, {deep: true})
@@ -61,20 +61,19 @@ function deleteThingDoneReducer (state, action) {
 }
 
 const things = handleActions({
-  LOGIN_USER__ERROR: genericErrorReducer,
-  LOAD_USER__DONE: loadUserDoneReducer,
+  LOAD_USER__FINISH: loadUserDoneReducer,
   LOAD_USER__ERROR: genericErrorReducer,
   PURGE_USER: purgeUserReducer,
-  GET_INVENTORY_LIST__DONE: getInventoryListDoneReducer,
-  GET_INVENTORY_LIST__ERROR: genericErrorReducer,
+  GET_INVENTORIES__DONE: getInventoriesDoneReducer,
+  GET_INVENTORIES__ERROR: genericErrorReducer,
   POST_INVENTORY__DONE: createInventoryDoneReducer,
   POST_INVENTORY__ERROR: genericErrorReducer,
-  GET_THING_LIST__DONE: getThingListDoneReducer,
-  GET_THING_LIST__ERROR: genericErrorReducer,
+  GET_THINGS__DONE: getThingsDoneReducer,
+  GET_THINGS__ERROR: genericErrorReducer,
   POST_THING__DONE: postThingDoneReducer,
   POST_THING__ERROR: genericErrorReducer,
-  UPDATE_THING__DONE: updateThingDoneReducer,
-  UPDATE_THING__ERROR: genericErrorReducer,
+  PUT_THING__DONE: putThingDoneReducer,
+  PUT_THING__ERROR: genericErrorReducer,
   DELETE_THING__DONE: deleteThingDoneReducer,
   DELETE_THING__ERROR: genericErrorReducer
 }, Immutable(emptyDatabase))

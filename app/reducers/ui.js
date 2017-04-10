@@ -74,11 +74,11 @@ const ui = handleActions({
   OPEN_INVENTORY_EDITOR: openInventoryEditorReducer,
   CLOSE_INVENTORY_EDITOR: closeInventoryEditorReducer,
   SUBMIT_INVENTORY__FINISH: closeInventoryEditorReducer,
-  LOAD_INVENTORY__DONE: setCurrentInventoryReducer,
+  LOAD_INVENTORY__FINISH: setCurrentInventoryReducer,
   AUTHORIZATION_REQUIRED: authorizationRequiredReducer,
-  LOGIN_USER__DONE: userAuthenticatedReducer,
+  LOGIN_USER__FINISH: userAuthenticatedReducer,
   LOGIN_USER__ERROR: userLoginErrorReducer,
-  REGISTER_USER__DONE: userAuthenticatedReducer,
+  REGISTER_USER__FINISH: userAuthenticatedReducer,
   REGISTER_USER__ERROR: userRegisterErrorReducer,
   PURGE_USER: purgeUserReducer
 }, Immutable({

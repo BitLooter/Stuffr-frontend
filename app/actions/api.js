@@ -14,40 +14,42 @@ import stuffrApi from '../stuffrapi'
 
 // Actions get the current user's info from the server
 export const GET_USER_INFO__REQUEST = 'GET_USER_INFO__REQUEST'
-export const GET_USER_INFO__DONE = 'GET_USER_INFO__DONE'
-export const GET_USER_INFO__ERROR = 'GET_USER_INFO__ERROR'
 export const getUserInfoRequest = createAction(GET_USER_INFO__REQUEST)
+export const GET_USER_INFO__DONE = 'GET_USER_INFO__DONE'
 export const getUserInfoDone = createAction(GET_USER_INFO__DONE)
+export const GET_USER_INFO__ERROR = 'GET_USER_INFO__ERROR'
 export const getUserInfoError = createAction(GET_USER_INFO__ERROR)
 // getUserInfo - Takes no parameters and returns user information
 export const getUserInfo = createTaskThunk(
   async function () {
+    log.debug('getUserInfo: Retrieving user info')
     return stuffrApi.getUserInfo()
   },
   getUserInfoRequest, getUserInfoDone, getUserInfoError
 )
 
 // Actions to GET inventories from the server.
-export const GET_INVENTORY_LIST__REQUEST = 'GET_INVENTORY_LIST__REQUEST'
-export const GET_INVENTORY_LIST__DONE = 'GET_INVENTORY_LIST__DONE'
-export const GET_INVENTORY_LIST__ERROR = 'GET_INVENTORY_LIST__ERROR'
-export const getInventoryListRequest = createAction(GET_INVENTORY_LIST__REQUEST)
-export const getInventoryListDone = createAction(GET_INVENTORY_LIST__DONE)
-export const getInventoryListError = createAction(GET_INVENTORY_LIST__ERROR)
-// getInventoryList - Takes no parameters and returns a list of inventories
-export const getInventoryList = createTaskThunk(
+export const GET_INVENTORIES__REQUEST = 'GET_INVENTORIES__REQUEST'
+export const getInventoriesRequest = createAction(GET_INVENTORIES__REQUEST)
+export const GET_INVENTORIES__DONE = 'GET_INVENTORIES__DONE'
+export const getInventoriesDone = createAction(GET_INVENTORIES__DONE)
+export const GET_INVENTORIES__ERROR = 'GET_INVENTORIES__ERROR'
+export const getInventoriesError = createAction(GET_INVENTORIES__ERROR)
+// getInventories - Takes no parameters and returns all inventories
+export const getInventories = createTaskThunk(
   async function () {
+    log.debug('getInventories: Retrieving inventories')
     return stuffrApi.getInventories()
   },
-  getInventoryListRequest, getInventoryListDone, getInventoryListError
+  getInventoriesRequest, getInventoriesDone, getInventoriesError
 )
 
 // Actions to POST a new inventory to the server.
 export const POST_INVENTORY__REQUEST = 'POST_INVENTORY__REQUEST'
-export const POST_INVENTORY__DONE = 'POST_INVENTORY__DONE'
-export const POST_INVENTORY__ERROR = 'POST_INVENTORY__ERROR'
 export const postInventoryRequest = createAction(POST_INVENTORY__REQUEST)
+export const POST_INVENTORY__DONE = 'POST_INVENTORY__DONE'
 export const postInventoryDone = createAction(POST_INVENTORY__DONE)
+export const POST_INVENTORY__ERROR = 'POST_INVENTORY__ERROR'
 export const postInventoryError = createAction(POST_INVENTORY__ERROR)
 // postInventory
 //  Parameters:
@@ -56,35 +58,35 @@ export const postInventoryError = createAction(POST_INVENTORY__ERROR)
 //   Original inventory merged with new server-souced data such as ID and creation date.
 export const postInventory = createTaskThunk(
   async function (_, inventory) {
-    const inventoryResponse = await stuffrApi.addInventory(inventory)
     log.debug(`postInventory: POST request for new inventory ${inventory.name}`)
+    const inventoryResponse = await stuffrApi.addInventory(inventory)
     return {...inventory, ...inventoryResponse}
   },
   postInventoryRequest, postInventoryDone, postInventoryError
 )
 
 // Actions to GET things from the server.
-export const GET_THING_LIST__REQUEST = 'GET_THING_LIST__REQUEST'
-export const GET_THING_LIST__DONE = 'GET_THING_LIST__DONE'
-export const GET_THING_LIST__ERROR = 'GET_THING_LIST__ERROR'
-export const getThingListRequest = createAction(GET_THING_LIST__REQUEST)
-export const getThingListDone = createAction(GET_THING_LIST__DONE)
-export const getThingListError = createAction(GET_THING_LIST__ERROR)
-// getThingList - Takes inventory ID and returns the things it contains
-export const getThingList = createTaskThunk(
+export const GET_THINGS__REQUEST = 'GET_THINGS__REQUEST'
+export const getThingsRequest = createAction(GET_THINGS__REQUEST)
+export const GET_THINGS__DONE = 'GET_THINGS__DONE'
+export const getThingsDone = createAction(GET_THINGS__DONE)
+export const GET_THINGS__ERROR = 'GET_THINGS__ERROR'
+export const getThingsError = createAction(GET_THINGS__ERROR)
+// getThings - Takes inventory ID and returns the things it contains
+export const getThings = createTaskThunk(
   async function (_, inventoryId) {
     log.debug(`getThingList: GET for inventory #${inventoryId}`)
     return stuffrApi.getThings(inventoryId)
   },
-  getThingListRequest, getThingListDone, getThingListError
+  getThingsRequest, getThingsDone, getThingsError
 )
 
 // Actions to POST a new thing to the server.
 export const POST_THING__REQUEST = 'POST_THING__REQUEST'
-export const POST_THING__DONE = 'POST_THING__DONE'
-export const POST_THING__ERROR = 'POST_THING__ERROR'
 export const postThingRequest = createAction(POST_THING__REQUEST)
+export const POST_THING__DONE = 'POST_THING__DONE'
 export const postThingDone = createAction(POST_THING__DONE)
+export const POST_THING__ERROR = 'POST_THING__ERROR'
 export const postThingError = createAction(POST_THING__ERROR)
 // postThing
 //  Parameters:
@@ -100,25 +102,25 @@ export const postThing = createTaskThunk(
 )
 
 // Actions to update an existing thing on the server.
-export const UPDATE_THING__REQUEST = 'UPDATE_THING__REQUEST'
-export const UPDATE_THING__DONE = 'UPDATE_THING__DONE'
-export const UPDATE_THING__ERROR = 'UPDATE_THING__ERROR'
-export const updateThingRequest = createAction(UPDATE_THING__REQUEST)
-export const updateThingDone = createAction(UPDATE_THING__DONE)
-export const updateThingError = createAction(UPDATE_THING__ERROR)
-// updateThing
+export const PUT_THING__REQUEST = 'PUT_THING__REQUEST'
+export const putThingRequest = createAction(PUT_THING__REQUEST)
+export const PUT_THING__DONE = 'PUT_THING__DONE'
+export const putThingDone = createAction(PUT_THING__DONE)
+export const PUT_THING__ERROR = 'PUT_THING__ERROR'
+export const putThingError = createAction(PUT_THING__ERROR)
+// putThing
 //  Parameters:
 //   thingId: ID of the thing to update
 //   thingData: Object containing the values to update
 //  Returns:
 //   Object containing the id of the modified thing and an object with the
 //   modified data.
-export const updateThing = createTaskThunk(
+export const putThing = createTaskThunk(
   async function (_, thingData, thingId) {
-    await stuffrApi.updateThing(thingId, thingData)
+    await stuffrApi.putThing(thingId, thingData)
     return {id: thingId, update: thingData}
   },
-  updateThingRequest, updateThingDone, updateThingError
+  putThingRequest, putThingDone, putThingError
 )
 
 // Actions to remove a thing on the server.
