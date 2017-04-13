@@ -205,6 +205,20 @@ export const submitThing = createTaskThunk(
   submitThingStart, submitThingFinish, submitThingError
 )
 
+export const REMOVE_THING__START = 'REMOVE_THING__START'
+export const removeThingStart = createAction(REMOVE_THING__START)
+export const REMOVE_THING__FINISH = 'REMOVE_THING__FINISH'
+export const removeThingFinish = createAction(REMOVE_THING__FINISH)
+export const REMOVE_THING__ERROR = 'REMOVE_THING__ERROR'
+export const removeThingError = createAction(REMOVE_THING__ERROR)
+export const removeThing = createTaskThunk(
+  async function ({dispatch}, thingId) {
+    log.info(`removeThing: Removing thing #${thingId}`)
+    await dispatch(api.deleteThing(thingId))
+  },
+  removeThingStart, removeThingFinish, removeThingError
+)
+
 export const SUBMIT_INVENTORY__START = 'SUBMIT_INVENTORY__START'
 export const submitInventoryStart = createAction(SUBMIT_INVENTORY__START)
 export const SUBMIT_INVENTORY__FINISH = 'SUBMIT_INVENTORY__FINISH'

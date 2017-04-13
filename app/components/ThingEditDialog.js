@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import moment from 'moment'
 
-import {closeThingEditor, submitThing, api} from '../actions'
+import {closeThingEditor, submitThing, removeThing} from '../actions'
 import {isString, isEmpty} from '../util'
 import FormDialogBase from './FormDialogBase'
 import ConfirmDialog from './ConfirmDialog'
@@ -28,8 +28,7 @@ const MULTILINE_ROWS = 3
     return {
       createThing: (data, inventoryId) => { dispatch(submitThing(data, inventoryId)) },
       updateThing: (data, thingId) => { dispatch(submitThing(data, null, thingId)) },
-      // deleteThing: (thingId) => { dispatch(api.deleteThing(thingId)) },
-      deleteThing: (thingId) => { dispatch(api.deleteThing(thingId)) },
+      deleteThing: (thingId) => { dispatch(removeThing(thingId)) },
       closeDialog: () => { dispatch(closeThingEditor()) }
     }
   }
@@ -153,13 +152,6 @@ export default class ThingEditDialog extends FormDialogBase {
         rows={MULTILINE_ROWS} rowsMax={MULTILINE_ROWS}
         fullWidth={true}
         defaultValue={thing.description}
-        onBlur={this.handleChange} /><br />
-      <TextField name='notes'
-        floatingLabelText={i18next.t('thing.notes')}
-        multiLine={true}
-        rows={MULTILINE_ROWS} rowsMax={MULTILINE_ROWS}
-        fullWidth={true}
-        defaultValue={thing.notes}
         onBlur={this.handleChange} /><br />
       {this.props.mode !== DIALOG_EDIT ? null : (<div>
         {i18next.t('thing.dateAdded')}: {moment(thing.date_created).calendar()}<br />
