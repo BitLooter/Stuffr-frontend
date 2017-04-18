@@ -34,7 +34,7 @@ const MULTILINE_ROWS = 3
   }
 )
 export default class ThingEditDialog extends FormDialogBase {
-  static fields = ['name', 'description', 'notes']
+  static fields = ['name', 'details', 'location']
 
   constructor (props) {
     super(props, props.thing)
@@ -77,11 +77,11 @@ export default class ThingEditDialog extends FormDialogBase {
     } else {
       log.error(`Name should be a string, found ${typeof data.name} instead`)
     }
-    if (data.description !== null && !isString(data.description)) {
-      log.error(`Description should be a string, found ${typeof data.description} instead`)
+    if (data.location !== null && !isString(data.location)) {
+      log.error(`Location should be a string, found ${typeof data.location} instead`)
     }
-    if (data.notes !== null && !isString(data.notes)) {
-      log.error(`Notes should be a string, found ${typeof data.notes} instead`)
+    if (data.details !== null && !isString(data.details)) {
+      log.error(`Details should be a string, found ${typeof data.details} instead`)
     }
 
     this.setState({errors})
@@ -146,12 +146,12 @@ export default class ThingEditDialog extends FormDialogBase {
         defaultValue={thing.name}
         errorText={this.state.errors.name}
         onBlur={this.handleChange} /><br />
-      <TextField name='description'
-        floatingLabelText={i18next.t('thing.description')}
+      <TextField name='details'
+        floatingLabelText={i18next.t('thing.details')}
         multiLine={true}
         rows={MULTILINE_ROWS} rowsMax={MULTILINE_ROWS}
         fullWidth={true}
-        defaultValue={thing.description}
+        defaultValue={thing.details}
         onBlur={this.handleChange} /><br />
       {this.props.mode !== DIALOG_EDIT ? null : (<div>
         {i18next.t('thing.dateAdded')}: {moment(thing.date_created).calendar()}<br />

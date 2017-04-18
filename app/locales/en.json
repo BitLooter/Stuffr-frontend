@@ -28,7 +28,7 @@
   },
   "thingList": {
     "nameHeader": "Name",
-    "descHeader": "Description"
+    "detailsHeader": "Details"
   },
   "inventory": {
     "name": "Name",
@@ -37,8 +37,8 @@
   },
   "thing": {
     "name": "Name",
-    "description": "Description",
-    "notes": "Notes",
+    "location": "Location",
+    "details": "Details",
     "dateAdded": "Date added",
     "dateModified": "Last modified",
     "delete": "Delete",

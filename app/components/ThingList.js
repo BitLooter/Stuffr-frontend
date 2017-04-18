@@ -13,14 +13,14 @@ const ThingList = ({ things, editThing }) =>
     <TableHeader>
       <TableRow>
         <TableHeaderColumn>{i18next.t('thingList.nameHeader')}</TableHeaderColumn>
-        <TableHeaderColumn>{i18next.t('thingList.descHeader')}</TableHeaderColumn>
+        <TableHeaderColumn>{i18next.t('thingList.detailsHeader')}</TableHeaderColumn>
       </TableRow>
     </TableHeader>
     <TableBody showRowHover>
       {things.map((thing) =>
         <TableRow key={thing.id}>
           <TableRowColumn>{thing.name}</TableRowColumn>
-          <TableRowColumn>{thing.description}</TableRowColumn>
+          <TableRowColumn>{thing.details}</TableRowColumn>
         </TableRow>
       )}
     </TableBody>
