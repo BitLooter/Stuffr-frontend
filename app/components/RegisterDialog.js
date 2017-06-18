@@ -92,6 +92,7 @@ export default class RegisterDialog extends FormDialogBase {
   }
 
   handleSubmit = () => {
+    // TODO: Authentication manager should switch back to login view after register
     if (this.validateForm()) {
       log.info(`Register request for ${this.state.data.email}`)
       this.props.register(this.state.data)
