@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import log from 'loglevel'
 import Dialog from 'material-ui/Dialog'
 
@@ -10,7 +11,7 @@ When subclassing this to create dialogs, you must do the following:
 - Call super() in the constructor with props and the default form state.
 */
 export default class FormDialogBase extends React.Component {
-  static proptypes = { dispatch: React.PropTypes.func.isRequired }
+  static proptypes = { dispatch: PropTypes.func.isRequired }
 
   constructor (props, defaultData) {
     super(props)

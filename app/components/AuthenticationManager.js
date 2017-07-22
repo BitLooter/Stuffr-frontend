@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import PropTypes from 'prop-types'
 import log from 'loglevel'
 
 import LoginDialog from './LoginDialog'
@@ -17,8 +18,8 @@ const MODE_REGISTER = Symbol('MODE_REGISTER')
 )
 export default class AuthenticationManager extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node.isRequired,
-    authenticated: React.PropTypes.bool.isRequired
+    children: PropTypes.node.isRequired,
+    authenticated: PropTypes.bool.isRequired
   }
 
   constructor (props) {

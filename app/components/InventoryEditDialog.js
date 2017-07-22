@@ -30,16 +30,16 @@ export default class InventoryEditDialog extends FormDialogBase {
   constructor (props) {
     super(props, props.inventory)
     this.buttons = <div>
-        <FlatButton
-          label={i18next.t('common.cancel')}
-          onClick={this.handleCancel}
-        />
-        <RaisedButton
-          primary={true}
-          label={i18next.t('common.save')}
-          onClick={this.handleDone}
-        />
-      </div>
+      <FlatButton
+        label={i18next.t('common.cancel')}
+        onClick={this.handleCancel}
+      />
+      <RaisedButton
+        primary={true}
+        label={i18next.t('common.save')}
+        onClick={this.handleDone}
+      />
+    </div>
   }
 
   validateForm = () => {

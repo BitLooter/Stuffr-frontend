@@ -79,7 +79,7 @@ export const loginUser = createTaskThunk(
     log.info(`loginUser: Logging in user ${email}`)
     await stuffrApi.login(email, password)
     storeToken(stuffrApi.token)
-    return await dispatch(loadUser())
+    return dispatch(loadUser())
   },
   loginUserStart, loginUserFinish, loginUserError
 )

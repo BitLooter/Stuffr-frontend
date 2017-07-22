@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import PropTypes from 'prop-types'
 import i18next from 'i18next'
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar'
 import Menu from 'material-ui/Menu'
@@ -26,10 +27,10 @@ import {openInventoryEditor, logoutUser, loadInventory} from '../actions'
 )
 class InventoryMenu extends React.Component {
   static propTypes = {
-    inventories: React.PropTypes.array.isRequired,
-    title: React.PropTypes.string.isRequired,
-    addInventory: React.PropTypes.func.isRequired,
-    selectInventory: React.PropTypes.func.isRequired
+    inventories: PropTypes.array.isRequired,
+    title: PropTypes.string.isRequired,
+    addInventory: PropTypes.func.isRequired,
+    selectInventory: PropTypes.func.isRequired
   }
   constructor (props) {
     super(props)
@@ -46,29 +47,29 @@ class InventoryMenu extends React.Component {
     return (
       <div>
         <RaisedButton label={this.props.title}
-                      onTouchTap={(e) => {
-                        event.preventDefault()  // prevent ghost click
-                        this.setState({open: true, anchor: e.currentTarget})
-                      }}
+          onTouchTap={(e) => {
+            event.preventDefault() // prevent ghost click
+            this.setState({open: true, anchor: e.currentTarget})
+          }}
         />
         <Popover open={this.state.open} anchorEl={this.state.anchor}
-                 onRequestClose={() => { this.setState({open: false}) }}>
+          onRequestClose={() => { this.setState({open: false}) }}>
           <Menu>
             {this.props.inventories.map((inventory) => {
               return (
                 <MenuItem primaryText={inventory.name} key={inventory.id}
-                          onTouchTap={() => {
-                            this.handleRequestClose()
-                            this.props.selectInventory(inventory.id)
-                          }} />
+                  onTouchTap={() => {
+                    this.handleRequestClose()
+                    this.props.selectInventory(inventory.id)
+                  }} />
               )
             }) }
             <Divider />
             <MenuItem primaryText={i18next.t('menu.addInventory')}
-                      onTouchTap={ () => {
-                        this.handleRequestClose()
-                        this.props.addInventory()
-                      }} />
+              onTouchTap={ () => {
+                this.handleRequestClose()
+                this.props.addInventory()
+              }} />
           </Menu>
         </Popover>
       </div>
@@ -94,9 +95,9 @@ class InventoryMenu extends React.Component {
 )
 class Menubar extends React.Component {
   static propTypes = {
-    inventories: React.PropTypes.array.isRequired,
-    inventoryName: React.PropTypes.string.isRequired,
-    logOut: React.PropTypes.func.isRequired
+    inventories: PropTypes.array.isRequired,
+    inventoryName: PropTypes.string.isRequired,
+    logOut: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -108,18 +109,18 @@ class Menubar extends React.Component {
     return (
       <div>
         <Sidebar open={this.state.sidebarOpen}
-                 onClose={() => { this.setState({sidebarOpen: false}) }}
-                 onLogout={this.props.logOut}/>
+          onClose={() => { this.setState({sidebarOpen: false}) }}
+          onLogout={this.props.logOut}/>
         <Toolbar>
           <ToolbarGroup>
             <FlatButton icon={<MenuIcon />}
-                        onTouchTap={
-                          () => {
-                            this.setState({sidebarOpen: true})
-                          }}
+              onTouchTap={
+                () => {
+                  this.setState({sidebarOpen: true})
+                }}
             />
             <InventoryMenu title={this.props.inventoryName}
-                           inventories={this.props.inventories} />
+              inventories={this.props.inventories} />
           </ToolbarGroup>
         </Toolbar>
       </div>

@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import PropTypes from 'prop-types'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAddIcon from 'material-ui/svg-icons/content/add'
 
@@ -12,9 +13,11 @@ import {openThingEditor} from '../actions'
 
 const DIALOG_CLOSED = Symbol.for('ui.DIALOG_CLOSED')
 
-const App = ({thingDialogMode, thingDialogData,
-              inventoryDialogMode, inventoryDialogData,
-              onClickActionButton}) => {
+const App = ({
+  thingDialogMode, thingDialogData,
+  inventoryDialogMode, inventoryDialogData,
+  onClickActionButton
+}) => {
   let dialog = null
   if (thingDialogMode !== DIALOG_CLOSED) {
     dialog = <ThingEditDialog mode={thingDialogMode} thing={thingDialogData} />
@@ -28,16 +31,16 @@ const App = ({thingDialogMode, thingDialogData,
       <FloatingActionButton style={{position: 'fixed', bottom: '1em', right: '1em'}}
         onTouchTap={onClickActionButton}><ContentAddIcon />
       </FloatingActionButton>
-      {dialog   /* Dialogs normally hidden */}
+      {dialog /* Dialogs normally hidden */}
     </AuthenticationManager>
   </div>)
 }
 App.propTypes = {
-  thingDialogMode: React.PropTypes.symbol.isRequired,
-  thingDialogData: React.PropTypes.object.isRequired,
-  inventoryDialogMode: React.PropTypes.symbol.isRequired,
-  inventoryDialogData: React.PropTypes.object.isRequired,
-  onClickActionButton: React.PropTypes.func.isRequired
+  thingDialogMode: PropTypes.symbol.isRequired,
+  thingDialogData: PropTypes.object.isRequired,
+  inventoryDialogMode: PropTypes.symbol.isRequired,
+  inventoryDialogData: PropTypes.object.isRequired,
+  onClickActionButton: PropTypes.func.isRequired
 }
 
 const AppContainer = connect(

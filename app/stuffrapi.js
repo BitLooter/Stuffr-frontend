@@ -38,40 +38,40 @@ class StuffrApi {
   // GET request to /userinfo
   async getUserInfo (callback) {
     log.debug('StuffrApi: Request for getUserInfo')
-    return await this._request('/userinfo', {callback})
+    return this._request('/userinfo', {callback})
   }
 
   // GET request to /inventories
   async getInventories (callback) {
     // TODO: server does not seem to produce any errors if no inventories exist, fix that.
     log.debug('StuffrApi: Request for getInventories')
-    return await this._request('/inventories', {callback})
+    return this._request('/inventories', {callback})
   }
 
   // POST request to /inventories
   async addInventory (inventoryData, callback) {
     log.debug('StuffrApi: Request for addInventory')
-    return await this._request('/inventories',
-        {parameters: inventoryData, callback})
+    return this._request('/inventories',
+      {parameters: inventoryData, callback})
   }
 
   // GET request to /inventories/<inventory_id>/things
   async getThings (inventoryId, callback) {
     log.debug('StuffrApi: Request for getThings')
-    return await this._request(`/inventories/${inventoryId}/things`, {callback})
+    return this._request(`/inventories/${inventoryId}/things`, {callback})
   }
 
   // POST request to /inventories/<inventory_id>/things
   async postThing (thingData, inventoryId, callback) {
     log.debug('StuffrApi: Request for postThing')
-    return await this._request(`/inventories/${inventoryId}/things`,
-        {parameters: thingData, callback})
+    return this._request(`/inventories/${inventoryId}/things`,
+      {parameters: thingData, callback})
   }
 
   // PUT request to /things/<id>
   async putThing (thingId, thingData, callback) {
     log.debug(`StuffrApi: Request for putThing <${thingId}>`)
-    return await this._request(`/things/${thingId}`,
+    return this._request(`/things/${thingId}`,
       {method: 'PUT',
         parameters: thingData,
         callback})
@@ -80,7 +80,7 @@ class StuffrApi {
   // DELETE request to /things/<id>
   async deleteThing (thingId, callback) {
     log.debug(`StuffrApi: Request for deleteThing <${thingId}>`)
-    return await this._request(`/things/${thingId}`,
+    return this._request(`/things/${thingId}`,
       {method: 'DELETE',
         callback})
   }

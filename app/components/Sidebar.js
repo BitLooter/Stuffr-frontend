@@ -1,5 +1,6 @@
 import i18next from 'i18next'
 import React from 'react'
+import PropTypes from 'prop-types'
 import Drawer from 'material-ui/Drawer'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
@@ -19,15 +20,15 @@ const AboutDialog = ({open, onClose}) =>
     {i18next.t('about.text').replace('$VERSION', window.siteConfig.frontendVersion)}
   </Dialog>
 AboutDialog.propTypes = {
-  open: React.PropTypes.bool.isRequired,
-  onClose: React.PropTypes.func.isRequired
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired
 }
 
 export default class Sidebar extends React.Component {
   static propTypes = {
-    open: React.PropTypes.bool.isRequired,
-    onClose: React.PropTypes.func.isRequired,
-    onLogout: React.PropTypes.func.isRequired
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onLogout: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -52,10 +53,10 @@ export default class Sidebar extends React.Component {
               onTouchTap={this.props.onClose}
             />
             <RaisedButton label={i18next.t('menu.logout')}
-                          onTouchTap={() => {
-                            this.props.onClose()
-                            this.props.onLogout()
-                          }} />
+              onTouchTap={() => {
+                this.props.onClose()
+                this.props.onLogout()
+              }} />
           </div>
           <div>
             <FlatButton
@@ -65,7 +66,7 @@ export default class Sidebar extends React.Component {
           </div>
         </div>
         <AboutDialog open={this.state.aboutDialogOpen}
-                     onClose={() => { this.setState({aboutDialogOpen: false}) }} />
+          onClose={() => { this.setState({aboutDialogOpen: false}) }} />
       </Drawer>
     )
   }

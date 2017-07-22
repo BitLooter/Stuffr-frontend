@@ -15,7 +15,7 @@ import stuffrApp from './reducers'
 import App from './components/App'
 import {setupApi} from './stuffrapi'
 
-injectTapEventPlugin()  // Needed for material-ui
+injectTapEventPlugin() // Needed for material-ui
 
 const logger = createLogger({collapsed: true})
 log.setLevel(window.siteConfig.logLevel)
@@ -58,7 +58,7 @@ i18next.use(i18nextFetch).init({
 async function runStuffr (appElement) {
   // If no token is available loadUser will trigger a login
   setupApi(window.siteConfig.apiPath, window.siteConfig.authPath,
-           window.localStorage.apiToken)
+    window.localStorage.apiToken)
   store.dispatch(loadUser())
 
   ReactDOM.render(

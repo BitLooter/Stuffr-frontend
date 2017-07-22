@@ -1,4 +1,6 @@
 /* eslint-env mocha */
+// Turn off the unused expressions tool, they are used by Chai for testing
+/* eslint no-unused-expressions: off */
 
 import chai, {expect} from 'chai'
 import chaiAsPromised from 'chai-as-promised'
@@ -8,8 +10,8 @@ import HttpStatus from 'http-status'
 
 import {createStuffrApi} from '../app/stuffrapi'
 import {TEST_DOMAIN, TEST_AUTH_URL, TEST_USER, TEST_INVENTORIES, TEST_THINGS,
-        NEW_INVENTORY, NEW_THING, NEW_INVENTORY_ID, NEW_THING_ID, NEW_USER, NEW_USER_ID}
-        from './dummydata'
+  NEW_INVENTORY, NEW_THING, NEW_INVENTORY_ID, NEW_THING_ID, NEW_USER, NEW_USER_ID}
+  from './dummydata'
 
 const TEST_INVENTORY_ID = 1
 const INVENTORIES_URL = `${TEST_DOMAIN}/inventories`

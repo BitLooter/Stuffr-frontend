@@ -43,11 +43,11 @@ export default class ThingEditDialog extends FormDialogBase {
     this.buttons = <div>
       { /* Hide delete button on new things */
         props.mode !== DIALOG_NEW
-        ? <FlatButton
+          ? <FlatButton
             style={{float: 'left'}}
             label={i18next.t('thing.delete')}
             onClick={this.handleDelete} />
-        : null
+          : null
       }
       <FlatButton
         label={i18next.t('common.cancel')}
@@ -134,11 +134,11 @@ export default class ThingEditDialog extends FormDialogBase {
     const title = this.props.mode === DIALOG_EDIT ? thing.name : i18next.t('thing.newTitle')
     const confirmDialog = this.state.confirm.open
       ? <ConfirmDialog
-          open={this.state.confirm.open}
-          title={this.state.confirm.title}
-          text={this.state.confirm.text}
-          onYes={() => { this.state.confirm.handleYes() }}
-          onNo={() => { this.state.confirm.handleNo() }} />
+        open={this.state.confirm.open}
+        title={this.state.confirm.title}
+        text={this.state.confirm.text}
+        onYes={() => { this.state.confirm.handleYes() }}
+        onNo={() => { this.state.confirm.handleNo() }} />
       : null
     const form = <div>
       <TextField name='name'

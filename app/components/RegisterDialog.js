@@ -33,11 +33,11 @@ export default class RegisterDialog extends FormDialogBase {
     })
 
     this.buttons = <RaisedButton
-        primary={true}
-        label={i18next.t('auth.switchToLogin')}
-        fullWidth={true}
-        onClick={this.props.onSwitchToLogin}
-      />
+      primary={true}
+      label={i18next.t('auth.switchToLogin')}
+      fullWidth={true}
+      onClick={this.props.onSwitchToLogin}
+    />
   }
 
   validateForm = () => {

@@ -1,4 +1,6 @@
 /* eslint-env mocha */
+// Turn off the unused expressions tool, they are used by Chai for testing
+/* eslint no-unused-expressions: off */
 
 import {expect} from 'chai'
 import Immutable from 'seamless-immutable'

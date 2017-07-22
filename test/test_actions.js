@@ -1,4 +1,6 @@
 /* eslint-env mocha */
+// Turn off the unused expressions tool, they are used by Chai for testing
+/* eslint no-unused-expressions: off */
 
 import {expect} from 'chai'
 import 'mocha-sinon'
@@ -6,11 +8,13 @@ import {createAction} from 'redux-actions'
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 
+/* eslint-disable import/no-duplicates, no-duplicate-imports */
 import * as actions from '../app/actions'
-import {__GetDependency__} from '../app/actions' // eslint-disable-line no-duplicate-imports
+import {__GetDependency__} from '../app/actions'
+/* eslint-enable import/no-duplicates, no-duplicate-imports */
 import stuffrApi, {setupApi} from '../app/stuffrapi'
 import {TEST_DOMAIN, TEST_AUTH_URL, TEST_STORE, TEST_USER, TEST_INVENTORIES, TEST_THINGS,
-        NEW_INVENTORY, NEW_INVENTORY_ID, NEW_THING, NEW_THING_ID} from './dummydata'
+  NEW_INVENTORY, NEW_INVENTORY_ID, NEW_THING, NEW_THING_ID} from './dummydata'
 
 const mockStore = configureStore([thunk])
 const TEST_INVENTORY_ID = TEST_INVENTORIES[0].id
@@ -19,9 +23,6 @@ describe('Actions:', () => {
   describe('Generic action code:', () => {
     it('Create API thunk', () => {
       const createTaskThunk = __GetDependency__('createTaskThunk')
-      // console.log(__GetDependency__)
-      // console.log(createApiThunk)
-      // expect(false).to.be.true
       const dummyAction = createAction('DUMMY_ACTION')
       const newThunkCreator = createTaskThunk(
         async () => {},

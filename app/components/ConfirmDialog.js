@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import i18next from 'i18next'
 import Dialog from 'material-ui/Dialog'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -15,11 +16,11 @@ const ConfirmDialog = ({open = true, title, text, onYes, onNo}) =>
     {text}
   </Dialog>
 ConfirmDialog.propTypes = {
-  open: React.PropTypes.bool,
-  text: React.PropTypes.string.isRequired,
-  title: React.PropTypes.string.isRequired,
-  onYes: React.PropTypes.func.isrequired,
-  onNo: React.PropTypes.func.isrequired
+  open: PropTypes.bool,
+  text: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  onYes: PropTypes.func.isrequired,
+  onNo: PropTypes.func.isrequired
 }
 
 export default ConfirmDialog

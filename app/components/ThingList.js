@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import PropTypes from 'prop-types'
 import i18next from 'i18next'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 
@@ -26,8 +27,8 @@ const ThingList = ({ things, editThing }) =>
     </TableBody>
   </Table>
 ThingList.propTypes = {
-  editThing: React.PropTypes.func.isRequired,
-  things: React.PropTypes.array.isRequired
+  editThing: PropTypes.func.isRequired,
+  things: PropTypes.array.isRequired
 }
 
 const ThingListContainer = connect(

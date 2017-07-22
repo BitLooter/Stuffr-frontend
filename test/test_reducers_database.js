@@ -1,4 +1,6 @@
 /* eslint-env mocha */
+// Turn off the unused expressions tool, they are used by Chai for testing
+/* eslint no-unused-expressions: off */
 // TODO: Test error conditions
 
 import {expect} from 'chai'
@@ -7,7 +9,7 @@ import 'mocha-sinon'
 import Immutable from 'seamless-immutable'
 
 import {TEST_THINGS, NEW_THING, NEW_THING_ID,
-        NEW_INVENTORY, NEW_INVENTORY_ID} from './dummydata'
+  NEW_INVENTORY, NEW_INVENTORY_ID} from './dummydata'
 import {__GetDependency__} from '../app/reducers/database'
 import * as actions from '../app/actions'
 
