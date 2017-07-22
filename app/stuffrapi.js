@@ -62,8 +62,8 @@ class StuffrApi {
   }
 
   // POST request to /inventories/<inventory_id>/things
-  async addThing (inventoryId, thingData, callback) {
-    log.debug('StuffrApi: Request for addThing')
+  async postThing (thingData, inventoryId, callback) {
+    log.debug('StuffrApi: Request for postThing')
     return await this._request(`/inventories/${inventoryId}/things`,
         {parameters: thingData, callback})
   }

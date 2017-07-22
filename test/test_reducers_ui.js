@@ -13,63 +13,63 @@ const DIALOG_CLOSED = Symbol.for('ui.DIALOG_CLOSED')
 
 describe('Reducers - UI:', () => {
   it('Creating a new thing', () => {
-    const createNewThingReducer = __GetDependency__('createNewThingReducer')
-    const testThing = createThing('')
-    const action = actions.ui.createNewThing(testThing)
+    const openThingEditorReducer = __GetDependency__('openThingEditorReducer')
+    const testThing = createThing()
+    const action = actions.openThingEditor()
     const oldState = Immutable({thingDialog: {mode: DIALOG_CLOSED}})
     const expectedState = Immutable({thingDialog: {
       mode: DIALOG_NEW, thing: testThing
     }})
-    expect(createNewThingReducer(oldState, action)).to.eql(expectedState)
+    expect(openThingEditorReducer(oldState, action)).to.eql(expectedState)
   })
 
   it('Editing an existing thing', () => {
-    const editThingReducer = __GetDependency__('editThingReducer')
+    const openThingEditorReducer = __GetDependency__('openThingEditorReducer')
     const testThing = createThing('TESTTHING')
-    const action = actions.ui.editThing(testThing)
+    const action = actions.openThingEditor(testThing)
     const oldState = Immutable({thingDialog: {mode: DIALOG_CLOSED}})
     const expectedState = Immutable({thingDialog: {
       mode: DIALOG_EDIT, thing: testThing
     }})
-    expect(editThingReducer(oldState, action)).to.eql(expectedState)
+    expect(openThingEditorReducer(oldState, action)).to.eql(expectedState)
   })
 
   it('Finished working with thing edit dialog', () => {
-    const editThingDoneReducer = __GetDependency__('editThingDoneReducer')
-    const action = actions.ui.editThingDone()
+    const closeThingEditorReducer = __GetDependency__('closeThingEditorReducer')
+    const action = actions.closeThingEditor()
     const oldState = Immutable({thingDialog: {mode: DIALOG_EDIT}})
     const expectedState = Immutable({thingDialog: {mode: DIALOG_CLOSED}})
-    expect(editThingDoneReducer(oldState, action)).to.eql(expectedState)
+    expect(closeThingEditorReducer(oldState, action)).to.eql(expectedState)
   })
 
   it('Creating a new inventory', () => {
-    const createNewInventoryReducer = __GetDependency__('createNewInventoryReducer')
-    const testInventory = createInventory('')
-    const action = actions.ui.createNewInventory(testInventory)
+    const openInventoryEditorReducer = __GetDependency__('openInventoryEditorReducer')
+    const testInventory = createInventory()
+    const action = actions.openInventoryEditor()
     const oldState = Immutable({inventoryDialog: {mode: DIALOG_CLOSED}})
     const expectedState = Immutable({inventoryDialog: {
       mode: DIALOG_NEW, inventory: testInventory
     }})
-    expect(createNewInventoryReducer(oldState, action)).to.eql(expectedState)
+    expect(openInventoryEditorReducer(oldState, action)).to.eql(expectedState)
   })
 
   it('Editing an existing inventory', () => {
-    const editInventoryReducer = __GetDependency__('editInventoryReducer')
+    const openInventoryEditorReducer = __GetDependency__('openInventoryEditorReducer')
     const testInventory = createInventory('TESTINVENTORY')
-    const action = actions.ui.editInventory(testInventory)
+    const action = actions.openInventoryEditor(testInventory)
     const oldState = Immutable({inventoryDialog: {mode: DIALOG_CLOSED}})
     const expectedState = Immutable({inventoryDialog: {
       mode: DIALOG_EDIT, inventory: testInventory
     }})
-    expect(editInventoryReducer(oldState, action)).to.eql(expectedState)
+    expect(openInventoryEditorReducer(oldState, action)).to.eql(expectedState)
   })
 
   it('Finished working with inventory edit dialog', () => {
-    const editInventoryDoneReducer = __GetDependency__('editInventoryDoneReducer')
-    const action = actions.ui.editInventoryDone()
+    const closeInventoryEditorReducer = __GetDependency__('closeInventoryEditorReducer')
+    const action = actions.closeInventoryEditor()
     const oldState = Immutable({inventoryDialog: {mode: DIALOG_EDIT}})
     const expectedState = Immutable({inventoryDialog: {mode: DIALOG_CLOSED}})
-    expect(editInventoryDoneReducer(oldState, action)).to.eql(expectedState)
+    expect(closeInventoryEditorReducer(oldState, action)).to.eql(expectedState)
   })
 
   it('Purge user data', () => {

@@ -195,7 +195,7 @@ export const submitThing = createTaskThunk(
     let thingResponse
     if (thingId) {
       log.debug(`submitThing: Updating existing thing #${thingId}`)
-      thingResponse = await dispatch(api.putThing(thingData, thingId))
+      thingResponse = await dispatch(api.putThing(thingId, thingData))
     } else {
       log.debug(`submitThing: Adding new thing to inventory #${inventoryId}`)
       thingResponse = await dispatch(api.postThing(thingData, inventoryId))

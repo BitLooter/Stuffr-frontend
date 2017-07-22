@@ -138,7 +138,7 @@ describe('Stuffr API wrapper:', () => {
         status: HttpStatus.CREATED,
         body: expectedResponse
       })
-      const thingResponse = await api.addThing(TEST_INVENTORY_ID, NEW_THING)
+      const thingResponse = await api.postThing(NEW_THING, TEST_INVENTORY_ID)
       expect(fetchMock.called(INVENTORIES_THINGS_URL)).to.be.true
       expect(thingResponse).to.eql(expectedResponse)
     })
@@ -149,7 +149,7 @@ describe('Stuffr API wrapper:', () => {
       fetchMock.put(thingsUrlWithId, {
         status: HttpStatus.NO_CONTENT
       })
-      const thingResponse = await api.updateThing(thingId, NEW_THING)
+      const thingResponse = await api.putThing(thingId, NEW_THING)
       expect(fetchMock.called(thingsUrlWithId)).to.be.true
       expect(thingResponse).to.be.null
     })

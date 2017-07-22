@@ -95,7 +95,7 @@ export const postThingError = createAction(POST_THING__ERROR)
 //   Original thing merged with new server-souced data such as ID and creation date.
 export const postThing = createTaskThunk(
   async function (_, thingData, inventoryId) {
-    const thingResponse = await stuffrApi.addThing(inventoryId, thingData)
+    const thingResponse = await stuffrApi.postThing(thingData, inventoryId)
     return {...thingData, ...thingResponse}
   },
   postThingRequest, postThingDone, postThingError
@@ -116,7 +116,7 @@ export const putThingError = createAction(PUT_THING__ERROR)
 //   Object containing the id of the modified thing and an object with the
 //   modified data.
 export const putThing = createTaskThunk(
-  async function (_, thingData, thingId) {
+  async function (_, thingId, thingData) {
     await stuffrApi.putThing(thingId, thingData)
     return {id: thingId, update: thingData}
   },

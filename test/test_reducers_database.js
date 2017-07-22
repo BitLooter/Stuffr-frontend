@@ -27,10 +27,10 @@ describe('Reducers - Errors:', () => {
 
 describe('Reducers - Database:', () => {
   it('Get all things completed', () => {
-    const getThingListDoneReducer = __GetDependency__('getThingListDoneReducer')
-    const action = actions.api.getThingListDone(TEST_THINGS.asMutable())
+    const getThingsDoneReducer = __GetDependency__('getThingsDoneReducer')
+    const action = actions.api.getThingsDone(TEST_THINGS.asMutable())
     const expectedState = Immutable({user: null, inventories: [], things: TEST_THINGS})
-    expect(getThingListDoneReducer(initialState, action)).to.eql(expectedState)
+    expect(getThingsDoneReducer(initialState, action)).to.eql(expectedState)
   })
 
   it('Adding a new thing completed', () => {
@@ -43,13 +43,13 @@ describe('Reducers - Database:', () => {
   })
 
   it('Updating an existing thing completed', () => {
-    const updateThingDoneReducer = __GetDependency__('updateThingDoneReducer')
+    const putThingDoneReducer = __GetDependency__('putThingDoneReducer')
     const updateData = {name: 'UPDATED'}
     let expectedState = TEST_THINGS.asMutable({deep: true})
     expectedState[0].name = 'UPDATED'
     expectedState = Immutable({user: null, inventories: [], things: expectedState})
-    const action = actions.api.updateThingDone({id: TEST_THINGS[0].id, update: updateData})
-    const newState = updateThingDoneReducer(Immutable({user: null, inventories: [], things: TEST_THINGS}), action)
+    const action = actions.api.putThingDone({id: TEST_THINGS[0].id, update: updateData})
+    const newState = putThingDoneReducer(Immutable({user: null, inventories: [], things: TEST_THINGS}), action)
     expect(newState).to.eql(expectedState)
   })
 
@@ -63,11 +63,11 @@ describe('Reducers - Database:', () => {
   })
 
   it('Adding a new inventory completed', () => {
-    const postInventoryDoneReducer = __GetDependency__('postInventoryDoneReducer')
+    const createInventoryDoneReducer = __GetDependency__('createInventoryDoneReducer')
     const newWithId = {id: NEW_INVENTORY_ID, ...NEW_INVENTORY}
     const expectedState = initialState.set('inventories', [newWithId])
     const action = actions.api.postInventoryDone(newWithId)
-    const newState = postInventoryDoneReducer(initialState, action)
+    const newState = createInventoryDoneReducer(initialState, action)
     expect(newState).to.eql(expectedState)
   })
 
