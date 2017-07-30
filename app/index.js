@@ -59,6 +59,7 @@ async function runStuffr (appElement) {
   // If no token is available loadUser will trigger a login
   setupApi(window.siteConfig.apiPath, window.siteConfig.authPath,
     window.localStorage.apiToken)
+  // TODO: Do not load user if no api token set
   store.dispatch(loadUser())
 
   ReactDOM.render(
