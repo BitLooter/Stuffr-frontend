@@ -15,11 +15,7 @@ import FormDialogBase from './FormDialogBase'
       errorMessage: state.ui.registerDialogError
     }
   },
-  function mapDispatchToProps (dispatch) {
-    return {
-      register: (registerInfo) => { dispatch(registerUser(registerInfo)) }
-    }
-  }
+  {registerUser}
 )
 export default class RegisterDialog extends FormDialogBase {
   static fields = ['email', 'password', 'password_confirm', 'name_first', 'name_last']
@@ -48,6 +44,7 @@ export default class RegisterDialog extends FormDialogBase {
     if (isString(data.email)) {
       // TODO: Validate email
       if (data.email.length === 0) {
+        // TODO: Fix errors when this form is redone
         errors.email = i18next.t('register.emailErrorMissing')
       }
     } else {
@@ -95,7 +92,7 @@ export default class RegisterDialog extends FormDialogBase {
     // TODO: Authentication manager should switch back to login view after register
     if (this.validateForm()) {
       log.info(`Register request for ${this.state.data.email}`)
-      this.props.register(this.state.data)
+      this.props.registerUser(this.state.data)
     }
   }
 

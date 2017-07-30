@@ -14,16 +14,7 @@ import FormDialogBase from './FormDialogBase'
 const DIALOG_NEW = Symbol.for('ui.DIALOG_NEW')
 const DIALOG_EDIT = Symbol.for('ui.DIALOG_EDIT')
 
-@connect(
-  undefined,
-  function mapDispatchToProps (dispatch) {
-    return {
-      updateInventory: (data, id) => { dispatch(submitInventory(data, id)) },
-      createInventory: (data) => { dispatch(submitInventory(data)) },
-      closeDialog: () => { dispatch(closeInventoryEditor()) }
-    }
-  }
-)
+@connect(undefined, {submitInventory, closeInventoryEditor})
 export default class InventoryEditDialog extends FormDialogBase {
   static fields = ['name']
 
@@ -64,11 +55,11 @@ export default class InventoryEditDialog extends FormDialogBase {
         const changedData = this.getChangedData()
         if (!isEmpty(changedData)) {
           log.info(`Updating existing inventory with id ${this.props.inventory.id}`)
-          this.props.updateInventory(changedData, this.props.thing.id)
+          this.props.submitInventory(changedData, this.props.thing.id)
         }
       } else if (this.props.mode === DIALOG_NEW) {
         log.info(`Creating new inventory named ${this.state.data.name}`)
-        this.props.createInventory(this.state.data)
+        this.props.submitInventory(this.state.data)
       } else {
         const errorMessage = `Unknown mode for InventoryEditDialog: ${String(this.props.mode)}`
         log.error(errorMessage)
@@ -80,7 +71,7 @@ export default class InventoryEditDialog extends FormDialogBase {
 
   handleCancel = () => {
     // Inventory form is very simple, do not bother with a confirmation
-    this.props.closeDialog()
+    this.props.closeInventoryEditor()
   }
 
   render () {

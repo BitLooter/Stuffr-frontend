@@ -7,8 +7,6 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import ArrowBackIcon from 'material-ui/svg-icons/navigation/arrow-back'
 
-// Doing a half-assed dynamic template thing here, if more strings like this are done in
-// the future this should be replaced with something like an sprintf library.
 const AboutDialog = ({open, onClose}) =>
   <Dialog
     open={open}

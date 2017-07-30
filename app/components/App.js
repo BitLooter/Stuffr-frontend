@@ -16,7 +16,7 @@ const DIALOG_CLOSED = Symbol.for('ui.DIALOG_CLOSED')
 const App = ({
   thingDialogMode, thingDialogData,
   inventoryDialogMode, inventoryDialogData,
-  onClickActionButton
+  openThingEditor
 }) => {
   let dialog = null
   if (thingDialogMode !== DIALOG_CLOSED) {
@@ -24,12 +24,14 @@ const App = ({
   } else if (inventoryDialogMode !== DIALOG_CLOSED) {
     dialog = <InventoryEditDialog mode={inventoryDialogMode} inventory={inventoryDialogData} />
   }
+  // TODO: app needs better offline handling
   return (<div className='app'>
     <AuthenticationManager>
       <Menubar />
       <ThingList />
       <FloatingActionButton style={{position: 'fixed', bottom: '1em', right: '1em'}}
-        onTouchTap={onClickActionButton}><ContentAddIcon />
+        onTouchTap={() => openThingEditor()}><ContentAddIcon />
+        {/* onTouchTap={openThingEditor}><ContentAddIcon /> */}
       </FloatingActionButton>
       {dialog /* Dialogs normally hidden */}
     </AuthenticationManager>
@@ -40,7 +42,7 @@ App.propTypes = {
   thingDialogData: PropTypes.object.isRequired,
   inventoryDialogMode: PropTypes.symbol.isRequired,
   inventoryDialogData: PropTypes.object.isRequired,
-  onClickActionButton: PropTypes.func.isRequired
+  openThingEditor: PropTypes.func.isRequired
 }
 
 const AppContainer = connect(
@@ -52,10 +54,6 @@ const AppContainer = connect(
       inventoryDialogData: state.ui.inventoryDialog.inventory
     }
   },
-  function mapDispatchToProps (dispatch) {
-    return {
-      onClickActionButton: () => { dispatch(openThingEditor()) }
-    }
-  }
+  {openThingEditor}
 )(App)
 export default AppContainer

@@ -15,11 +15,7 @@ import FormDialogBase from './FormDialogBase'
       errorMessage: state.ui.loginDialogError
     }
   },
-  function mapDispatchToProps (dispatch) {
-    return {
-      login: (email, password) => { dispatch(loginUser(email, password)) }
-    }
-  }
+  { loginUser }
 )
 export default class LoginDialog extends FormDialogBase {
   constructor (props) {
@@ -63,7 +59,7 @@ export default class LoginDialog extends FormDialogBase {
   handleSubmit = () => {
     if (this.validateForm()) {
       log.info(`Login request for ${this.state.email}`)
-      this.props.login(this.state.data.email, this.state.data.password)
+      this.props.loginUser(this.state.data.email, this.state.data.password)
     }
   }
 

@@ -24,14 +24,7 @@ const MULTILINE_ROWS = 3
         : null
     }
   },
-  function mapDispatchToProps (dispatch) {
-    return {
-      createThing: (data, inventoryId) => { dispatch(submitThing(data, inventoryId)) },
-      updateThing: (data, thingId) => { dispatch(submitThing(data, null, thingId)) },
-      deleteThing: (thingId) => { dispatch(removeThing(thingId)) },
-      closeDialog: () => { dispatch(closeThingEditor()) }
-    }
-  }
+  {submitThing, removeThing, closeThingEditor}
 )
 export default class ThingEditDialog extends FormDialogBase {
   static fields = ['name', 'details', 'location']
@@ -94,12 +87,12 @@ export default class ThingEditDialog extends FormDialogBase {
         const changedData = this.getChangedData()
         if (!isEmpty(changedData)) {
           log.info(`Updating existing thing with id ${this.props.thing.id}`)
-          this.props.updateThing(changedData, this.props.thing.id)
+          this.props.submitThing(changedData, null, this.props.thing.id)
         }
       } else if (this.props.mode === DIALOG_NEW) {
         const newData = this.state.data
         log.info(`Creating new thing named ${newData.name}`)
-        this.props.createThing(newData, this.props.currentInventoryId)
+        this.props.submitThing(newData, this.props.currentInventoryId)
       } else {
         const errorMessage = `Unknown mode for ThingEditDialog: ${String(this.props.mode)}`
         log.error(errorMessage)
@@ -110,8 +103,8 @@ export default class ThingEditDialog extends FormDialogBase {
 
   handleDelete = () => {
     // Do not confirm, if a mistake is made user can retrieve it from the trash
-    this.props.deleteThing(this.props.thing.id)
-    this.props.closeDialog()
+    this.props.removeThing(this.props.thing.id)
+    this.props.closeThingEditor()
   }
 
   handleCancel = () => {
@@ -121,11 +114,11 @@ export default class ThingEditDialog extends FormDialogBase {
         open: true,
         title: i18next.t('thing.confirmCancelTitle'),
         text: i18next.t('thing.confirmCancelText'),
-        handleYes: this.props.closeDialog,
+        handleYes: this.props.closeThingEditor,
         handleNo: () => this.setState({confirm: {open: false}})
       }})
     } else {
-      this.props.closeDialog()
+      this.props.closeThingEditor()
     }
   }
 

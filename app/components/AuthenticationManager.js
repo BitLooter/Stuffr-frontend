@@ -30,6 +30,8 @@ export default class AuthenticationManager extends React.Component {
   }
 
   switchMode (mode) {
+    // TODO: Switch back to login mode after successfully registering a new
+    // user. Will probably require moving mode to global state.
     log.info(`Authentication mode switching to ${String(mode)}`)
     this.setState({mode})
   }

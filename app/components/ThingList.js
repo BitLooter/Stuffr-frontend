@@ -7,9 +7,9 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import {openThingEditor} from '../actions'
 
 // TODO: Height needs to be set to the height of the window
-const ThingList = ({ things, editThing }) =>
+const ThingList = ({ things, openThingEditor }) =>
   <Table multiSelectable height='700px' onCellClick={(row) => {
-    editThing(things[row])
+    openThingEditor(things[row])
   }}>
     <TableHeader>
       <TableRow>
@@ -27,7 +27,7 @@ const ThingList = ({ things, editThing }) =>
     </TableBody>
   </Table>
 ThingList.propTypes = {
-  editThing: PropTypes.func.isRequired,
+  openThingEditor: PropTypes.func.isRequired,
   things: PropTypes.array.isRequired
 }
 
@@ -35,12 +35,6 @@ const ThingListContainer = connect(
   function mapStateToProps (state) {
     return {things: state.database.things}
   },
-  function mapDispatchToProps (dispatch) {
-    return {
-      editThing: (thing) => {
-        dispatch(openThingEditor(thing))
-      }
-    }
-  }
+  {openThingEditor}
 )(ThingList)
 export default ThingListContainer

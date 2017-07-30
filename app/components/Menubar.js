@@ -16,21 +16,13 @@ import {openInventoryEditor, logoutUser, loadInventory} from '../actions'
 
 // BUG: inventory menu gets screwy when no inventories exist
 
-@connect(
-  undefined,
-  function mapDispatchToProps (dispatch) {
-    return {
-      selectInventory: (id) => { dispatch(loadInventory(id)) },
-      addInventory: () => { dispatch(openInventoryEditor()) }
-    }
-  }
-)
+@connect(undefined, {loadInventory, openInventoryEditor})
 class InventoryMenu extends React.Component {
   static propTypes = {
     inventories: PropTypes.array.isRequired,
     title: PropTypes.string.isRequired,
-    addInventory: PropTypes.func.isRequired,
-    selectInventory: PropTypes.func.isRequired
+    openInventoryEditor: PropTypes.func.isRequired,
+    loadInventory: PropTypes.func.isRequired
   }
   constructor (props) {
     super(props)
@@ -60,7 +52,7 @@ class InventoryMenu extends React.Component {
                 <MenuItem primaryText={inventory.name} key={inventory.id}
                   onTouchTap={() => {
                     this.handleRequestClose()
-                    this.props.selectInventory(inventory.id)
+                    this.props.loadInventory(inventory.id)
                   }} />
               )
             }) }
@@ -68,7 +60,7 @@ class InventoryMenu extends React.Component {
             <MenuItem primaryText={i18next.t('menu.addInventory')}
               onTouchTap={ () => {
                 this.handleRequestClose()
-                this.props.addInventory()
+                this.props.openInventoryEditor()
               }} />
           </Menu>
         </Popover>
