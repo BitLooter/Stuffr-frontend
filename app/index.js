@@ -11,7 +11,7 @@ import i18nextFetch from 'i18next-fetch-backend'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import {loadUser} from './actions'
-import stuffrApp from './reducers'
+import reducer from './reducers'
 import App from './components/App'
 import {setupApi} from './stuffrapi'
 
@@ -21,12 +21,14 @@ const logger = createLogger({collapsed: true})
 log.setLevel(window.siteConfig.logLevel)
 log.info(`Log level set to ${window.siteConfig.logLevel}`)
 
-const store = redux.createStore(stuffrApp, redux.compose(
+const store = redux.createStore(reducer, redux.compose(
   redux.applyMiddleware(thunk, logger),
   // Activate Redux dev tools if installed in browser
   // https://github.com/zalmoxisus/redux-devtools-extension
-  window.devToolsExtension ? window.devToolsExtension() : (f) => f
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 ))
+// Update store's reducer on HMR
+module.hot && module.hot.accept('./reducers', () => store.replaceReducer(reducer))
 
 i18next.use(i18nextFetch).init({
   lng: 'en',
@@ -63,6 +65,8 @@ async function runStuffr (appElement) {
   store.dispatch(loadUser())
 
   ReactDOM.render(
+    // Provider: Used to provide access to the Redux store in components
+    // MuiThemeProvider: Needed for Material-UI
     <Provider store={store}>
       <MuiThemeProvider>
         <App />

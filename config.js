@@ -1,6 +1,6 @@
 // This file merges the default configuration into the local configuration. To
 // set up a local configuration, copy config.default.js to config.local.js and
-// change whatever settings you need to.
+// change settings to what you need.
 
 const defaultConfig = require('./config.default')
 

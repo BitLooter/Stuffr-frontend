@@ -231,8 +231,9 @@ export const submitInventory = createTaskThunk(
     log.info('submitInventory: Submitting inventory data')
     let response
     if (inventoryId) {
-      log.debug('submitInventory: Updating existing inventory')
-      response = await dispatch(api.updateInventory(inventoryData, inventoryId))
+      // TODO: implement updating inventories
+      // log.debug('submitInventory: Updating existing inventory')
+      // response = await dispatch(api.putInventory(inventoryData, inventoryId))
     } else {
       log.debug('submitInventory: Adding new inventory')
       response = await dispatch(api.postInventory(inventoryData))

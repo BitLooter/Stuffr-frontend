@@ -3,8 +3,8 @@
 <head>
   <meta charset='UTF-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <meta name='description' content='Stuffr helps you keep track of your things'>
-  <meta name='application-name' content='Stuffr'>
+  <meta name='description' content='<%= htmlWebpackPlugin.options.title %>'>
+  <meta name='application-name' content='<%= htmlWebpackPlugin.options.title %>'>
   <title><%= htmlWebpackPlugin.options.title %></title>
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css' />
   <style>
@@ -23,8 +23,8 @@
 </head>
 <body>
   <!-- TODO: Better loading screen -->
-  <div id='app'>Stuffr is now loading...</div>
-  <noscript>Javascript is disabled. You must enable Javascript to use Stuffr.</noscript>
+  <div id='app'><%= htmlWebpackPlugin.options.title %> is now loading...</div>
+  <noscript>Javascript is disabled. You must enable Javascript to use this site.</noscript>
 
   <% if (htmlWebpackPlugin.options.overlayMessage) { %>
     <div id='overlayMessage'><%= htmlWebpackPlugin.options.overlayMessage %></div>

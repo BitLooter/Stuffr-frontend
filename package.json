@@ -60,9 +60,9 @@
     "webpack-dev-server": "2.5.1"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "webpack-dev-server --progress",
     "dev": "webpack --progress --watch",
-    "build": "webpack --progress -p --config webpack.prod.config.js",
+    "build": "webpack --progress -p --env.production",
     "test": "npm run lint & mocha || true",
     "testonly": "mocha || true",
     "lint": "eslint . --ext .js --ext .jsx --ignore-path .gitignore --cache || true"
