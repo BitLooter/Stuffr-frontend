@@ -29,7 +29,7 @@ const siteConfig = {
 
 const htmlWebpackPluginMainConfig = new HtmlWebpackPlugin({
   title: 'Stuffr',
-  template: path.join(__dirname, '/app/index.ejs'),
+  template: path.join(__dirname, '/app/app.ejs'),
   chunks: ['main'],
   xhtml: true,
   hash: true,
@@ -40,7 +40,7 @@ const htmlWebpackPluginMainConfig = new HtmlWebpackPlugin({
 const htmlWebpackPluginAdminConfig = new HtmlWebpackPlugin({
   filename: 'admin/index.html',
   title: 'Stuffr Admin',
-  template: path.join(__dirname, '/app/index.ejs'),
+  template: path.join(__dirname, '/app/app.ejs'),
   chunks: ['admin/main'],
   xhtml: true,
   hash: true,
