@@ -27,8 +27,17 @@ const store = redux.createStore(reducer, redux.compose(
   // https://github.com/zalmoxisus/redux-devtools-extension
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 ))
-// Update store's reducer on HMR
-module.hot && module.hot.accept('./reducers', () => store.replaceReducer(reducer))
+
+// Set up HMR
+if (module.hot) {
+  module.hot.accept('./reducers', () => store.replaceReducer(reducer))
+  module.hot.accept('./actions')
+  // TODO: Test API reinitialization
+  module.hot.accept('./stuffrapi', () => setupApi(
+    window.siteConfig.apiPath, window.siteConfig.authPath,
+    window.localStorage.apiToken
+  ))
+}
 
 i18next.use(i18nextFetch).init({
   lng: 'en',
