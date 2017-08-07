@@ -25,5 +25,9 @@ module.exports = {
 
   /* The minimum log level to print to console. From low to high 'trace',
      'debug', 'info', 'warn', and 'error'. */
-  logLevel: 'info'
+  logLevel: 'info',
+
+  /* Source for webfonts. Choices are 'local', using the files in fonts/, or
+     'google', loading from Google's font CDN. */
+  fontSource: 'local'
 }
