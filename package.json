@@ -17,6 +17,7 @@
     "copy-webpack-plugin": "4.0.1",
     "css-loader": "0.28.4",
     "es6-promise": "4.1.1",
+    "html-webpack-inline-chunk-plugin": "1.1.1",
     "html-webpack-plugin": "2.29.0",
     "http-status": "1.0.1",
     "i18next": "8.4.3",

@@ -4,6 +4,7 @@ const fs = require('fs')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const InlineChunkWebpackPlugin = require('html-webpack-inline-chunk-plugin')
 
 const appConfig = require('./config')
 // Need package.json to get current version
@@ -110,8 +111,9 @@ const config = {
     new webpack.NamedChunksPlugin(),
     // Named modules smaller than HashedModuleIdsPlugin after gzip
     new webpack.NamedModulesPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({name: 'vendor', minChunks: Infinity}),
-    new webpack.optimize.CommonsChunkPlugin({name: 'manifest'}),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: ['vendor', 'manifest'],
+      minChunks: Infinity}),
     htmlWebpackPluginMainConfig,
     htmlWebpackPluginAdminConfig,
     copyStaticFilesConfig
@@ -132,6 +134,9 @@ module.exports = (env) => {
     config.devtool = 'cheap-module-source-map'
     config.output.filename = '[name].[chunkhash].js'
     config.plugins.push(CompressionPluginConfig)
+    config.plugins.push(new InlineChunkWebpackPlugin({
+      inlineChunks: ['manifest']
+    }))
 
   // DEVELOPMENT SETTINGS
   // ====================
