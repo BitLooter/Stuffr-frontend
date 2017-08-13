@@ -59,7 +59,8 @@
     "react-hot-loader": "1.3.1",
     "redux-mock-store": "1.2.3",
     "sinon": "2.3.8",
-    "webpack-dev-server": "2.5.1"
+    "webpack-dev-server": "2.5.1",
+    "@storybook/react": "^3.2.3"
   },
   "scripts": {
     "start": "webpack-dev-server --progress",
@@ -67,7 +68,9 @@
     "build": "webpack --progress -p --env.production",
     "test": "npm run lint & mocha || true",
     "testonly": "mocha || true",
-    "lint": "eslint . --ext .js --ext .jsx --ignore-path .gitignore --cache || true"
+    "lint": "eslint . --ext .js --ext .jsx --ignore-path .gitignore --cache || true",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "author": "David Powell",
   "license": "AGPL-3.0",

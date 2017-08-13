@@ -17,12 +17,12 @@ import {setupApi} from './stuffrapi'
 
 injectTapEventPlugin() // Needed for material-ui
 
-const logger = createLogger({collapsed: true})
+const reduxLogger = createLogger({collapsed: true})
 log.setLevel(window.siteConfig.logLevel)
 log.info(`Log level set to ${window.siteConfig.logLevel}`)
 
 const store = redux.createStore(reducer, redux.compose(
-  redux.applyMiddleware(thunk, logger),
+  redux.applyMiddleware(thunk, reduxLogger),
   // Activate Redux dev tools if installed in browser
   // https://github.com/zalmoxisus/redux-devtools-extension
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

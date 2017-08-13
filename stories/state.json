@@ -1,0 +1,44 @@
+{
+  "database": {
+    "user": {
+      "id": 1,
+      "email": "a@example.com",
+      "name_first": "a",
+      "name_last": "a"
+    },
+    "inventories": [
+      {
+        "id": 1,
+        "name": "a's stuff",
+        "date_created": "2017-07-27T16:20:43.987287+00:00"
+      }
+    ],
+    "things": [
+      {
+        "id": 1,
+		"name": "feff",
+        "date_created": "2017-07-30T01:25:00.023954+00:00",
+        "date_modified": "2017-07-30T01:25:00.024009+00:00",
+        "date_deleted": null,
+        "location": null,
+        "details": "fffffff\n"
+      }
+    ]
+  },
+  "ui": {
+    "authenticated": true,
+    "currentInventory": 0,
+    "thingDialog": {
+      "thing": {
+        "name": "PLACEHOLDER",
+        "location": null,
+        "details": null
+      }
+    },
+    "inventoryDialog": {
+      "inventory": {
+        "name": "PLACEHOLDER"
+      }
+    }
+  }
+}
