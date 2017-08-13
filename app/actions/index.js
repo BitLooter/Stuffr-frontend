@@ -136,6 +136,7 @@ export const loadUser = createTaskThunk(
     const userInfo = await stuffrApi.getUserInfo()
     await dispatch(api.getInventories())
     // Inventory list is populated by previous action
+    // TODO: Last inventory is not being saved
     dispatch(loadInventory())
     return userInfo
   },
