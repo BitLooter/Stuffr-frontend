@@ -82,7 +82,7 @@ const config = {
           loader: 'babel-loader',
           options: {
             // TODO: modules: false incompatible with HMR, uncomment when fixed
-            presets: [['es2015', {/* modules: false */}], 'stage-1', 'react'],
+            presets: [['env', {/* modules: false */}], 'stage-2', 'react'],
             plugins: ['transform-decorators-legacy']
           }
         }]
