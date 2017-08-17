@@ -6,14 +6,13 @@ import thunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import log from 'loglevel'
-import i18next from 'i18next'
-import i18nextFetch from 'i18next-fetch-backend'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
-import {loadUser} from './actions'
+import { loadUser } from './actions'
 import reducer from './reducers'
 import App from './components/App'
-import {setupApi} from './stuffrapi'
+import { setupApi } from './stuffrapi'
+import { i18nSetup } from './i18n'
 
 injectTapEventPlugin() // Needed for material-ui
 
@@ -39,34 +38,32 @@ if (module.hot) {
   ))
 }
 
-i18next.use(i18nextFetch).init({
-  lng: 'en',
-  fallbackLng: 'en',
-  backend: {
-    loadPath: '/locales/{{lng}}.json',
-    addPath: '/locales/add/{{lng}}'
-  }
-}, (error, t) => {
-  if (error !== undefined) {
-    log.error(`Error loading i18n: ${error}`)
-  }
-  const appElement = document.getElementById('app')
-  runStuffr(appElement).catch((e) => {
-    // TODO: make this error display prettier
-    const errorElement = document.createElement('div')
-    errorElement.innerHTML = `
-      <h1>Whoops!</h1>
-        <p>Something went wrong during setup.</p>
-        <p>Technical details:</p>`
-    const stackTraceElement = document.createElement('pre')
-    stackTraceElement.appendChild(document.createTextNode(e.stack))
-    errorElement.appendChild(stackTraceElement)
-    appElement.parentNode.replaceChild(errorElement, appElement)
-  })
+const appElement = document.getElementById('app')
+runStuffr(appElement).catch((e) => {
+  // TODO: make this error display prettier
+  const errorElement = document.createElement('div')
+  errorElement.innerHTML = `
+    <h1>Whoops!</h1>
+      <p>Something went wrong during setup.</p>
+      <p>Technical details:</p>`
+  const stackTraceElement = document.createElement('pre')
+  stackTraceElement.appendChild(document.createTextNode(e.stack))
+  errorElement.appendChild(stackTraceElement)
+  appElement.parentNode.replaceChild(errorElement, appElement)
 })
 
 // Wrap init code in a function call to allow for async actions
 async function runStuffr (appElement) {
+  try {
+    await i18nSetup({
+      loadPath: '/locales/{{lng}}.json',
+      addPath: '/locales/add/{{lng}}'
+    })
+  } catch (e) {
+    log.error(`Error loading i18n: ${e}`)
+    throw e
+  }
+
   // If no token is available loadUser will trigger a login
   setupApi(window.siteConfig.apiPath, window.siteConfig.authPath,
     window.localStorage.apiToken)
