@@ -204,10 +204,23 @@ const dummyApi = {
     throw new Error(errorMsg)
   }
 }
-
 let defaultApi = new Proxy({}, dummyApi)
 export {defaultApi as default}
 
+// Proxy API that does nothing, useful for testing
+const nullApi = {
+  get (target, name) {
+    log.debug(`nullApi get: target=${target}, name=${name}`)
+    return () => {}
+  }
+}
+const nullApiProxy = new Proxy({}, nullApi)
+export function setNullApi () {
+  defaultApi = nullApiProxy
+}
+
+/* Prepares the default API object for use. If you need to handle your own API
+   object, use createStuffrApi instead. */
 export function setupApi (baseUrl, authBaseUrl, token) {
   log.info(`StuffrApi: Created new default API object for ${baseUrl}`)
   defaultApi = createStuffrApi(baseUrl, authBaseUrl, token)

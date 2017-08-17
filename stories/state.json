@@ -2,26 +2,54 @@
   "database": {
     "user": {
       "id": 1,
-      "email": "a@example.com",
-      "name_first": "a",
-      "name_last": "a"
+      "email": "storybook@example.com",
+      "name_first": "Storybook",
+      "name_last": "Example"
     },
     "inventories": [
       {
         "id": 1,
-        "name": "a's stuff",
-        "date_created": "2017-07-27T16:20:43.987287+00:00"
+        "name": "First inventory",
+        "date_created": "2017-07-31T00:00:00+00:00"
+      },
+      {
+        "id": 2,
+        "name": "Second inventory",
+        "date_created": "2017-07-31T01:00:00+00:00"
+      },
+      {
+        "id": 3,
+        "name": "Third inventory",
+        "date_created": "2017-07-31T02:00:00+00:00"
       }
     ],
     "things": [
       {
         "id": 1,
-		"name": "feff",
-        "date_created": "2017-07-30T01:25:00.023954+00:00",
-        "date_modified": "2017-07-30T01:25:00.024009+00:00",
+		    "name": "First thing",
+        "date_created": "2017-07-31T00:00:00+00:00",
+        "date_modified": "2017-07-31T00:01:00+00:00",
         "date_deleted": null,
         "location": null,
-        "details": "fffffff\n"
+        "details": "Details for first thing"
+      },
+      {
+        "id": 2,
+		    "name": "Second thing",
+        "date_created": "2017-07-31T00:00:01+00:00",
+        "date_modified": "2017-07-31T00:01:01+00:00",
+        "date_deleted": null,
+        "location": null,
+        "details": "Details for second thing"
+      },
+      {
+        "id": 1,
+		    "name": "Third thing",
+        "date_created": "2017-07-31T00:00:02+00:00",
+        "date_modified": "2017-07-31T00:01:02+00:00",
+        "date_deleted": null,
+        "location": null,
+        "details": "Details for third thing"
       }
     ]
   },
