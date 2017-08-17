@@ -79,17 +79,13 @@ class InventoryMenu extends React.Component {
       authenticated: state.database.user !== null
     }
   },
-  function mapDispatchToProps (dispatch) {
-    return {
-      logOut: () => dispatch(logoutUser())
-    }
-  }
+  {logoutUser}
 )
 class Menubar extends React.Component {
   static propTypes = {
     inventories: PropTypes.array.isRequired,
     inventoryName: PropTypes.string.isRequired,
-    logOut: PropTypes.func.isRequired
+    logoutUser: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -102,7 +98,7 @@ class Menubar extends React.Component {
       <div>
         <Sidebar open={this.state.sidebarOpen}
           onClose={() => { this.setState({sidebarOpen: false}) }}
-          onLogout={this.props.logOut}/>
+          onLogout={this.props.logoutUser}/>
         <Toolbar>
           <ToolbarGroup>
             <FlatButton icon={<MenuIcon />}
