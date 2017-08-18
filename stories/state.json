@@ -43,7 +43,7 @@
         "details": "Details for second thing"
       },
       {
-        "id": 1,
+        "id": 3,
 		    "name": "Third thing",
         "date_created": "2017-07-31T00:00:02+00:00",
         "date_modified": "2017-07-31T00:01:02+00:00",
