@@ -1,8 +1,10 @@
 /* Contains common code and data for localization. */
 
-import i18next from 'i18next'
+import i18next, { t } from 'i18next'
 import i18nextFetch from 'i18next-fetch-backend'
 import log from 'loglevel'
+
+export default t
 
 export function i18nSetup (source, {synchronous = false, debug = false} = {}) {
   const baseOptions = {

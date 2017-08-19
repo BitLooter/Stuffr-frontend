@@ -1,14 +1,14 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import i18next from 'i18next'
+import { connect } from 'react-redux'
 import log from 'loglevel'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import moment from 'moment'
 
-import {submitInventory, closeInventoryEditor} from '../actions'
-import {isString, isEmpty} from '../util'
+import { submitInventory, closeInventoryEditor } from '../actions'
+import t from '../i18n'
+import { isString, isEmpty } from '../util'
 import FormDialogBase from './FormDialogBase'
 
 const DIALOG_NEW = Symbol.for('ui.DIALOG_NEW')
@@ -22,12 +22,12 @@ export default class InventoryEditDialog extends FormDialogBase {
     super(props, props.inventory)
     this.buttons = <div>
       <FlatButton
-        label={i18next.t('common.cancel')}
+        label={t('common.cancel')}
         onClick={this.handleCancel}
       />
       <RaisedButton
         primary={true}
-        label={i18next.t('common.save')}
+        label={t('common.save')}
         onClick={this.handleDone}
       />
     </div>
@@ -39,7 +39,7 @@ export default class InventoryEditDialog extends FormDialogBase {
 
     if (isString(data.name)) {
       if (data.name.length === 0) {
-        errors.name = i18next.t('inventory.nameErrorMissing')
+        errors.name = t('inventory.nameErrorMissing')
       }
     } else {
       log.error(`Name should be a string, found ${typeof data.name} instead`)
@@ -76,10 +76,10 @@ export default class InventoryEditDialog extends FormDialogBase {
 
   render () {
     const title = this.props.mode === DIALOG_EDIT
-      ? this.props.inventory.name : i18next.t('inventory.newTitle')
+      ? this.props.inventory.name : t('inventory.newTitle')
     const form = <div>
       <TextField name='name'
-        floatingLabelText={i18next.t('inventory.name')}
+        floatingLabelText={t('inventory.name')}
         defaultValue={this.props.inventory.name}
         errorText={this.state.errors.name}
         onBlur={this.handleChange}

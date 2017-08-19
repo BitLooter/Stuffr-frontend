@@ -1,12 +1,12 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import i18next from 'i18next'
+import { connect } from 'react-redux'
 import log from 'loglevel'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 
-import {isString, isEmpty} from '../util'
-import {loginUser} from '../actions'
+import { loginUser } from '../actions'
+import t from '../i18n'
+import { isString, isEmpty } from '../util'
 import FormDialogBase from './FormDialogBase'
 
 @connect(
@@ -25,7 +25,7 @@ export default class LoginDialog extends FormDialogBase {
     })
     this.buttons = <RaisedButton
       primary={true}
-      label={i18next.t('auth.switchToRegister')}
+      label={t('auth.switchToRegister')}
       fullWidth={true}
       onTouchTap={this.props.onSwitchToRegister}
     />
@@ -38,7 +38,7 @@ export default class LoginDialog extends FormDialogBase {
     // Email
     if (isString(data.email)) {
       if (data.email.length === 0) {
-        errors.email = i18next.t('login.emailErrorMissing')
+        errors.email = t('login.emailErrorMissing')
       }
     } else {
       log.error(`Email should be a string, found ${typeof data.email} instead`)
@@ -46,7 +46,7 @@ export default class LoginDialog extends FormDialogBase {
     // Password
     if (isString(data.password)) {
       if (data.password.length === 0) {
-        errors.password = i18next.t('login.passwordErrorMissing')
+        errors.password = t('login.passwordErrorMissing')
       }
     } else {
       log.error(`Password should be a string, found ${typeof data.password} instead`)
@@ -68,19 +68,19 @@ export default class LoginDialog extends FormDialogBase {
     const form = <div>
       {this.props.errorMessage ? <div>{this.props.errorMessage}</div> : null}
       <TextField name='email' onChange={this.handleChange}
-        floatingLabelText={i18next.t('auth.email')}
+        floatingLabelText={t('auth.email')}
         errorText={this.state.errors.email} /> <br />
       <TextField name='password' onChange={this.handleChange}
-        floatingLabelText={i18next.t('auth.password')} type='password'
+        floatingLabelText={t('auth.password')} type='password'
         errorText={this.state.errors.password} /> <br />
       <RaisedButton
         primary={true}
-        label={i18next.t('auth.loginSubmit')}
+        label={t('auth.loginSubmit')}
         fullWidth={true}
         onTouchTap={this.handleSubmit}
       />
     </div>
 
-    return this.renderDialog(i18next.t('auth.loginTitle'), this.buttons, form, () => {})
+    return this.renderDialog(t('auth.loginTitle'), this.buttons, form, () => {})
   }
 }

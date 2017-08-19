@@ -1,10 +1,10 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import i18next from 'i18next'
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table'
 
-import {openThingEditor} from '../actions'
+import { openThingEditor } from '../actions'
+import t from '../i18n'
 
 // TODO: Height needs to be set to the height of the window
 const ThingList = ({ things, openThingEditor }) =>
@@ -13,8 +13,8 @@ const ThingList = ({ things, openThingEditor }) =>
   }}>
     <TableHeader>
       <TableRow>
-        <TableHeaderColumn>{i18next.t('thingList.nameHeader')}</TableHeaderColumn>
-        <TableHeaderColumn>{i18next.t('thingList.detailsHeader')}</TableHeaderColumn>
+        <TableHeaderColumn>{t('thingList.nameHeader')}</TableHeaderColumn>
+        <TableHeaderColumn>{t('thingList.detailsHeader')}</TableHeaderColumn>
       </TableRow>
     </TableHeader>
     <TableBody showRowHover>

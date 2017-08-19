@@ -1,12 +1,12 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import i18next from 'i18next'
+import { connect } from 'react-redux'
 import log from 'loglevel'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 
-import {isString, isEmpty} from '../util'
-import {registerUser} from '../actions'
+import { registerUser } from '../actions'
+import t from '../i18n'
+import { isString, isEmpty } from '../util'
 import FormDialogBase from './FormDialogBase'
 
 @connect(
@@ -30,7 +30,7 @@ export default class RegisterDialog extends FormDialogBase {
 
     this.buttons = <RaisedButton
       primary={true}
-      label={i18next.t('auth.switchToLogin')}
+      label={t('auth.switchToLogin')}
       fullWidth={true}
       onClick={this.props.onSwitchToLogin}
     />
@@ -45,7 +45,7 @@ export default class RegisterDialog extends FormDialogBase {
       // TODO: Validate email
       if (data.email.length === 0) {
         // TODO: Fix errors when this form is redone
-        errors.email = i18next.t('register.emailErrorMissing')
+        errors.email = t('register.emailErrorMissing')
       }
     } else {
       log.error(`Email should be a string, found ${typeof data.email} instead`)
@@ -54,7 +54,7 @@ export default class RegisterDialog extends FormDialogBase {
     if (isString(data.password)) {
       // TODO: Validate against password requirements
       if (data.password.length === 0) {
-        errors.password = i18next.t('register.passwordErrorMissing')
+        errors.password = t('register.passwordErrorMissing')
       }
     } else {
       log.error(`Password should be a string, found ${typeof data.password} instead`)
@@ -62,7 +62,7 @@ export default class RegisterDialog extends FormDialogBase {
     // Password confirm
     if (isString(data.password_confirm)) {
       if (data.password_confirm.length === 0) {
-        errors.password_confirm = i18next.t('register.passwordConfirmErrorMissing')
+        errors.password_confirm = t('register.passwordConfirmErrorMissing')
       }
     } else {
       log.error(`Password confirm should be a string, found ${typeof data.password_confirm} instead`)
@@ -70,7 +70,7 @@ export default class RegisterDialog extends FormDialogBase {
     // First name
     if (isString(data.name_first)) {
       if (data.name_first.length === 0) {
-        errors.name_first = i18next.t('register.nameFirstErrorMissing')
+        errors.name_first = t('register.nameFirstErrorMissing')
       }
     } else {
       log.error(`First name should be a string, found ${typeof data.name_first} instead`)
@@ -78,7 +78,7 @@ export default class RegisterDialog extends FormDialogBase {
     // Last name
     if (isString(data.name_last)) {
       if (data.name_last.length === 0) {
-        errors.name_last = i18next.t('register.nameLastErrorMissing')
+        errors.name_last = t('register.nameLastErrorMissing')
       }
     } else {
       log.error(`Last name should be a string, found ${typeof data.name_last} instead`)
@@ -100,28 +100,28 @@ export default class RegisterDialog extends FormDialogBase {
     const form = <div>
       {this.props.errorMessage ? <div>{this.props.errorMessage}</div> : null}
       <TextField name='email' onBlur={this.handleChange}
-        floatingLabelText={i18next.t('auth.email')}
+        floatingLabelText={t('auth.email')}
         errorText={this.state.errors.email} /> <br />
       <TextField name='password' onBlur={this.handleChange}
-        floatingLabelText={i18next.t('auth.password')} type='password'
+        floatingLabelText={t('auth.password')} type='password'
         errorText={this.state.errors.password} /> <br />
       {/* TODO: check passwords with onChange to report status without blur */}
       <TextField name='password_confirm' onBlur={this.handleChange}
-        floatingLabelText={i18next.t('auth.passwordConfirm')} type='password'
+        floatingLabelText={t('auth.passwordConfirm')} type='password'
         errorText={this.state.errors.password_confirm} /> <br />
       <TextField name='name_first' onBlur={this.handleChange}
-        floatingLabelText={i18next.t('auth.nameFirst')}
+        floatingLabelText={t('auth.nameFirst')}
         errorText={this.state.errors.name_first} />
       <TextField name='name_last' onBlur={this.handleChange}
-        floatingLabelText={i18next.t('auth.nameLast')}
+        floatingLabelText={t('auth.nameLast')}
         errorText={this.state.errors.name_last} /> <br />
       <RaisedButton
         primary={true}
-        label={i18next.t('auth.registerSubmit')}
+        label={t('auth.registerSubmit')}
         fullWidth={true}
         onClick={this.handleSubmit}
       />
     </div>
-    return this.renderDialog(i18next.t('auth.registerTitle'), this.buttons, form, () => {})
+    return this.renderDialog(t('auth.registerTitle'), this.buttons, form, () => {})
   }
 }
