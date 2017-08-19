@@ -1,14 +1,14 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import i18next from 'i18next'
+import { connect } from 'react-redux'
 import log from 'loglevel'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import moment from 'moment'
 
-import {closeThingEditor, submitThing, removeThing} from '../actions'
-import {isString, isEmpty} from '../util'
+import { closeThingEditor, submitThing, removeThing } from '../actions'
+import t from '../i18n'
+import { isString, isEmpty } from '../util'
 import FormDialogBase from './FormDialogBase'
 import ConfirmDialog from './ConfirmDialog'
 
@@ -32,24 +32,24 @@ export default class ThingEditDialog extends FormDialogBase {
   constructor (props) {
     super(props, props.thing)
     const thing = props.thing
-    this.title = this.props.mode === DIALOG_EDIT ? thing.name : i18next.t('thing.newTitle')
+    this.title = this.props.mode === DIALOG_EDIT ? thing.name : t('thing.newTitle')
     this.buttons = <div>
       { /* Hide delete button on new things */
         props.mode !== DIALOG_NEW
           ? <FlatButton
             style={{float: 'left'}}
-            label={i18next.t('thing.delete')}
+            label={t('thing.delete')}
             onClick={this.handleDelete} />
           : null
       }
       <FlatButton
-        label={i18next.t('common.cancel')}
+        label={t('common.cancel')}
         onClick={this.handleCancel}
       />
       { /* TODO: Disable button if nothing has been edited */ }
       <RaisedButton
         primary={true}
-        label={i18next.t('common.save')}
+        label={t('common.save')}
         onClick={this.handleDone}
       />
     </div>
@@ -65,7 +65,7 @@ export default class ThingEditDialog extends FormDialogBase {
 
     if (isString(data.name)) {
       if (data.name.length === 0) {
-        errors.name = i18next.t('thing.nameErrorMissing')
+        errors.name = t('thing.nameErrorMissing')
       }
     } else {
       log.error(`Name should be a string, found ${typeof data.name} instead`)
@@ -112,8 +112,8 @@ export default class ThingEditDialog extends FormDialogBase {
     if (!isEmpty(this.getChangedData())) {
       this.setState({confirm: {
         open: true,
-        title: i18next.t('thing.confirmCancelTitle'),
-        text: i18next.t('thing.confirmCancelText'),
+        title: t('thing.confirmCancelTitle'),
+        text: t('thing.confirmCancelText'),
         handleYes: this.props.closeThingEditor,
         handleNo: () => this.setState({confirm: {open: false}})
       }})
@@ -124,7 +124,7 @@ export default class ThingEditDialog extends FormDialogBase {
 
   render () {
     const thing = this.props.thing
-    const title = this.props.mode === DIALOG_EDIT ? thing.name : i18next.t('thing.newTitle')
+    const title = this.props.mode === DIALOG_EDIT ? thing.name : t('thing.newTitle')
     const confirmDialog = this.state.confirm.open
       ? <ConfirmDialog
         open={this.state.confirm.open}
@@ -135,20 +135,20 @@ export default class ThingEditDialog extends FormDialogBase {
       : null
     const form = <div>
       <TextField name='name'
-        floatingLabelText={i18next.t('thing.name')}
+        floatingLabelText={t('thing.name')}
         defaultValue={thing.name}
         errorText={this.state.errors.name}
         onBlur={this.handleChange} /><br />
       <TextField name='details'
-        floatingLabelText={i18next.t('thing.details')}
+        floatingLabelText={t('thing.details')}
         multiLine={true}
         rows={MULTILINE_ROWS} rowsMax={MULTILINE_ROWS}
         fullWidth={true}
         defaultValue={thing.details}
         onBlur={this.handleChange} /><br />
       {this.props.mode !== DIALOG_EDIT ? null : (<div>
-        {i18next.t('thing.dateAdded')}: {moment(thing.date_created).calendar()}<br />
-        {i18next.t('thing.dateModified')}: {moment(thing.date_modified).calendar()}
+        {t('thing.dateAdded')}: {moment(thing.date_created).calendar()}<br />
+        {t('thing.dateModified')}: {moment(thing.date_modified).calendar()}
       </div>)}
       {confirmDialog}
     </div>

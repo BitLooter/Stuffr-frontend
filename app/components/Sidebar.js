@@ -1,4 +1,3 @@
-import i18next from 'i18next'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Drawer from 'material-ui/Drawer'
@@ -7,15 +6,17 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import ArrowBackIcon from 'material-ui/svg-icons/navigation/arrow-back'
 
+import t from '../i18n'
+
 const AboutDialog = ({open, onClose}) =>
   <Dialog
     open={open}
     modal={true}
-    actions={<RaisedButton label={i18next.t('common.close')} onTouchTap={onClose} />}
+    actions={<RaisedButton label={t('common.close')} onTouchTap={onClose} />}
   >
     {/* Doing a half-assed dynamic template thing here, if more strings like this are done in
         the future this should be replaced with something like an sprintf library. */}
-    {i18next.t('about.text').replace('$VERSION', window.siteConfig.frontendVersion)}
+    {t('about.text').replace('$VERSION', window.siteConfig.frontendVersion)}
   </Dialog>
 AboutDialog.propTypes = {
   open: PropTypes.bool.isRequired,
@@ -50,7 +51,7 @@ export default class Sidebar extends React.Component {
               icon={<ArrowBackIcon />}
               onTouchTap={this.props.onClose}
             />
-            <RaisedButton label={i18next.t('menu.logout')}
+            <RaisedButton label={t('menu.logout')}
               onTouchTap={() => {
                 this.props.onClose()
                 this.props.onLogout()
@@ -58,7 +59,7 @@ export default class Sidebar extends React.Component {
           </div>
           <div>
             <FlatButton
-              label={i18next.t('menu.about')}
+              label={t('menu.about')}
               onTouchTap={() => this.setState({aboutDialogOpen: true})}
             />
           </div>

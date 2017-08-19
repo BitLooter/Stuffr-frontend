@@ -1,8 +1,7 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import i18next from 'i18next'
-import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar'
+import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import Divider from 'material-ui/Divider'
@@ -11,8 +10,9 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import MenuIcon from 'material-ui/svg-icons/navigation/menu'
 
+import { openInventoryEditor, logoutUser, loadInventory } from '../actions'
+import t from '../i18n'
 import Sidebar from './Sidebar'
-import {openInventoryEditor, logoutUser, loadInventory} from '../actions'
 
 // BUG: inventory menu gets screwy when no inventories exist
 
@@ -57,7 +57,7 @@ class InventoryMenu extends React.Component {
               )
             }) }
             <Divider />
-            <MenuItem primaryText={i18next.t('menu.addInventory')}
+            <MenuItem primaryText={t('menu.addInventory')}
               onTouchTap={ () => {
                 this.handleRequestClose()
                 this.props.openInventoryEditor()
