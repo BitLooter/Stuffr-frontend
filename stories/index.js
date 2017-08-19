@@ -25,8 +25,8 @@ storiesOf('Main view components', module)
 storiesOf('Dialogs', module)
   .add('Confirm dialog', () => <ConfirmDialog
     open={true}
-    title={'TESTTITLE'}
-    text={'TEST'}
+    title={'Confirm Dialog'}
+    text={'Used to get a positive or negative response from the user'}
     onYes={storybookAction('Yes clicked')}
     onNo={storybookAction('No clicked')} />)
   .add('Thing edit', () => <ThingEditDialog mode={DIALOG_EDIT} thing={exampleThing} />)

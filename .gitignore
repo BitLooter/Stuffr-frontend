@@ -2,6 +2,7 @@ dist*
 node_modules
 .eslintcache
 npm-debug.log
+storybook-static
 
 config.local.js
 overlay.html
