@@ -20,11 +20,12 @@ const reduxLogger = createLogger({collapsed: true})
 log.setLevel(window.siteConfig.logLevel)
 log.info(`Log level set to ${window.siteConfig.logLevel}`)
 
-const store = redux.createStore(reducer, redux.compose(
-  redux.applyMiddleware(thunk, reduxLogger),
-  // Activate Redux dev tools if installed in browser
-  // https://github.com/zalmoxisus/redux-devtools-extension
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+// Activate Redux dev tools if installed in browser
+// https://github.com/zalmoxisus/redux-devtools-extension
+const devToolComposer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : redux.compose
+const store = redux.createStore(reducer, devToolComposer(
+  redux.applyMiddleware(thunk, reduxLogger)
 ))
 
 // Set up HMR
