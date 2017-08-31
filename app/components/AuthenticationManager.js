@@ -44,10 +44,10 @@ export default class AuthenticationManager extends React.Component {
       component = <div>{this.props.children}</div>
     } else if (this.state.mode === MODE_LOGIN) {
       component = <LoginDialog
-        onSwitchToRegister={() => this.switchMode(MODE_REGISTER)} />
+        handleSwitchToRegister={() => this.switchMode(MODE_REGISTER)} />
     } else if (this.state.mode === MODE_REGISTER) {
       component = <RegisterDialog
-        onSwitchToLogin={() => this.switchMode(MODE_LOGIN)} />
+        handleSwitchToLogin={() => this.switchMode(MODE_LOGIN)} />
     }
 
     return component
