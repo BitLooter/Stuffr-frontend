@@ -33,6 +33,6 @@ storiesOf('Dialogs', module)
   .add('Thing edit (new)', () => <ThingEditDialog mode={DIALOG_NEW} thing={newThing} />)
   .add('Inventory edit (new)', () => <InventoryEditDialog mode={DIALOG_NEW} inventory={newThing} />)
   .add('Login dialog', () => <LoginDialog
-    onSwitchToRegister={storybookAction('Switch to register mode')} />)
+    handleSwitchToRegister={storybookAction('Switch to register mode')} />)
   .add('Register dialog', () => <RegisterDialog
-    onSwitchToLogin={storybookAction('Switch to login mode')} />)
+    handleSwitchToLogin={storybookAction('Switch to login mode')} />)
