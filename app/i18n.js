@@ -12,7 +12,8 @@ export function i18nSetup (source, {synchronous = false, debug = false} = {}) {
     fallbackLng: 'en',
     initImmediate: !synchronous,
     saveMissing: true,
-    missingKeyHandler: (key) => log.error(`Missing key: ${key}`),
+    missingKeyHandler: (lng, ns, key) =>
+      log.error(`Missing key: ${lng}:${ns}:${key}`),
     parseMissingKeyHandler: (key) => `MISSING_KEY: ${key}`,
     debug
   }
