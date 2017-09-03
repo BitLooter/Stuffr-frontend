@@ -10,14 +10,14 @@ import TextField from 'material-ui/TextField'
 import { loginUser } from '../actions'
 import t from '../i18n'
 
-const ReduxWrapper = connect(
+const reduxWrapper = connect(
   function mapStateToProps (state) {
     return {
       errorMessage: state.ui.loginDialogError
     }
   },
   { loginUser })
-const FormikWrapper = Formik({
+const formikWrapper = Formik({
   mapPropsToValues: (props) => ({
     email: '',
     password: ''
@@ -32,7 +32,7 @@ const FormikWrapper = Formik({
     props.loginUser(values.email, values.password)
   }
 })
-const LoginDialog = ReduxWrapper(FormikWrapper(({
+export default reduxWrapper(formikWrapper(({
   handleSwitchToRegister,
   errorMessage,
   values, errors,
@@ -63,5 +63,3 @@ const LoginDialog = ReduxWrapper(FormikWrapper(({
       errorText={errors.password} /> <br />
   </Dialog>
 }))
-
-export default LoginDialog

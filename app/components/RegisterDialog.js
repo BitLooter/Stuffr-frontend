@@ -19,14 +19,14 @@ function equalTo (fieldName, message) {
 }
 yup.addMethod(yup.mixed, 'equalTo', equalTo)
 
-const ReduxWrapper = connect(
+const reduxWrapper = connect(
   function mapStateToProps (state) {
     return {
       errorMessage: state.ui.registerDialogError
     }
   },
   {registerUser})
-const FormikWrapper = Formik({
+const formikWrapper = Formik({
   mapPropsToValues: (props) => ({
     email: '',
     password: '',
@@ -49,7 +49,7 @@ const FormikWrapper = Formik({
     props.registerUser(values)
   }
 })
-const RegisterDialog = ReduxWrapper(FormikWrapper(({
+export default reduxWrapper(formikWrapper(({
   handleSwitchToLogin,
   errorMessage,
   values, errors,
@@ -90,5 +90,3 @@ const RegisterDialog = ReduxWrapper(FormikWrapper(({
       errorText={errors.name_last} /> <br />
   </Dialog>
 }))
-
-export default RegisterDialog
