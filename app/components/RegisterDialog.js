@@ -35,7 +35,8 @@ const formikWrapper = Formik({
     name_last: ''
   }),
   validationSchema: yup.object().shape({
-    email: yup.string().email().required(t('register.emailErrorMissing')),
+    email: yup.string().email().label('Email')
+      .required(t('register.emailErrorMissing')),
     password: yup.string().required(t('register.passwordErrorMissing')),
     password_confirm: yup.string()
       .equalTo('password', t('register.passwordErrorMismatch'))
@@ -43,10 +44,10 @@ const formikWrapper = Formik({
     name_first: yup.string().required(t('register.nameFirstErrorMissing')),
     name_last: yup.string().required(t('register.nameLastErrorMissing'))
   }),
-  handleSubmit: (values, {props}) => {
-    // TODO: Authentication manager should switch back to login view after register
+  handleSubmit: async (values, {props}) => {
     log.info(`Register request for ${values.email}`)
-    props.registerUser(values)
+    await props.registerUser(values)
+    props.handleSwitchToLogin()
   }
 })
 export default reduxWrapper(formikWrapper(({

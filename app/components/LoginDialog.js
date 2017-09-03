@@ -27,7 +27,6 @@ const formikWrapper = Formik({
     password: yup.string().required(t('auth.passwordErrorMissing'))
   }),
   handleSubmit: (values, {props}) => {
-    // TODO: Authentication manager should switch back to login view after register
     log.info(`Login request for ${values.email}`)
     props.loginUser(values.email, values.password)
   }
