@@ -12,5 +12,7 @@ function logReducer (state, action) {
   }
   return state
 }
+// TODO: Better example state
+// TODO: Hot reloading for store
 const store = redux.createStore(logReducer, state, redux.applyMiddleware(thunk))
 export default store
