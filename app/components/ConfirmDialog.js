@@ -25,3 +25,60 @@ ConfirmDialog.propTypes = {
 }
 
 export default ConfirmDialog
+
+// React HOC that wraps a given component and adds 'confirmWithUser' to its
+// props. When called as a function it displays a confirmation dialog to the
+// user and returns a promise that resolves to true or false, depending on
+// whether the user selects Yes or No. confirmWithUser takes two arguments,
+// the title and the text of the confirm dialog.
+export function withConfirmDialog (WrappedComponent) {
+  return class ConfirmDialogProvider extends React.Component {
+    constructor (props) {
+      super(props)
+      this.state = {
+        open: false,
+        // TODO: Better defaults, using t()
+        title: 'NO TITLE',
+        text: 'Confirm placeholder',
+        handleYes: () => null,
+        handleNo: () => null
+      }
+    }
+
+    showConfirm = (title, text) => {
+      return new Promise((resolve, reject) => {
+        const hideAndResolve = (result) => {
+          this.hideConfirm()
+          resolve(result)
+        }
+        this.setState({
+          open: true,
+          title,
+          text,
+          handleYes: () => { hideAndResolve(true) },
+          handleNo: () => { hideAndResolve(false) }
+        })
+      })
+    }
+
+    hideConfirm = () => {
+      this.setState({open: false})
+    }
+
+    render () {
+      return <div>
+        <WrappedComponent
+          confirmWithUser={this.showConfirm}
+          {...this.props}
+        />
+        <ConfirmDialog
+          open={this.state.open}
+          title={this.state.title}
+          text={this.state.text}
+          onYes={this.state.handleYes}
+          onNo={this.state.handleNo}
+        />
+      </div>
+    }
+  }
+}
