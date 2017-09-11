@@ -1,5 +1,5 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import log from 'loglevel'
 
@@ -41,6 +41,7 @@ export default class AuthenticationManager extends React.Component {
       // Rest of the UI is only rendered if user is authenticated
       component = <div>{this.props.children}</div>
     } else if (this.state.mode === MODE_LOGIN) {
+      // TODO: Allow to disable user register button
       component = <LoginDialog
         handleSwitchToRegister={() => this.switchMode(MODE_REGISTER)} />
     } else if (this.state.mode === MODE_REGISTER) {
