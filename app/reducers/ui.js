@@ -66,7 +66,7 @@ function purgeUserReducer (state, action) {
   return state.merge(noUser)
 }
 
-const ui = handleActions({
+const reducer = handleActions({
   OPEN_THING_EDITOR: openThingEditorReducer,
   CLOSE_THING_EDITOR: closeThingEditorReducer,
   // TODO: Don't wait for submit to finish
@@ -97,4 +97,4 @@ const ui = handleActions({
 }, {deep: true}
 ))
 
-export default ui
+export default reducer
