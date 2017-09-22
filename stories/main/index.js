@@ -5,7 +5,7 @@ import { storiesOf } from '@storybook/react'
 import { action as storybookAction } from '@storybook/addon-actions'
 import RaisedButton from 'material-ui/RaisedButton'
 
-import locale from '../../app/locales/main/en'
+import locale from '../../app/locales/main/en.json'
 import * as apiActions from '../../app/actions/api'
 import state from './state'
 import { createDemoStore } from '../common'
