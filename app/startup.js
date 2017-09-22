@@ -8,7 +8,7 @@ import log from 'loglevel'
 
 import { i18nSetup } from './i18n'
 
-export default async function startup (appComponent, reducer) {
+export default async function startup (appComponent, reducer, {i18nNS} = {}) {
   log.setLevel(window.siteConfig.logLevel)
   log.info(`Log level set to ${window.siteConfig.logLevel}`)
 
@@ -21,11 +21,15 @@ export default async function startup (appComponent, reducer) {
     redux.applyMiddleware(thunk, reduxLogger)
   ))
 
-  try {
-    await i18nSetup({loadPath: 'locales/{{lng}}.json'})
-  } catch (e) {
-    log.error(`Error loading i18n: ${e}`)
-    throw e
+  // Load translation data if a namespace was specified
+  if (i18nNS) {
+    try {
+      await i18nSetup({loadPath: 'locales/{{ns}}/{{lng}}.json'}, i18nNS)
+      log.info(`Successfully loaded locale en:${i18nNS}`)
+    } catch (e) {
+      log.error(`Error loading i18n: ${e}`)
+      throw e
+    }
   }
 
   const appElement = document.getElementById('app')
