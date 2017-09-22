@@ -21,7 +21,8 @@ initAndDisplayErrors(async () => {
     <MuiThemeProvider>
       <AdminApp />
     </MuiThemeProvider>,
-    reducer
+    reducer,
+    {i18nNS: 'admin'}
   )
   store.dispatch({type: 'DO ADMIN STARTUP STUFF HERE'})
 

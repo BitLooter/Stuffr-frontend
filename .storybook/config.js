@@ -7,25 +7,20 @@ import log from 'loglevel'
 import { muiTheme } from 'storybook-addon-material-ui'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
-import locale from '../app/locales/en'
-import { i18nSetup } from '../app/i18n'
-import store from '../stories/store'
 import { setNullApi } from '../app/stuffrapi'
+import { i18nSetup } from '../app/i18n'
 
 log.setLevel('debug')
+// Storybook does not make any remote network requests
 setNullApi()
 window.siteConfig = {frontendVersion: 'STORYBOOK DEMO'}
-i18nSetup({en: {translation: locale}}, {synchronous: true})
+i18nSetup({en: {dummy: {Resources: 'are loaded later'}}}, 'default', {synchronous: true})
 
-addDecorator( (story) =>
-  <Provider store={store}>
-    {story()}
-  </Provider>
-)
 addDecorator( muiTheme() )
 
 function loadStories() {
-  require('../stories')
+  require('../stories/main')
+  require('../stories/admin')
 }
 
 configure(loadStories, module)

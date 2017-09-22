@@ -6,10 +6,15 @@ import log from 'loglevel'
 
 export default t
 
-export function i18nSetup (source, {synchronous = false, debug = false} = {}) {
+export function i18nSetup (
+  options, ns,
+  {synchronous = false, debug = false} = {}
+) {
   const baseOptions = {
     lng: 'en',
     fallbackLng: 'en',
+    ns,
+    defaultNS: ns,
     initImmediate: !synchronous,
     saveMissing: true,
     missingKeyHandler: (lng, ns, key) =>
@@ -21,10 +26,10 @@ export function i18nSetup (source, {synchronous = false, debug = false} = {}) {
   // If fetch backend options are passed enable the plugin, otherwise use
   // it as translation data
   let i18nextWithPlugins = i18next
-  let sourceOptions = {resources: source}
-  if (source.hasOwnProperty('loadPath')) {
+  let sourceOptions = {resources: options}
+  if (options.hasOwnProperty('loadPath')) {
     i18nextWithPlugins = i18next.use(i18nextFetch)
-    sourceOptions = {backend: source}
+    sourceOptions = {backend: options}
   }
   const fullOptions = {...baseOptions, ...sourceOptions}
   return new Promise((resolve, reject) => {

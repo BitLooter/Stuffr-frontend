@@ -1,18 +1,28 @@
 import React from 'react'
+import { Provider } from 'react-redux'
+import i18next from 'i18next'
 import { storiesOf } from '@storybook/react'
 import { action as storybookAction } from '@storybook/addon-actions'
 import RaisedButton from 'material-ui/RaisedButton'
 
-import store from './store'
-import { createThing } from '../app/models'
+import locale from '../../app/locales/main/en'
+import * as apiActions from '../../app/actions/api'
+import state from './state'
+import { createDemoStore } from '../common'
+import { createThing } from '../../app/models'
 
-import Menubar from '../app/components/Menubar'
-import ConfirmDialog, { withConfirmDialog } from '../app/components/ConfirmDialog'
-import InventoryEditDialog from '../app/components/InventoryEditDialog'
-import LoginDialog from '../app/components/LoginDialog'
-import RegisterDialog from '../app/components/RegisterDialog'
-import ThingList from '../app/components/ThingList'
-import ThingEditDialog from '../app/components/ThingEditDialog'
+import Menubar from '../../app/components/Menubar'
+import ConfirmDialog, { withConfirmDialog } from '../../app/components/ConfirmDialog'
+import InventoryEditDialog from '../../app/components/InventoryEditDialog'
+import LoginDialog from '../../app/components/LoginDialog'
+import RegisterDialog from '../../app/components/RegisterDialog'
+import ThingList from '../../app/components/ThingList'
+import ThingEditDialog from '../../app/components/ThingEditDialog'
+
+i18next.addResourceBundle('en', 'default', locale, true, true)
+
+const actionBlacklist = Object.keys(apiActions)
+const store = createDemoStore(state, actionBlacklist)
 
 const DIALOG_NEW = Symbol.for('ui.DIALOG_NEW')
 const DIALOG_EDIT = Symbol.for('ui.DIALOG_EDIT')
@@ -23,16 +33,27 @@ const ExampleConfirmButton = withConfirmDialog(({confirmWithUser}) => <RaisedBut
   primary={true} label='Show example confirm dialog'
   onClick={async () => {
     const userResponse = await confirmWithUser(
-      'Title of confirm dialog',
-      'Explanatory text here.')
+      'Confirm called by a function',
+      `A component wrapped in withConfirmDialog has a prop that will display
+      a confirmation dialog when called as a function.`)
     storybookAction('Confirm dialog choice')(userResponse)
   }} />)
 
 storiesOf('Main view components', module)
+  .addDecorator((story) =>
+    <Provider store={store}>
+      {story()}
+    </Provider>
+  )
   .add('Menu bar', () => <Menubar />)
   .add('Thing list', () => <ThingList />)
 
 storiesOf('Dialogs', module)
+  .addDecorator((story) =>
+    <Provider store={store}>
+      {story()}
+    </Provider>
+  )
   .add('Confirm dialog', () => <ConfirmDialog
     open={true}
     title={'Confirm Dialog'}

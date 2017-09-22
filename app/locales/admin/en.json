@@ -1,0 +1,7 @@
+{
+  "panel": {
+    "overview": "Overview",
+    "userManagement": "User Management",
+    "adminManagement": "Admin Settings"
+  }
+}

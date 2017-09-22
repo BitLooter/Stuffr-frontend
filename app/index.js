@@ -19,7 +19,8 @@ initAndDisplayErrors(async () => {
     <MuiThemeProvider>
       <App />
     </MuiThemeProvider>,
-    reducer
+    reducer,
+    {i18nNS: 'main'}
   )
 
   // TODO: Do not load user if no api token set
