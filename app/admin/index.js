@@ -2,7 +2,7 @@ import React from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
-import startup, { initAndDisplayErrors } from '../startup'
+import startup, { initAndDisplayErrors } from '../common/startup'
 import reducer from './reducers'
 import AdminApp from './components/AdminApp'
 import { refreshServerInfo, refreshStats } from './actions'

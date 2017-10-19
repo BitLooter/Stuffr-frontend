@@ -16,7 +16,7 @@ import TextField from 'material-ui/TextField'
 import moment from 'moment'
 
 import { closeThingEditor, submitThing, removeThing } from '../actions'
-import t from '../i18n'
+import t from '../../common/i18n'
 import { withConfirmDialog } from './ConfirmDialog'
 
 const DIALOG_NEW = Symbol.for('ui.DIALOG_NEW')

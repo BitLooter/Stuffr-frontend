@@ -10,8 +10,8 @@ import Immutable from 'seamless-immutable'
 
 import {TEST_THINGS, NEW_THING, NEW_THING_ID,
   NEW_INVENTORY, NEW_INVENTORY_ID} from './dummydata'
-import {__GetDependency__} from '../app/reducers/database'
-import * as actions from '../app/actions'
+import {__GetDependency__} from '../app/main/reducers/database'
+import * as actions from '../app/main/actions'
 
 const initialState = Immutable({user: null, inventories: [], things: []})
 

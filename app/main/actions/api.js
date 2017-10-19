@@ -10,7 +10,7 @@ import {createAction} from 'redux-actions'
 import log from 'loglevel'
 
 import {createTaskThunk} from '.'
-import stuffrApi from '../stuffrapi'
+import stuffrApi from '../../stuffrapi'
 
 // Actions get the current user's info from the server
 export const GET_USER_INFO__REQUEST = 'GET_USER_INFO__REQUEST'

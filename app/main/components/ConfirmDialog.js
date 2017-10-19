@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Dialog from 'material-ui/Dialog'
 import RaisedButton from 'material-ui/RaisedButton'
 
-import t from '../i18n'
+import t from '../../common/i18n'
 
 const ConfirmDialog = ({open = true, title, text, onYes, onNo}) =>
   <Dialog

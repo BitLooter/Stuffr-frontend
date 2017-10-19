@@ -8,7 +8,7 @@ import { muiTheme } from 'storybook-addon-material-ui'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import { setNullApi } from '../app/stuffrapi'
-import { i18nSetup } from '../app/i18n'
+import { i18nSetup } from '../app/common/i18n'
 
 log.setLevel('debug')
 // Storybook does not make any remote network requests

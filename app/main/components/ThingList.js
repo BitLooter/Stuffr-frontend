@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table'
 
 import { openThingEditor } from '../actions'
-import t from '../i18n'
+import t from '../../common/i18n'
 
 // TODO: Height needs to be set to the height of the window
 const ThingList = ({ things, openThingEditor }) =>

@@ -6,18 +6,18 @@ import { action as storybookAction } from '@storybook/addon-actions'
 import RaisedButton from 'material-ui/RaisedButton'
 
 import locale from '../../app/locales/main/en.json'
-import * as apiActions from '../../app/actions/api'
+import * as apiActions from '../../app/main/actions/api'
 import state from './state'
 import { createDemoStore } from '../common'
-import { createThing } from '../../app/models'
+import { createThing } from '../../app/main/models'
 
-import Menubar from '../../app/components/Menubar'
-import ConfirmDialog, { withConfirmDialog } from '../../app/components/ConfirmDialog'
-import InventoryEditDialog from '../../app/components/InventoryEditDialog'
-import LoginDialog from '../../app/components/LoginDialog'
-import RegisterDialog from '../../app/components/RegisterDialog'
-import ThingList from '../../app/components/ThingList'
-import ThingEditDialog from '../../app/components/ThingEditDialog'
+import Menubar from '../../app/main/components/Menubar'
+import ConfirmDialog, { withConfirmDialog } from '../../app/main/components/ConfirmDialog'
+import InventoryEditDialog from '../../app/main/components/InventoryEditDialog'
+import LoginDialog from '../../app/main/components/LoginDialog'
+import RegisterDialog from '../../app/main/components/RegisterDialog'
+import ThingList from '../../app/main/components/ThingList'
+import ThingEditDialog from '../../app/main/components/ThingEditDialog'
 
 i18next.addResourceBundle('en', 'default', locale, true, true)
 

@@ -2,11 +2,11 @@ import React from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
-import startup, { initAndDisplayErrors } from './startup'
+import startup, { initAndDisplayErrors } from '../common/startup'
 import { loadUser } from './actions'
 import reducer from './reducers'
 import App from './components/App'
-import { setupApi } from './stuffrapi'
+import { setupApi } from '../stuffrapi'
 
 initAndDisplayErrors(async () => {
   // If no token is available loadUser will trigger a login
@@ -31,7 +31,7 @@ initAndDisplayErrors(async () => {
     module.hot.accept('./reducers', () => store.replaceReducer(reducer))
     module.hot.accept('./actions')
     // TODO: Test API reinitialization
-    module.hot.accept('./stuffrapi', () => setupApi(
+    module.hot.accept('../stuffrapi', () => setupApi(
       window.siteConfig.apiPath, window.siteConfig.authPath,
       window.localStorage.apiToken
     ))
