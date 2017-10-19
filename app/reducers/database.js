@@ -3,7 +3,7 @@ import Immutable from 'seamless-immutable'
 import log from 'loglevel'
 
 // Constants
-const emptyDatabase = {user: null, inventories: [], things: []}
+const emptyDatabase = Immutable({user: null, inventories: [], things: []})
 
 // Reducers
 
@@ -76,6 +76,6 @@ const reducer = handleActions({
   PUT_THING__ERROR: genericErrorReducer,
   DELETE_THING__DONE: deleteThingDoneReducer,
   DELETE_THING__ERROR: genericErrorReducer
-}, Immutable(emptyDatabase))
+}, emptyDatabase)
 
 export default reducer
