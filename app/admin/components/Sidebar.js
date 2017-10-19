@@ -5,7 +5,7 @@ import MenuItem from 'material-ui/MenuItem'
 import IconCurrentPanel from 'material-ui/svg-icons/navigation/chevron-right'
 
 import { selectPanel } from '../actions'
-import t from '../../i18n'
+import t from '../../common/i18n'
 
 const panels = ['overview', 'userManagement', 'adminManagement']
 const reduxWrapper = connect(

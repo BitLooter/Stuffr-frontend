@@ -11,7 +11,7 @@ import HttpStatus from 'http-status'
 import log from 'loglevel'
 
 import * as api from './api'
-import stuffrApi from '../stuffrapi'
+import stuffrApi from '../../stuffrapi'
 
 export {api}
 

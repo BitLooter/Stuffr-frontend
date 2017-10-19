@@ -11,7 +11,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import MenuIcon from 'material-ui/svg-icons/navigation/menu'
 
 import { openInventoryEditor, logoutUser, loadInventory } from '../actions'
-import t from '../i18n'
+import t from '../../common/i18n'
 import Sidebar from './Sidebar'
 
 // BUG: inventory menu gets screwy when no inventories exist

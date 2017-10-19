@@ -8,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 
 import { registerUser } from '../actions'
-import t from '../i18n'
+import t from '../../common/i18n'
 
 // TODO: Don't switch back to login mode if backend error during register
 

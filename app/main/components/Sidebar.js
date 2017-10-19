@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import ArrowBackIcon from 'material-ui/svg-icons/navigation/arrow-back'
 
-import t from '../i18n'
+import t from '../../common/i18n'
 
 const AboutDialog = ({open, onClose}) =>
   <Dialog

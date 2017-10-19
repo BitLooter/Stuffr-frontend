@@ -9,8 +9,8 @@ import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 
 /* eslint-disable import/no-duplicates, no-duplicate-imports */
-import * as actions from '../app/actions'
-import {__GetDependency__} from '../app/actions'
+import * as actions from '../app/main/actions'
+import {__GetDependency__} from '../app/main/actions'
 /* eslint-enable import/no-duplicates, no-duplicate-imports */
 import stuffrApi, {setupApi} from '../app/stuffrapi'
 import {TEST_DOMAIN, TEST_AUTH_URL, TEST_STORE, TEST_USER, TEST_INVENTORIES, TEST_THINGS,

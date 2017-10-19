@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import AuthenticationManager from '../../components/AuthenticationManager'
+import AuthenticationManager from '../../main/components/AuthenticationManager'
 import Sidebar from './Sidebar'
 import StatusPanel from './StatusPanel'
 import UserPanel from './UserPanel'

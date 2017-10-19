@@ -43,7 +43,7 @@ const siteConfig = {
 const htmlWebpackPluginMainConfig = new HtmlWebpackPlugin({
   title: 'Stuffr',
   description: 'Stuffr helps you keep track of your things',
-  template: path.join(__dirname, '/app/app.ejs'),
+  template: path.join(__dirname, '/app/common/app.ejs'),
   chunks: ['manifest', 'vendor', 'main'],
   xhtml: true,
   siteConfig: JSON.stringify(siteConfig),
@@ -54,7 +54,7 @@ const htmlWebpackPluginAdminConfig = new HtmlWebpackPlugin({
   filename: 'admin/index.html',
   title: 'Stuffr Admin',
   description: 'Admin page for Stuffr',
-  template: path.join(__dirname, '/app/app.ejs'),
+  template: path.join(__dirname, '/app/common/app.ejs'),
   chunks: ['manifest', 'vendor', 'admin/main'],
   xhtml: true,
   siteConfig: JSON.stringify(siteConfig),
@@ -89,11 +89,17 @@ const config = {
       }
     ]
   },
+  resolve: {
+    modules: [
+      path.join(__dirname, 'app'),
+      'node_modules'
+    ]
+  },
   entry: {
-    main: [
+    'main': [
       'babel-polyfill',
       'isomorphic-fetch',
-      './index'
+      './main/index'
     ],
     'admin/main': [
       // TODO: test if a polyfill is still needed on modern browsers

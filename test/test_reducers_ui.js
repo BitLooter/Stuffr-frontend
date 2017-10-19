@@ -5,9 +5,9 @@
 import {expect} from 'chai'
 import Immutable from 'seamless-immutable'
 
-import {__GetDependency__} from '../app/reducers/ui'
-import * as actions from '../app/actions'
-import {createThing, createInventory} from '../app/models'
+import {__GetDependency__} from '../app/main/reducers/ui'
+import * as actions from '../app/main/actions'
+import {createThing, createInventory} from '../app/main/models'
 
 const DIALOG_NEW = Symbol.for('ui.DIALOG_NEW')
 const DIALOG_EDIT = Symbol.for('ui.DIALOG_EDIT')

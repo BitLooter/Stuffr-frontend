@@ -10,7 +10,7 @@ import TextField from 'material-ui/TextField'
 import moment from 'moment'
 
 import { submitInventory, closeInventoryEditor } from '../actions'
-import t from '../i18n'
+import t from '../../common/i18n'
 
 const DIALOG_NEW = Symbol.for('ui.DIALOG_NEW')
 const DIALOG_EDIT = Symbol.for('ui.DIALOG_EDIT')
