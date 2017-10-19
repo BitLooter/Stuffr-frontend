@@ -10,6 +10,7 @@ import TextField from 'material-ui/TextField'
 import { loginUser } from '../actions'
 import t from '../i18n'
 
+// TODO: Clear loginDialogError after successful login
 const reduxWrapper = connect(
   function mapStateToProps (state) {
     return {

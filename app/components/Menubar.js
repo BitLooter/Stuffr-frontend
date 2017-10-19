@@ -93,6 +93,7 @@ class Menubar extends React.Component {
     this.state = {sidebarOpen: false}
   }
 
+  // TODO: Special handling for no inventories exist
   render () {
     return (
       <div>

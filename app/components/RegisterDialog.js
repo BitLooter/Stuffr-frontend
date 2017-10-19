@@ -10,6 +10,8 @@ import TextField from 'material-ui/TextField'
 import { registerUser } from '../actions'
 import t from '../i18n'
 
+// TODO: Don't switch back to login mode if backend error during register
+
 // Adds an 'equalTo' test to validations that compares value to another field.
 // Move this into the startup function if I build another form using it
 function equalTo (fieldName, message) {
