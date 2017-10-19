@@ -2,6 +2,8 @@
 
 import Immutable from 'seamless-immutable'
 
+const DIALOG_CLOSED = Symbol.for('ui.DIALOG_CLOSED')
+
 export const TEST_DOMAIN = 'https://example.com'
 export const TEST_AUTH_URL = `${TEST_DOMAIN}/auth`
 
@@ -47,7 +49,21 @@ export const TEST_DATABASE = Immutable({
 })
 
 export const TEST_STORE = Immutable({
-  database: TEST_DATABASE
+  database: TEST_DATABASE,
+  ui: {
+    authenticated: true,
+    currentInventory: null,
+    thingDialog: {
+      mode: DIALOG_CLOSED,
+      thing: {name: 'PLACEHOLDER'}
+    },
+    inventoryDialog: {
+      mode: DIALOG_CLOSED,
+      inventory: {name: 'PLACEHOLDER'}
+    },
+    loginDialogError: undefined,
+    registerDialogError: undefined
+  }
 })
 
 export const NEW_USER = Immutable({

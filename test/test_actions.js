@@ -14,7 +14,7 @@ import {__GetDependency__} from '../app/main/actions'
 /* eslint-enable import/no-duplicates, no-duplicate-imports */
 import stuffrApi, {setupApi} from '../app/stuffrapi'
 import {TEST_DOMAIN, TEST_AUTH_URL, TEST_STORE, TEST_USER, TEST_INVENTORIES, TEST_THINGS,
-  NEW_INVENTORY, NEW_INVENTORY_ID, NEW_THING, NEW_THING_ID} from './dummydata'
+  NEW_USER, NEW_INVENTORY, NEW_INVENTORY_ID, NEW_THING, NEW_THING_ID} from './dummydata'
 
 const mockStore = configureStore([thunk])
 const TEST_INVENTORY_ID = TEST_INVENTORIES[0].id
@@ -39,162 +39,161 @@ describe('Actions:', () => {
       setupApi(TEST_DOMAIN, TEST_AUTH_URL)
     })
 
-    // it('Logging in a user (loginUser)', async function () {
-    //   const loginUserAction = actions.loginUser('testmail@example.com', 'pass')
-    //   // Should be a thunk
-    //   expect(loginUserAction).to.be.a('function')
+    it('Logging in a user (loginUser)', async function () {
+      const loginUserAction = actions.loginUser('testmail@example.com', 'pass')
+      // Should be a thunk
+      expect(loginUserAction).to.be.a('function')
 
-    //   const store = mockStore(TEST_STORE)
-    //   this.sinon.stub(stuffrApi, 'login')
+      const store = mockStore(TEST_STORE)
+      this.sinon.stub(stuffrApi, 'login')
 
-    //   global.window = {localStorage: {}}
-    //   await store.dispatch(loginUserAction)
-    //   expect(stuffrApi.login.calledOnce).to.be.true
+      global.window = {localStorage: {}}
+      await store.dispatch(loginUserAction)
+      expect(stuffrApi.login.calledOnce).to.be.true
 
-    //   const thunkActions = store.getActions()
-    //   const actionTypes = thunkActions.map((a) => a.type)
-    //   expect(actionTypes).to.include(actions.LOGIN_USER__DONE)
-    //   // These actions may not complete before thunk is finished, check they
-    //   // were started instead.
-    //   expect(actionTypes).to.include(actions.LOAD_USER__REQUEST)
+      const thunkActions = store.getActions()
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.LOGIN_USER__FINISH)
+      // These actions may not complete before thunk is finished, check they
+      // were started instead.
+      expect(actionTypes).to.include(actions.LOAD_USER__START)
 
-    //   const state = store.getState()
-    //   expect(state.database.user).to.eql(TEST_USER)
-    //   expect(state.database.inventories).to.eql(TEST_INVENTORIES)
+      const state = store.getState()
+      expect(state.database.user).to.eql(TEST_USER)
+      expect(state.database.inventories).to.eql(TEST_INVENTORIES)
 
-    //   expect(global.window.localStorage.apiToken).to.not.be.undefined
-    // })
+      expect(global.window.localStorage.apiToken).to.not.be.undefined
+    })
 
-    // it('Logging in a user with incorrect password', async function () {
-    //   const loginUserAction = actions.loginUser('testmail@example.com', 'badpass')
-    //   // Should be a thunk
-    //   expect(loginUserAction).to.be.a('function')
+    it('Logging in a user with incorrect password', async function () {
+      const loginUserAction = actions.loginUser('testmail@example.com', 'badpass')
+      // Should be a thunk
+      expect(loginUserAction).to.be.a('function')
 
-    //   const store = mockStore(TEST_STORE)
-    //   this.sinon.stub(stuffrApi, 'login').throws('An error')
+      const store = mockStore(TEST_STORE)
+      this.sinon.stub(stuffrApi, 'login').throws('An error')
 
-    //   await store.dispatch(loginUserAction)
-    //   expect(stuffrApi.login.calledOnce).to.be.true
+      await store.dispatch(loginUserAction)
+      expect(stuffrApi.login.calledOnce).to.be.true
 
-    //   const thunkActions = store.getActions()
-    //   const actionTypes = thunkActions.map((a) => a.type)
-    //   expect(actionTypes).to.include(actions.LOGIN_USER__ERROR)
-    // })
+      const thunkActions = store.getActions()
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.LOGIN_USER__ERROR)
+    })
 
-    // it('Logging a user out (logoutUser)', async function () {
-    //   const logoutUserAction = actions.logoutUser()
-    //   // Should be a thunk
-    //   expect(logoutUserAction).to.be.a('function')
+    it('Logging a user out (logoutUser)', async function () {
+      const logoutUserAction = actions.logoutUser()
+      // Should be a thunk
+      expect(logoutUserAction).to.be.a('function')
 
-    //   const store = mockStore(TEST_STORE)
-    //   this.sinon.stub(stuffrApi, 'logout')
+      const store = mockStore(TEST_STORE)
+      this.sinon.stub(stuffrApi, 'logout')
 
-    //   await store.dispatch(logoutUserAction)
-    //   expect(stuffrApi.logout.calledOnce).to.be.true
+      await store.dispatch(logoutUserAction)
+      expect(stuffrApi.logout.calledOnce).to.be.true
 
-    //   const thunkActions = store.getActions()
-    //   const actionTypes = thunkActions.map((a) => a.type)
-    //   expect(actionTypes).to.include(actions.PURGE_USER)
+      const thunkActions = store.getActions()
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.PURGE_USER)
 
-    //   expect(stuffrApi.token).to.be.null
-    // })
+      expect(stuffrApi.token).to.be.null
+    })
 
-    // it('Registering a new user (registerUser)', async function () {
-    //   const registerUserAction = actions.registerUser(NEW_USER)
-    //   // Should be a thunk
-    //   expect(registerUserAction).to.be.a('function')
+    it('Registering a new user (registerUser)', async function () {
+      const registerUserAction = actions.registerUser(NEW_USER)
+      // Should be a thunk
+      expect(registerUserAction).to.be.a('function')
 
-    //   const store = mockStore(TEST_STORE)
-    //   this.sinon.stub(stuffrApi, 'registerUser')
+      const store = mockStore(TEST_STORE)
+      this.sinon.stub(stuffrApi, 'registerUser')
 
-    //   global.window = {localStorage: {}}
-    //   await store.dispatch(registerUserAction)
-    //   expect(stuffrApi.registerUser.calledOnce).to.be.true
+      global.window = {localStorage: {}}
+      await store.dispatch(registerUserAction)
+      expect(stuffrApi.registerUser.calledOnce).to.be.true
 
-    //   const thunkActions = store.getActions()
-    //   const actionTypes = thunkActions.map((a) => a.type)
-    //   expect(actionTypes).to.include(actions.REGISTER_USER__DONE)
-    //   // These actions may not complete before thunk is finished, check they
-    //   // were started instead.
-    //   expect(actionTypes).to.include(actions.LOAD_USER__REQUEST)
+      const thunkActions = store.getActions()
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.REGISTER_USER__FINISH)
+      // These actions may not complete before thunk is finished, check they
+      // were started instead.
+      expect(actionTypes).to.include(actions.LOAD_USER__START)
 
-    //   const state = store.getState()
-    //   expect(state.database.user).to.eql(TEST_USER)
-    //   expect(state.database.inventories).to.eql(TEST_INVENTORIES)
+      const state = store.getState()
+      expect(state.database.user).to.eql(TEST_USER)
+      expect(state.database.inventories).to.eql(TEST_INVENTORIES)
 
-    //   expect(global.window.localStorage.apiToken).to.not.be.undefined
-    // })
+      expect(global.window.localStorage.apiToken).to.not.be.undefined
+    })
 
-    // it('Registering a new user with invalid data', async function () {
-    //   const registerUserAction = actions.registerUser('testmail@example.com', 'badpass')
-    //   // Should be a thunk
-    //   expect(registerUserAction).to.be.a('function')
+    it('Registering a new user with invalid data', async function () {
+      const registerUserAction = actions.registerUser('testmail@example.com', 'badpass')
+      // Should be a thunk
+      expect(registerUserAction).to.be.a('function')
 
-    //   const store = mockStore(TEST_STORE)
-    //   this.sinon.stub(stuffrApi, 'registerUser').throws('An error')
+      const store = mockStore(TEST_STORE)
+      this.sinon.stub(stuffrApi, 'registerUser').throws('An error')
 
-    //   await store.dispatch(registerUserAction)
-    //   expect(stuffrApi.registerUser.calledOnce).to.be.true
+      await store.dispatch(registerUserAction)
+      expect(stuffrApi.registerUser.calledOnce).to.be.true
 
-    //   const thunkActions = store.getActions()
-    //   const actionTypes = thunkActions.map((a) => a.type)
-    //   expect(actionTypes).to.include(actions.REGISTER_USER__ERROR)
-    // })
+      const thunkActions = store.getActions()
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.REGISTER_USER__ERROR)
+    })
 
-    // it('Loading a user (loadUser)', async function () {
-    //   const loadUserAction = actions.loadUser()
-    //   // Should be a thunk
-    //   expect(loadUserAction).to.be.a('function')
+    it('Loading a user (loadUser)', async function () {
+      const loadUserAction = actions.loadUser()
+      // Should be a thunk
+      expect(loadUserAction).to.be.a('function')
 
-    //   const store = mockStore(TEST_STORE)
-    //   this.sinon.stub(stuffrApi, 'getUserInfo').returns(TEST_USER)
-    //   this.sinon.stub(stuffrApi, 'getInventories').returns(TEST_INVENTORIES)
+      const store = mockStore(TEST_STORE)
+      this.sinon.stub(stuffrApi, 'getUserInfo').returns(TEST_USER)
+      this.sinon.stub(stuffrApi, 'getInventories').returns(TEST_INVENTORIES)
 
-    //   await store.dispatch(loadUserAction)
-    //   expect(stuffrApi.getUserInfo.calledOnce).to.be.true
-    //   expect(stuffrApi.getInventories.calledOnce).to.be.true
+      await store.dispatch(loadUserAction)
+      expect(stuffrApi.getUserInfo.calledOnce).to.be.true
+      expect(stuffrApi.getInventories.calledOnce).to.be.true
 
-    //   const thunkActions = store.getActions()
-    //   const actionTypes = thunkActions.map((a) => a.type)
-    //   expect(actionTypes).to.include(actions.api.GET_INVENTORY_LIST__DONE)
-    //   expect(actionTypes).to.include(actions.ui.SET_CURRENT_INVENTORY)
-    //   expect(actionTypes).to.include(actions.LOAD_USER__DONE)
-    //   // These actions may not complete before thunk is finished, check they
-    //   // were started instead.
-    //   expect(actionTypes).to.include(actions.LOAD_INVENTORY__REQUEST)
+      const thunkActions = store.getActions()
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.api.GET_INVENTORIES__DONE)
+      expect(actionTypes).to.include(actions.LOAD_USER__FINISH)
+      // These actions may not complete before thunk is finished, check they
+      // were started instead.
+      expect(actionTypes).to.include(actions.LOAD_INVENTORY__START)
 
-    //   const state = store.getState()
-    //   expect(state.database.user).to.eql(TEST_USER)
-    //   expect(state.database.inventories).to.eql(TEST_INVENTORIES)
-    // })
+      const state = store.getState()
+      expect(state.database.user).to.eql(TEST_USER)
+      expect(state.database.inventories).to.eql(TEST_INVENTORIES)
+    })
 
-    // it('Load an inventory (loadInventory)', async function () {
-    //   const loadInventoryAction = actions.loadInventory(0)
-    //   // Should be a thunk
-    //   expect(loadInventoryAction).to.be.a('function')
+    it('Load an inventory (loadInventory)', async function () {
+      const TEST_ID = TEST_STORE.database.inventories[0].id
+      const loadInventoryAction = actions.loadInventory(TEST_ID)
+      // Should be a thunk
+      expect(loadInventoryAction).to.be.a('function')
 
-    //   const store = mockStore(TEST_STORE)
+      const store = mockStore(TEST_STORE)
 
-    //   await store.dispatch(loadInventoryAction)
-    //   const thunkActions = store.getActions()
-    //   const actionTypes = thunkActions.map((a) => a.type)
-    //   expect(actionTypes).to.include(actions.ui.SET_CURRENT_INVENTORY)
-    //   expect(actionTypes).to.include(actions.LOAD_INVENTORY__DONE)
-    // })
+      await store.dispatch(loadInventoryAction)
+      const thunkActions = store.getActions()
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.LOAD_INVENTORY__FINISH)
+    })
 
-    // it('Load an invalid inventory', async function () {
-    //   const invalidIndex = TEST_STORE.database.inventories.length
-    //   const loadInventoryAction = actions.loadInventory(invalidIndex)
-    //   // Should be a thunk
-    //   expect(loadInventoryAction).to.be.a('function')
+    it('Load an invalid inventory', async function () {
+      const invalidIndex = TEST_STORE.database.inventories.length + 1
+      const loadInventoryAction = actions.loadInventory(invalidIndex)
+      // Should be a thunk
+      expect(loadInventoryAction).to.be.a('function')
 
-    //   const store = mockStore(TEST_STORE)
+      const store = mockStore(TEST_STORE)
 
-    //   await store.dispatch(loadInventoryAction)
-    //   const thunkActions = store.getActions()
-    //   const actionTypes = thunkActions.map((a) => a.type)
-    //   expect(actionTypes).to.include(actions.LOAD_INVENTORY__ERROR)
-    // })
+      await store.dispatch(loadInventoryAction)
+      const thunkActions = store.getActions()
+      const actionTypes = thunkActions.map((a) => a.type)
+      expect(actionTypes).to.include(actions.LOAD_INVENTORY__ERROR)
+    })
   })
 
   describe('API thunk actions:', function () {
