@@ -2,5 +2,13 @@
 	"ui": {
 		"authenticated": true
 	},
-	"activePanel": "overview"
+	"activePanel": "overview",
+	"stats": {
+		"numUsers": 1234,
+		"numInventories": 2345,
+		"numThings": 3456
+	},
+	"serverInfo": {
+		"version": "STORYBOOK"
+	}
 }

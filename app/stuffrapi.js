@@ -35,6 +35,12 @@ class StuffrApi {
     }
   }
 
+  // GET request to /serverinfo
+  async getServerInfo (callback) {
+    log.debug('StuffrApi: Request for getServerInfo')
+    return this._request('/serverinfo', {callback})
+  }
+
   // GET request to /userinfo
   async getUserInfo (callback) {
     log.debug('StuffrApi: Request for getUserInfo')
@@ -133,6 +139,16 @@ class StuffrApi {
     }
     log.info(`StuffrApi: Successfully registered new user ${newUserInfo.email}`)
   }
+
+  /* Admin calls
+   **************/
+  async adminGetStats (callback) {
+    log.info('StuffrApi: (Admin) Request for get stats')
+    return this._request('/admin/stats', {callback})
+  }
+
+  /* Utility methods
+   ******************/
 
   // Makes request to the server specified in baseUrl
   async _request (path, {method, parameters, requestUrlBase, callback} = {}) {
