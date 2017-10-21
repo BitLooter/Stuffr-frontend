@@ -6,10 +6,10 @@ REQUEST actions are dispatched when the request is made, DONE when successfully
 retrieved, and ERROR if any sort of error occured.
 *******************************************************************/
 
-import {createAction} from 'redux-actions'
+import { createAction } from 'redux-actions'
 import log from 'loglevel'
 
-import {createTaskThunk} from '.'
+import { createTaskThunk } from '../../common/actions'
 import stuffrApi from '../../stuffrapi'
 
 // Actions get the current user's info from the server

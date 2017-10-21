@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import { Formik } from 'formik'
 import yup from 'yup'
 import log from 'loglevel'
@@ -7,7 +8,6 @@ import Dialog from 'material-ui/Dialog'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 
-import { registerUser } from '../actions'
 import t from '../../common/i18n'
 
 // TODO: Don't switch back to login mode if backend error during register
@@ -26,8 +26,7 @@ const reduxWrapper = connect(
     return {
       errorMessage: state.ui.registerDialogError
     }
-  },
-  {registerUser})
+  })
 const formikWrapper = Formik({
   mapPropsToValues: (props) => ({
     email: '',
@@ -48,11 +47,11 @@ const formikWrapper = Formik({
   }),
   handleSubmit: async (values, {props}) => {
     log.info(`Register request for ${values.email}`)
-    await props.registerUser(values)
+    await props.onRegister(values, props.dispatch)
     props.handleSwitchToLogin()
   }
 })
-export default reduxWrapper(formikWrapper(({
+const RegisterDialog = reduxWrapper(formikWrapper(({
   handleSwitchToLogin,
   errorMessage,
   values, errors,
@@ -93,3 +92,8 @@ export default reduxWrapper(formikWrapper(({
       errorText={errors.name_last} /> <br />
   </Dialog>
 }))
+RegisterDialog.propTypes = {
+  onRegister: PropTypes.func.isRequired
+}
+
+export default RegisterDialog

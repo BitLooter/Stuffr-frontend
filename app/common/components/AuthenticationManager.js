@@ -19,7 +19,9 @@ const MODE_REGISTER = Symbol('MODE_REGISTER')
 export default class AuthenticationManager extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
-    authenticated: PropTypes.bool.isRequired
+    authenticated: PropTypes.bool.isRequired,
+    onLogin: PropTypes.func.isRequired,
+    onRegister: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -43,9 +45,11 @@ export default class AuthenticationManager extends React.Component {
     } else if (this.state.mode === MODE_LOGIN) {
       // TODO: Allow to disable user register button
       component = <LoginDialog
+        onLogin={this.props.onLogin}
         handleSwitchToRegister={() => this.switchMode(MODE_REGISTER)} />
     } else if (this.state.mode === MODE_REGISTER) {
       component = <RegisterDialog
+        onRegister={this.props.onRegister}
         handleSwitchToLogin={() => this.switchMode(MODE_LOGIN)} />
     }
 

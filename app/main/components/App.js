@@ -1,17 +1,28 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAddIcon from 'material-ui/svg-icons/content/add'
 
 import ThingList from './ThingList'
-import AuthenticationManager from './AuthenticationManager'
+import AuthenticationManager from '../../common/components/AuthenticationManager'
 import ThingEditDialog from './ThingEditDialog'
 import InventoryEditDialog from './InventoryEditDialog'
 import Menubar from './Menubar'
-import {openThingEditor} from '../actions'
+import { loadUser, openThingEditor } from '../actions'
+import { loginUser, registerUser } from '../../common/actions/auth'
 
 const DIALOG_CLOSED = Symbol.for('ui.DIALOG_CLOSED')
+
+async function handleLogin (email, password, dispatch) {
+  await dispatch(loginUser(email, password))
+  dispatch(loadUser())
+}
+
+async function handleRegister (userData, dispatch) {
+  await dispatch(registerUser(userData))
+  dispatch(loadUser())
+}
 
 const App = ({
   thingDialogMode, thingDialogData,
@@ -26,12 +37,11 @@ const App = ({
   }
   // TODO: app needs better offline handling
   return (<div className='app'>
-    <AuthenticationManager>
+    <AuthenticationManager onLogin={handleLogin} onRegister={handleRegister}>
       <Menubar />
       <ThingList />
       <FloatingActionButton style={{position: 'fixed', bottom: '1em', right: '1em'}}
         onTouchTap={() => openThingEditor()}><ContentAddIcon />
-        {/* onTouchTap={openThingEditor}><ContentAddIcon /> */}
       </FloatingActionButton>
       {dialog /* Dialogs normally hidden */}
     </AuthenticationManager>

@@ -10,7 +10,8 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import MenuIcon from 'material-ui/svg-icons/navigation/menu'
 
-import { openInventoryEditor, logoutUser, loadInventory } from '../actions'
+import { openInventoryEditor, loadInventory } from '../actions'
+import { logoutUser } from '../../common/actions/auth'
 import t from '../../common/i18n'
 import Sidebar from './Sidebar'
 
