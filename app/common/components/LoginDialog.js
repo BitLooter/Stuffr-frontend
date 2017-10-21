@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import { Formik } from 'formik'
 import yup from 'yup'
 import log from 'loglevel'
@@ -7,8 +8,7 @@ import Dialog from 'material-ui/Dialog'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 
-import { loginUser } from '../actions'
-import t from '../../common/i18n'
+import t from '../i18n'
 
 // TODO: Clear loginDialogError after successful login
 const reduxWrapper = connect(
@@ -16,8 +16,7 @@ const reduxWrapper = connect(
     return {
       errorMessage: state.ui.loginDialogError
     }
-  },
-  { loginUser })
+  })
 const formikWrapper = Formik({
   mapPropsToValues: (props) => ({
     email: '',
@@ -29,10 +28,10 @@ const formikWrapper = Formik({
   }),
   handleSubmit: (values, {props}) => {
     log.info(`Login request for ${values.email}`)
-    props.loginUser(values.email, values.password)
+    props.onLogin(values.email, values.password, props.dispatch)
   }
 })
-export default reduxWrapper(formikWrapper(({
+const LoginDialog = reduxWrapper(formikWrapper(({
   handleSwitchToRegister,
   errorMessage,
   values, errors,
@@ -63,3 +62,8 @@ export default reduxWrapper(formikWrapper(({
       errorText={errors.password} /> <br />
   </Dialog>
 }))
+LoginDialog.propTypes = {
+  onLogin: PropTypes.func.isRequired
+}
+
+export default LoginDialog
