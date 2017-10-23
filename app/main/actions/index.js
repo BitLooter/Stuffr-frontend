@@ -87,6 +87,7 @@ export const loadInventory = createTaskThunk(
         throw (Error(error))
       }
     }
+    // TODO: abstract window/localStorage out
     window.localStorage.lastInventoryId = inventoryId
     dispatch(api.getThings(inventoryId))
     return {id: inventoryId, index: inventoryIndex}

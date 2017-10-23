@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions'
 import log from 'loglevel'
 
-import { createTaskThunk } from '../main/actions'
+import { createTaskThunk } from '../common/actions'
 import stuffrApi from '../stuffrapi'
 
 const SET_PANEL = 'SET_PANEL'
