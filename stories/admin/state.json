@@ -1,5 +1,5 @@
 {
-	"ui": {
+	"auth": {
 		"authenticated": true
 	},
 	"activePanel": "overview",

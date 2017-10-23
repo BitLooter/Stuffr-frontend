@@ -19,6 +19,7 @@ i18nSetup({en: {dummy: {Resources: 'are loaded later'}}}, 'default', {synchronou
 addDecorator( muiTheme() )
 
 function loadStories() {
+  require('../stories/common')
   require('../stories/main')
   require('../stories/admin')
 }

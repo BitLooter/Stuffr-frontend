@@ -8,14 +8,12 @@ import RaisedButton from 'material-ui/RaisedButton'
 import locale from '../../app/locales/main/en.json'
 import * as apiActions from '../../app/main/actions/api'
 import state from './state'
-import { createDemoStore } from '../common'
+import { createDemoStore } from '../store'
 import { createThing } from '../../app/main/models'
 
 import Menubar from '../../app/main/components/Menubar'
 import ConfirmDialog, { withConfirmDialog } from '../../app/main/components/ConfirmDialog'
 import InventoryEditDialog from '../../app/main/components/InventoryEditDialog'
-import LoginDialog from '../../app/main/components/LoginDialog'
-import RegisterDialog from '../../app/main/components/RegisterDialog'
 import ThingList from '../../app/main/components/ThingList'
 import ThingEditDialog from '../../app/main/components/ThingEditDialog'
 
@@ -39,7 +37,7 @@ const ExampleConfirmButton = withConfirmDialog(({confirmWithUser}) => <RaisedBut
     storybookAction('Confirm dialog choice')(userResponse)
   }} />)
 
-storiesOf('Main view components', module)
+storiesOf('Main view/Components', module)
   .addDecorator((story) =>
     <Provider store={store}>
       {story()}
@@ -48,7 +46,7 @@ storiesOf('Main view components', module)
   .add('Menu bar', () => <Menubar />)
   .add('Thing list', () => <ThingList />)
 
-storiesOf('Dialogs', module)
+storiesOf('Main view/Dialogs', module)
   .addDecorator((story) =>
     <Provider store={store}>
       {story()}
@@ -65,7 +63,3 @@ storiesOf('Dialogs', module)
   .add('Thing edit', () => <ThingEditDialog mode={DIALOG_EDIT} thing={exampleThing} />)
   .add('Thing edit (new)', () => <ThingEditDialog mode={DIALOG_NEW} thing={newThing} />)
   .add('Inventory edit (new)', () => <InventoryEditDialog mode={DIALOG_NEW} inventory={newThing} />)
-  .add('Login dialog', () => <LoginDialog
-    handleSwitchToRegister={storybookAction('Switch to register mode')} />)
-  .add('Register dialog', () => <RegisterDialog
-    handleSwitchToLogin={storybookAction('Switch to login mode')} />)

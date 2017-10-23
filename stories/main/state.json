@@ -68,5 +68,8 @@
         "name": "PLACEHOLDER"
       }
     }
+  },
+  "auth": {
+    "authenticated": true
   }
 }
