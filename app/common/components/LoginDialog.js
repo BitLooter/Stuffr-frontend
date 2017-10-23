@@ -10,11 +10,11 @@ import TextField from 'material-ui/TextField'
 
 import t from '../i18n'
 
-// TODO: Clear loginDialogError after successful login
+// TODO: Clear loginError after successful login
 const reduxWrapper = connect(
   function mapStateToProps (state) {
     return {
-      errorMessage: state.ui.loginDialogError
+      errorMessage: state.auth.loginError
     }
   })
 const formikWrapper = Formik({

@@ -3,15 +3,16 @@
 /* eslint no-unused-expressions: off */
 // TODO: Test error conditions
 
-import {expect} from 'chai'
+import { expect } from 'chai'
 import log from 'loglevel'
 import 'mocha-sinon'
 import Immutable from 'seamless-immutable'
 
-import {TEST_THINGS, NEW_THING, NEW_THING_ID,
-  NEW_INVENTORY, NEW_INVENTORY_ID} from './dummydata'
-import {__GetDependency__} from '../app/main/reducers/database'
+import { TEST_THINGS, NEW_THING, NEW_THING_ID,
+  NEW_INVENTORY, NEW_INVENTORY_ID } from './dummydata'
+import { __GetDependency__ } from '../app/main/reducers/database'
 import * as actions from '../app/main/actions'
+import * as actionsAuth from '../app/common/actions/auth'
 
 const initialState = Immutable({user: null, inventories: [], things: []})
 
@@ -75,7 +76,7 @@ describe('Reducers - Database:', () => {
 
   it('Purging user data', () => {
     const purgeUserReducer = __GetDependency__('purgeUserReducer')
-    const action = actions.purgeUser()
+    const action = actionsAuth.purgeUser()
     const newState = purgeUserReducer(initialState, action)
     expect(newState.things).to.be.empty
     expect(newState.inventories).to.be.empty

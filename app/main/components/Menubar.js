@@ -76,8 +76,7 @@ class InventoryMenu extends React.Component {
     return {
       inventories: state.database.inventories,
       // TODO: Handle no inventories exist
-      inventoryName: currentInventory ? currentInventory.name : 'Loading...',
-      authenticated: state.database.user !== null
+      inventoryName: currentInventory ? currentInventory.name : 'Loading...'
     }
   },
   {logoutUser}
