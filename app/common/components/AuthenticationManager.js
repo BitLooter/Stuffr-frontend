@@ -12,7 +12,7 @@ const MODE_REGISTER = Symbol('MODE_REGISTER')
 @connect(
   function mapStateToProps (state) {
     return {
-      authenticated: state.ui.authenticated
+      authenticated: state.auth.authenticated
     }
   }
 )

@@ -13,7 +13,17 @@ const placeholderThing = Immutable(models.createThing({name: 'PLACEHOLDER'}))
 const placeholderInventory = Immutable(models.createInventory({name: 'PLACEHOLDER'}))
 const emptyThing = Immutable(models.createThing())
 const emptyInventory = Immutable(models.createInventory())
-const noUser = Immutable({authenticated: false, currentInventory: null})
+const noUser = Immutable({
+  currentInventory: null,
+  thingDialog: {
+    mode: DIALOG_CLOSED,
+    thing: placeholderThing
+  },
+  inventoryDialog: {
+    mode: DIALOG_CLOSED,
+    inventory: placeholderInventory
+  }
+}, {deep: true})
 
 function openThingEditorReducer (state, action) {
   // If no payload, it's a new thing, otherwise edit thing in payload
@@ -45,25 +55,8 @@ function setCurrentInventoryReducer (state, action) {
   return state.set('currentInventory', action.payload.index)
 }
 
-function authorizationRequiredReducer (state, action) {
-  return state.set('authenticated', false)
-}
-
-function userAuthenticatedReducer (state, action) {
-  return state.set('authenticated', true)
-}
-
-function userLoginErrorReducer (state, action) {
-  // TODO: make login/register errors more user-friendly
-  return state.set('loginDialogError', action.payload.message)
-}
-
-function userRegisterErrorReducer (state, action) {
-  return state.set('registerDialogError', action.payload.message)
-}
-
 function purgeUserReducer (state, action) {
-  return state.merge(noUser)
+  return noUser
 }
 
 const reducer = handleActions({
@@ -75,26 +68,7 @@ const reducer = handleActions({
   CLOSE_INVENTORY_EDITOR: closeInventoryEditorReducer,
   SUBMIT_INVENTORY__FINISH: closeInventoryEditorReducer,
   LOAD_INVENTORY__FINISH: setCurrentInventoryReducer,
-  AUTHORIZATION_REQUIRED: authorizationRequiredReducer,
-  LOGIN_USER__FINISH: userAuthenticatedReducer,
-  LOGIN_USER__ERROR: userLoginErrorReducer,
-  REGISTER_USER__FINISH: userAuthenticatedReducer,
-  REGISTER_USER__ERROR: userRegisterErrorReducer,
   PURGE_USER: purgeUserReducer
-}, Immutable({
-  authenticated: true,
-  currentInventory: null,
-  thingDialog: {
-    mode: DIALOG_CLOSED,
-    thing: placeholderThing
-  },
-  inventoryDialog: {
-    mode: DIALOG_CLOSED,
-    inventory: placeholderInventory
-  },
-  loginDialogError: undefined,
-  registerDialogError: undefined
-}, {deep: true}
-))
+}, noUser)
 
 export default reducer

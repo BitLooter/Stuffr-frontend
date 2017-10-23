@@ -24,7 +24,7 @@ yup.addMethod(yup.mixed, 'equalTo', equalTo)
 const reduxWrapper = connect(
   function mapStateToProps (state) {
     return {
-      errorMessage: state.ui.registerDialogError
+      errorMessage: state.auth.registerError
     }
   })
 const formikWrapper = Formik({

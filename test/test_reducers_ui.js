@@ -7,6 +7,7 @@ import Immutable from 'seamless-immutable'
 
 import {__GetDependency__} from '../app/main/reducers/ui'
 import * as actions from '../app/main/actions'
+import * as actionsAuth from '../app/common/actions/auth'
 import {createThing, createInventory} from '../app/main/models'
 
 const DIALOG_NEW = Symbol.for('ui.DIALOG_NEW')
@@ -76,10 +77,9 @@ describe('Reducers - UI:', () => {
 
   it('Purge user data', () => {
     const purgeUserReducer = __GetDependency__('purgeUserReducer')
-    const action = actions.purgeUser()
-    const oldState = Immutable({authenticated: true, currentInventory: 6})
+    const action = actionsAuth.purgeUser()
+    const oldState = Immutable({currentInventory: 6})
     const newState = purgeUserReducer(oldState, action)
-    expect(newState.authenticated).to.be.false
     expect(newState.currentInventory).to.be.null
   })
 })
