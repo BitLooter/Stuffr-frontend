@@ -1,0 +1,7 @@
+{
+  "auth": {
+    "authenticated": true,
+    "loginError": null,
+    "registerError": null
+  }
+}
