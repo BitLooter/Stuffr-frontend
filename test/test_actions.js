@@ -2,143 +2,23 @@
 // Turn off the unused expressions tool, they are used by Chai for testing
 /* eslint no-unused-expressions: off */
 
-import {expect} from 'chai'
+import { expect } from 'chai'
 import 'mocha-sinon'
-import {createAction} from 'redux-actions'
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 
-/* eslint-disable import/no-duplicates, no-duplicate-imports */
 import * as actions from '../app/main/actions'
-import {__GetDependency__} from '../app/main/actions'
-/* eslint-enable import/no-duplicates, no-duplicate-imports */
 import stuffrApi, {setupApi} from '../app/stuffrapi'
-import {TEST_DOMAIN, TEST_AUTH_URL, TEST_STORE, TEST_USER, TEST_INVENTORIES, TEST_THINGS,
-  NEW_USER, NEW_INVENTORY, NEW_INVENTORY_ID, NEW_THING, NEW_THING_ID} from './dummydata'
+import { TEST_DOMAIN, TEST_AUTH_URL, TEST_STORE, TEST_USER, TEST_INVENTORIES, TEST_THINGS,
+  NEW_INVENTORY, NEW_INVENTORY_ID, NEW_THING, NEW_THING_ID } from './dummydata'
 
 const mockStore = configureStore([thunk])
 const TEST_INVENTORY_ID = TEST_INVENTORIES[0].id
 
-describe('Actions:', () => {
-  describe('Generic action code:', () => {
-    it('Create API thunk', () => {
-      const createTaskThunk = __GetDependency__('createTaskThunk')
-      const dummyAction = createAction('DUMMY_ACTION')
-      const newThunkCreator = createTaskThunk(
-        async () => {},
-        dummyAction, dummyAction, dummyAction
-      )
-      expect(newThunkCreator).to.be.a('function')
-      const newThunk = newThunkCreator()
-      expect(newThunk).to.be.a('function')
-    })
-  })
-
+describe('Actions - Main app:', () => {
   describe('Task actions', function () {
     beforeEach(() => {
       setupApi(TEST_DOMAIN, TEST_AUTH_URL)
-    })
-
-    it('Logging in a user (loginUser)', async function () {
-      const loginUserAction = actions.loginUser('testmail@example.com', 'pass')
-      // Should be a thunk
-      expect(loginUserAction).to.be.a('function')
-
-      const store = mockStore(TEST_STORE)
-      this.sinon.stub(stuffrApi, 'login')
-
-      global.window = {localStorage: {}}
-      await store.dispatch(loginUserAction)
-      expect(stuffrApi.login.calledOnce).to.be.true
-
-      const thunkActions = store.getActions()
-      const actionTypes = thunkActions.map((a) => a.type)
-      expect(actionTypes).to.include(actions.LOGIN_USER__FINISH)
-      // These actions may not complete before thunk is finished, check they
-      // were started instead.
-      expect(actionTypes).to.include(actions.LOAD_USER__START)
-
-      const state = store.getState()
-      expect(state.database.user).to.eql(TEST_USER)
-      expect(state.database.inventories).to.eql(TEST_INVENTORIES)
-
-      expect(global.window.localStorage.apiToken).to.not.be.undefined
-    })
-
-    it('Logging in a user with incorrect password', async function () {
-      const loginUserAction = actions.loginUser('testmail@example.com', 'badpass')
-      // Should be a thunk
-      expect(loginUserAction).to.be.a('function')
-
-      const store = mockStore(TEST_STORE)
-      this.sinon.stub(stuffrApi, 'login').throws('An error')
-
-      await store.dispatch(loginUserAction)
-      expect(stuffrApi.login.calledOnce).to.be.true
-
-      const thunkActions = store.getActions()
-      const actionTypes = thunkActions.map((a) => a.type)
-      expect(actionTypes).to.include(actions.LOGIN_USER__ERROR)
-    })
-
-    it('Logging a user out (logoutUser)', async function () {
-      const logoutUserAction = actions.logoutUser()
-      // Should be a thunk
-      expect(logoutUserAction).to.be.a('function')
-
-      const store = mockStore(TEST_STORE)
-      this.sinon.stub(stuffrApi, 'logout')
-
-      await store.dispatch(logoutUserAction)
-      expect(stuffrApi.logout.calledOnce).to.be.true
-
-      const thunkActions = store.getActions()
-      const actionTypes = thunkActions.map((a) => a.type)
-      expect(actionTypes).to.include(actions.PURGE_USER)
-
-      expect(stuffrApi.token).to.be.null
-    })
-
-    it('Registering a new user (registerUser)', async function () {
-      const registerUserAction = actions.registerUser(NEW_USER)
-      // Should be a thunk
-      expect(registerUserAction).to.be.a('function')
-
-      const store = mockStore(TEST_STORE)
-      this.sinon.stub(stuffrApi, 'registerUser')
-
-      global.window = {localStorage: {}}
-      await store.dispatch(registerUserAction)
-      expect(stuffrApi.registerUser.calledOnce).to.be.true
-
-      const thunkActions = store.getActions()
-      const actionTypes = thunkActions.map((a) => a.type)
-      expect(actionTypes).to.include(actions.REGISTER_USER__FINISH)
-      // These actions may not complete before thunk is finished, check they
-      // were started instead.
-      expect(actionTypes).to.include(actions.LOAD_USER__START)
-
-      const state = store.getState()
-      expect(state.database.user).to.eql(TEST_USER)
-      expect(state.database.inventories).to.eql(TEST_INVENTORIES)
-
-      expect(global.window.localStorage.apiToken).to.not.be.undefined
-    })
-
-    it('Registering a new user with invalid data', async function () {
-      const registerUserAction = actions.registerUser('testmail@example.com', 'badpass')
-      // Should be a thunk
-      expect(registerUserAction).to.be.a('function')
-
-      const store = mockStore(TEST_STORE)
-      this.sinon.stub(stuffrApi, 'registerUser').throws('An error')
-
-      await store.dispatch(registerUserAction)
-      expect(stuffrApi.registerUser.calledOnce).to.be.true
-
-      const thunkActions = store.getActions()
-      const actionTypes = thunkActions.map((a) => a.type)
-      expect(actionTypes).to.include(actions.REGISTER_USER__ERROR)
     })
 
     it('Loading a user (loadUser)', async function () {
@@ -170,6 +50,7 @@ describe('Actions:', () => {
     it('Load an inventory (loadInventory)', async function () {
       const TEST_ID = TEST_STORE.database.inventories[0].id
       const loadInventoryAction = actions.loadInventory(TEST_ID)
+      global.window = {localStorage: {}}
       // Should be a thunk
       expect(loadInventoryAction).to.be.a('function')
 
