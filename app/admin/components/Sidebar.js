@@ -10,7 +10,7 @@ import t from '../../common/i18n'
 const panels = ['overview', 'userManagement', 'adminManagement']
 const reduxWrapper = connect(
   function mapStateToProps (state) {
-    return {activePanel: state.activePanel}
+    return {activePanel: state.ui.activePanel}
   },
   {selectPanel}
 )

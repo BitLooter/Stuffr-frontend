@@ -1,14 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-// import PropTypes from 'prop-types'
 
 const reduxWrapper = connect(
   function mapStateToProps (state) {
     return {
-      numUsers: state.stats.numUsers,
-      numInventories: state.stats.numInventories,
-      numThings: state.stats.numThings,
-      serverVersion: state.serverInfo.version
+      numUsers: state.server.stats.numUsers,
+      numInventories: state.server.stats.numInventories,
+      numThings: state.server.stats.numThings,
+      serverVersion: state.server.info.version
     }
   }
 )
@@ -25,11 +24,5 @@ const StatusPanel = reduxWrapper(({
     Client version: v{window.siteConfig.frontendVersion}
   </div>)
 })
-// StatusPanel.propTypes = {
-//   numUsers: PropTypes.number.isRequired,
-//   numInventories: PropTypes.number.isRequired,
-//   numThings: PropTypes.number.isRequired,
-//   serverVersion: PropTypes.string.isRequired
-// }
 
 export default StatusPanel

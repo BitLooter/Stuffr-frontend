@@ -21,7 +21,7 @@ export default class AuthenticationManager extends React.Component {
     children: PropTypes.node.isRequired,
     authenticated: PropTypes.bool.isRequired,
     onLogin: PropTypes.func.isRequired,
-    onRegister: PropTypes.func.isRequired
+    onRegister: PropTypes.func
   }
 
   constructor (props) {
@@ -37,6 +37,8 @@ export default class AuthenticationManager extends React.Component {
   }
 
   render () {
+    // onRegister is optional
+    const handleRegister = this.props.onRegister || this.props.onLogin
     let component
     // TODO: Password reset mode
     if (this.props.authenticated) {
@@ -49,7 +51,7 @@ export default class AuthenticationManager extends React.Component {
         handleSwitchToRegister={() => this.switchMode(MODE_REGISTER)} />
     } else if (this.state.mode === MODE_REGISTER) {
       component = <RegisterDialog
-        onRegister={this.props.onRegister}
+        onRegister={handleRegister}
         handleSwitchToLogin={() => this.switchMode(MODE_LOGIN)} />
     }
 
