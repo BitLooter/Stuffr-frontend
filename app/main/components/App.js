@@ -10,17 +10,10 @@ import ThingEditDialog from './ThingEditDialog'
 import InventoryEditDialog from './InventoryEditDialog'
 import Menubar from './Menubar'
 import { loadUser, openThingEditor } from '../actions'
-import { loginUser, registerUser } from '../../common/actions/auth'
 
 const DIALOG_CLOSED = Symbol.for('ui.DIALOG_CLOSED')
 
-async function handleLogin (email, password, dispatch) {
-  await dispatch(loginUser(email, password))
-  dispatch(loadUser())
-}
-
-async function handleRegister (userData, dispatch) {
-  await dispatch(registerUser(userData))
+function handlePostLogin (dispatch) {
   dispatch(loadUser())
 }
 
@@ -37,7 +30,7 @@ const App = ({
   }
   // TODO: app needs better offline handling
   return (<div className='app'>
-    <AuthenticationManager onLogin={handleLogin} onRegister={handleRegister}>
+    <AuthenticationManager onLogin={handlePostLogin}>
       <Menubar />
       <ThingList />
       <FloatingActionButton style={{position: 'fixed', bottom: '1em', right: '1em'}}

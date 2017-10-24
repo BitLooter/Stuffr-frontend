@@ -12,7 +12,7 @@ const panelComponents = {
 }
 const reduxWrapper = connect(
   function mapStateToProps (state) {
-    return {activePanel: state.activePanel}
+    return {activePanel: state.ui.activePanel}
   }
 )
 const AdminApp = reduxWrapper(({activePanel}) => {
@@ -22,7 +22,7 @@ const AdminApp = reduxWrapper(({activePanel}) => {
     : <div>UNKNOWN PANEL TYPE: {activePanel}</div>
 
   return <div>
-    <AuthenticationManager>
+    <AuthenticationManager onLogin={() => null}>
       <Sidebar />
       {/* marginLeft should be the same as the sidebar width */}
       <div style={{marginLeft: '25%'}} >

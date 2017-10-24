@@ -8,6 +8,7 @@ import Dialog from 'material-ui/Dialog'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 
+import { registerUser } from '../actions/auth'
 import t from '../../common/i18n'
 
 // TODO: Don't switch back to login mode if backend error during register
@@ -47,7 +48,9 @@ const formikWrapper = Formik({
   }),
   handleSubmit: async (values, {props}) => {
     log.info(`Register request for ${values.email}`)
-    await props.onRegister(values, props.dispatch)
+    // TODO: Handle backend register errors
+    await props.dispatch(registerUser(values))
+    await props.onRegister(props.dispatch)
     props.handleSwitchToLogin()
   }
 })

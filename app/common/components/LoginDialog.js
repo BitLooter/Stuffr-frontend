@@ -8,6 +8,7 @@ import Dialog from 'material-ui/Dialog'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 
+import { loginUser } from '../actions/auth'
 import t from '../i18n'
 
 // TODO: Clear loginError after successful login
@@ -26,9 +27,11 @@ const formikWrapper = Formik({
     email: yup.string().required(t('auth.emailErrorMissing')),
     password: yup.string().required(t('auth.passwordErrorMissing'))
   }),
-  handleSubmit: (values, {props}) => {
+  handleSubmit: async (values, {props}) => {
     log.info(`Login request for ${values.email}`)
-    props.onLogin(values.email, values.password, props.dispatch)
+    // TODO: Handle backend login errors
+    await props.dispatch(loginUser(values.email, values.password))
+    props.onLogin(props.dispatch)
   }
 })
 const LoginDialog = reduxWrapper(formikWrapper(({
