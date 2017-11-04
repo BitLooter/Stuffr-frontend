@@ -50,7 +50,7 @@ describe('Actions - Main app:', () => {
     it('Load an inventory (loadInventory)', async function () {
       const TEST_ID = TEST_STORE.database.inventories[0].id
       const loadInventoryAction = actions.loadInventory(TEST_ID)
-      global.window = {localStorage: {}}
+      global.localStorage = {}
       // Should be a thunk
       expect(loadInventoryAction).to.be.a('function')
 

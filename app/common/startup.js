@@ -9,13 +9,13 @@ import log from 'loglevel'
 import { i18nSetup } from './i18n'
 
 export default async function startup (appComponent, reducer, {i18nNS} = {}) {
-  log.setLevel(window.siteConfig.logLevel)
-  log.info(`Log level set to ${window.siteConfig.logLevel}`)
+  log.setLevel(global.siteConfig.logLevel)
+  log.info(`Log level set to ${global.siteConfig.logLevel}`)
 
   // Activate Redux dev tools if installed in browser
   // https://github.com/zalmoxisus/redux-devtools-extension
-  const devToolComposer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : redux.compose
+  const devToolComposer = global.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? global.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : redux.compose
   const reduxLogger = createLogger({collapsed: true})
   const store = redux.createStore(reducer, devToolComposer(
     redux.applyMiddleware(thunk, reduxLogger)

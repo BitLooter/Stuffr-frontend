@@ -21,7 +21,7 @@ const StatusPanel = reduxWrapper(({
     Inventories: {numInventories}<br />
     Things: {numThings}<br />
     Server version: v{serverVersion}<br />
-    Client version: v{window.siteConfig.frontendVersion}
+    Client version: v{global.siteConfig.frontendVersion}
   </div>)
 })
 

@@ -16,7 +16,7 @@ const AboutDialog = ({open, onClose}) =>
   >
     {/* Doing a half-assed dynamic template thing here, if more strings like this are done in
         the future this should be replaced with something like an sprintf library. */}
-    {t('about.text').replace('$VERSION', window.siteConfig.frontendVersion)}
+    {t('about.text').replace('$VERSION', global.siteConfig.frontendVersion)}
   </Dialog>
 AboutDialog.propTypes = {
   open: PropTypes.bool.isRequired,

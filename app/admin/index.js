@@ -10,8 +10,8 @@ import { setupApi } from '../stuffrapi'
 
 initAndDisplayErrors(async () => {
   // If no token is available loadUser will trigger a login
-  setupApi(window.siteConfig.apiPath, window.siteConfig.authPath,
-    window.localStorage.apiToken)
+  setupApi(global.siteConfig.apiPath, global.siteConfig.authPath,
+    localStorage.apiToken)
 
   injectTapEventPlugin() // Needed for Material-UI
   const store = await startup(
@@ -33,10 +33,10 @@ initAndDisplayErrors(async () => {
   if (module.hot) {
     module.hot.accept('./reducers', () => store.replaceReducer(reducer))
     module.hot.accept('./actions')
-  //   // TODO: Test API reinitialization
-  //   module.hot.accept('./stuffrapi', () => setupApi(
-  //     window.siteConfig.apiPath, window.siteConfig.authPath,
-  //     window.localStorage.apiToken
-  //   ))
+    // TODO: Test API reinitialization
+    module.hot.accept('../stuffrapi', () => setupApi(
+      global.siteConfig.apiPath, global.siteConfig.authPath,
+      localStorage.apiToken
+    ))
   }
 })

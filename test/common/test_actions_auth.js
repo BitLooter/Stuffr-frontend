@@ -27,7 +27,7 @@ describe('Actions - Authentication:', () => {
     const store = mockStore(TEST_STORE)
     this.sinon.stub(stuffrApi, 'login')
 
-    global.window = {localStorage: {}}
+    global.localStorage = {}
     await store.dispatch(loginUserAction)
     expect(stuffrApi.login.calledOnce).to.be.true
 
@@ -38,7 +38,7 @@ describe('Actions - Authentication:', () => {
     const state = store.getState()
     expect(state.database.user).to.eql(TEST_USER)
 
-    expect(global.window.localStorage.apiToken).to.not.be.undefined
+    expect(global.localStorage.apiToken).to.not.be.undefined
   })
 
   it('Logging in a user with incorrect password', async function () {
@@ -83,7 +83,7 @@ describe('Actions - Authentication:', () => {
     const store = mockStore(TEST_STORE)
     this.sinon.stub(stuffrApi, 'registerUser')
 
-    global.window = {localStorage: {}}
+    global.localStorage = {}
     await store.dispatch(registerUserAction)
     expect(stuffrApi.registerUser.calledOnce).to.be.true
 
@@ -94,7 +94,7 @@ describe('Actions - Authentication:', () => {
     const state = store.getState()
     expect(state.database.user).to.eql(TEST_USER)
 
-    expect(global.window.localStorage.apiToken).to.not.be.undefined
+    expect(global.localStorage.apiToken).to.not.be.undefined
   })
 
   it('Registering a new user with invalid data', async function () {

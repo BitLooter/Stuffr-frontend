@@ -9,7 +9,7 @@ import stuffrApi from '../../stuffrapi'
 
 // Places the API token where it can be retrieved for later sessions
 function storeToken (token) {
-  window.localStorage.apiToken = token
+  localStorage.apiToken = token
 }
 
 /* Event actions
@@ -70,8 +70,8 @@ export const logoutUser = function () {
   return function (dispatch) {
     log.info('purgeUser: Purging user data')
     stuffrApi.logout()
-    delete window.localStorage.apiToken
-    delete window.localStorage.lastInventoryId
+    delete localStorage.apiToken
+    delete localStorage.lastInventoryId
     // Reducers use purgeUser to clean user data from state
     dispatch(purgeUser())
   }

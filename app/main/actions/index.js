@@ -68,11 +68,11 @@ export const loadInventory = createTaskThunk(
     // If no ID check localStorage for the last used ID, uses first inventory if not found
     if (requestedId === undefined) {
       // TODO: Browser/view specific code that should be moved out of the thunk
-      log.debug(`loadInventory: No requestedId, using lastInventoryId #${window.localStorage.lastInventoryId}`)
-      const lastId = parseInt(window.localStorage.lastInventoryId)
+      log.debug(`loadInventory: No requestedId, using lastInventoryId #${localStorage.lastInventoryId}`)
+      const lastId = parseInt(localStorage.lastInventoryId)
       inventoryIndex = getState().database.inventories.findIndex((v) => v.id === lastId)
       if (inventoryIndex === -1) {
-        log.debug(`loadInventory: lastInventoryId #${window.localStorage.lastInventoryId} invalid, loading first inventory`)
+        log.debug(`loadInventory: lastInventoryId #${localStorage.lastInventoryId} invalid, loading first inventory`)
         inventoryIndex = 0
       }
       inventoryId = getState().database.inventories[inventoryIndex].id
@@ -87,8 +87,8 @@ export const loadInventory = createTaskThunk(
         throw (Error(error))
       }
     }
-    // TODO: abstract window/localStorage out
-    window.localStorage.lastInventoryId = inventoryId
+    // TODO: abstract localStorage out
+    localStorage.lastInventoryId = inventoryId
     dispatch(api.getThings(inventoryId))
     return {id: inventoryId, index: inventoryIndex}
   },
