@@ -1,0 +1,1 @@
+global.siteConfig = {prefix: 'TEST'}

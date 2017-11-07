@@ -46,7 +46,8 @@ const htmlWebpackPluginMainConfig = new HtmlWebpackPlugin({
   template: path.join(__dirname, '/app/common/app.ejs'),
   chunks: ['manifest', 'vendor', 'main'],
   xhtml: true,
-  siteConfig: JSON.stringify(siteConfig),
+  // siteConfig: JSON.stringify({prefix: 'MAIN', ...siteConfig}),
+  siteConfig: JSON.stringify(Object.assign(siteConfig, {prefix: 'MAIN'})),
   fonts,
   overlayMessage
 })
@@ -57,7 +58,8 @@ const htmlWebpackPluginAdminConfig = new HtmlWebpackPlugin({
   template: path.join(__dirname, '/app/common/app.ejs'),
   chunks: ['manifest', 'vendor', 'admin/main'],
   xhtml: true,
-  siteConfig: JSON.stringify(siteConfig),
+  // siteConfig: JSON.stringify({prefix: 'ADMIN', ...siteConfig}),
+  siteConfig: JSON.stringify(Object.assign(siteConfig, {prefix: 'ADMIN'})),
   fonts,
   overlayMessage
 })

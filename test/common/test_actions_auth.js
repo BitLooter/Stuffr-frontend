@@ -13,6 +13,7 @@ import { TEST_DOMAIN, TEST_AUTH_URL, TEST_STORE, TEST_USER,
   NEW_USER } from '../dummydata'
 
 const mockStore = configureStore([thunk])
+export const authTokenKey = `${global.siteConfig.prefix}_apiToken`
 
 describe('Actions - Authentication:', () => {
   beforeEach(() => {
@@ -38,7 +39,7 @@ describe('Actions - Authentication:', () => {
     const state = store.getState()
     expect(state.database.user).to.eql(TEST_USER)
 
-    expect(global.localStorage.apiToken).to.not.be.undefined
+    expect(global.localStorage[authTokenKey]).to.not.be.undefined
   })
 
   it('Logging in a user with incorrect password', async function () {
@@ -94,7 +95,7 @@ describe('Actions - Authentication:', () => {
     const state = store.getState()
     expect(state.database.user).to.eql(TEST_USER)
 
-    expect(global.localStorage.apiToken).to.not.be.undefined
+    expect(global.localStorage[authTokenKey]).to.not.be.undefined
   })
 
   it('Registering a new user with invalid data', async function () {
