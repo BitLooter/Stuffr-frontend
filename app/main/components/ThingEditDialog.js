@@ -6,7 +6,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { Formik } from 'formik'
+import { withFormik } from 'formik'
 import yup from 'yup'
 import log from 'loglevel'
 import Dialog from 'material-ui/Dialog'
@@ -34,7 +34,7 @@ const reduxWrapper = connect(
   },
   {submitThing, removeThing, closeThingEditor}
 )
-const formikWrapper = Formik({
+const formikWrapper = withFormik({
   mapPropsToValues: ({thing}) => ({
     name: thing.name, details: thing.details, location: thing.location}
   ),

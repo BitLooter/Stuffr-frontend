@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Formik } from 'formik'
+import { withFormik } from 'formik'
 import yup from 'yup'
 import log from 'loglevel'
 import Dialog from 'material-ui/Dialog'
@@ -15,7 +15,7 @@ import t from '../../common/i18n'
 const DIALOG_NEW = Symbol.for('ui.DIALOG_NEW')
 const DIALOG_EDIT = Symbol.for('ui.DIALOG_EDIT')
 
-const formikWrapper = Formik({
+const formikWrapper = withFormik({
   mapPropsToValues: (props) => ({
     name: ''
   }),

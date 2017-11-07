@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Formik } from 'formik'
+import { withFormik } from 'formik'
 import yup from 'yup'
 import log from 'loglevel'
 import Dialog from 'material-ui/Dialog'
@@ -18,7 +18,7 @@ const reduxWrapper = connect(
       errorMessage: state.auth.loginError
     }
   })
-const formikWrapper = Formik({
+const formikWrapper = withFormik({
   mapPropsToValues: (props) => ({
     email: '',
     password: ''
