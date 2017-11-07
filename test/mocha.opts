@@ -1,4 +1,3 @@
 --recursive
---require test/babeloptions
 --require test/init
 --grep babeloptions --invert
