@@ -1,3 +1,5 @@
+// Common startup code for all of Stuffr's apps
+
 import React from 'react'
 import * as ReactDOM from 'react-dom'
 import * as redux from 'redux'
@@ -7,10 +9,19 @@ import { createLogger } from 'redux-logger'
 import log from 'loglevel'
 
 import { i18nSetup } from './i18n'
+import { setupApi } from '../stuffrapi'
+
+function initStuffrApi () {
+  setupApi(global.siteConfig.apiPath, global.siteConfig.authPath,
+    localStorage.apiToken)
+}
 
 export default async function startup (appComponent, reducer, {i18nNS} = {}) {
   log.setLevel(global.siteConfig.logLevel)
   log.info(`Log level set to ${global.siteConfig.logLevel}`)
+  log.info('INIT: Starting app setup...')
+
+  initStuffrApi()
 
   // Activate Redux dev tools if installed in browser
   // https://github.com/zalmoxisus/redux-devtools-extension
@@ -40,12 +51,19 @@ export default async function startup (appComponent, reducer, {i18nNS} = {}) {
     </Provider>,
     appElement)
 
+  // Set up HMR for dev server for common code
+  if (module.hot) {
+    // TODO: Test API reinitialization
+    module.hot.accept('../stuffrapi', initStuffrApi)
+  }
+
+  log.info('INIT: App setup complete')
   return store
 }
 
 // Convenience function to run startup code and display any fatal errors.
 // Takes a function that performs app startup actions and returns a promise.
-export function initAndDisplayErrors (initFunc) {
+export function renderStartupErrors (initFunc) {
   initFunc().catch(renderStacktrace)
 }
 

@@ -6,10 +6,11 @@ import log from 'loglevel'
 
 import { createTaskThunk } from './'
 import stuffrApi from '../../stuffrapi'
+import { authTokenKey } from '../../util'
 
 // Places the API token where it can be retrieved for later sessions
 function storeToken (token) {
-  localStorage.apiToken = token
+  localStorage[authTokenKey] = token
 }
 
 /* Event actions
@@ -42,6 +43,10 @@ export const loginUser = createTaskThunk(
   loginUserStart, loginUserFinish, loginUserError
 )
 
+// Reload a logged in user with existing auth token
+export const RESTORE_USER = 'RESTORE_USER'
+export const restoreUser = createAction(RESTORE_USER)
+
 // Actions to register a new user
 export const REGISTER_USER__START = 'REGISTER_USER__START'
 export const registerUserStart = createAction(REGISTER_USER__START)
@@ -70,7 +75,7 @@ export const logoutUser = function () {
   return function (dispatch) {
     log.info('purgeUser: Purging user data')
     stuffrApi.logout()
-    delete localStorage.apiToken
+    delete localStorage[authTokenKey]
     delete localStorage.lastInventoryId
     // Reducers use purgeUser to clean user data from state
     dispatch(purgeUser())

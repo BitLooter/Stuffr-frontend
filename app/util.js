@@ -1,4 +1,12 @@
-// Misc utility functions used in multiple Places
+// Misc utility functions used in multiple places
+
+/* Constants
+ ************/
+// Key in localStorage where the auth token is persisted
+export const authTokenKey = `${global.siteConfig.prefix}_apiToken`
+
+/* Functions
+ ************/
 
 export function isString (value) {
   return typeof value === 'string' || value instanceof String

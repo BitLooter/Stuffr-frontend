@@ -34,6 +34,7 @@ const reducer = handleActions({
   AUTHORIZATION_REQUIRED: authorizationRequiredReducer,
   LOGIN_USER__FINISH: authenticatedReducer,
   LOGIN_USER__ERROR: loginErrorReducer,
+  RESTORE_USER: authenticatedReducer,
   REGISTER_USER__FINISH: authenticatedReducer,
   REGISTER_USER__ERROR: registerErrorReducer,
   PURGE_USER: purgeUserReducer
