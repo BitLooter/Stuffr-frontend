@@ -10,10 +10,11 @@ import log from 'loglevel'
 
 import { i18nSetup } from './i18n'
 import { setupApi } from '../stuffrapi'
+import { authTokenKey } from '../util'
 
 function initStuffrApi () {
   setupApi(global.siteConfig.apiPath, global.siteConfig.authPath,
-    localStorage.apiToken)
+    localStorage[authTokenKey])
 }
 
 export default async function startup (appComponent, reducer, {i18nNS} = {}) {
