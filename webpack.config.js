@@ -81,7 +81,7 @@ const config = {
         loader: 'babel-loader',
         options: {
           presets: [['env', {modules: false}], 'stage-2', 'react'],
-          plugins: ['transform-decorators-legacy']
+          plugins: []
         }
       }]
     }]
@@ -149,7 +149,8 @@ module.exports = (env) => {
     // Enable hot reloading
     config.module.rules[0].use[0].options.plugins.unshift('react-hot-loader/babel')
     config.plugins.push(new webpack.HotModuleReplacementPlugin())
-    config.entry.main.splice(1, 0, 'react-hot-loader/patch')
+    config.entry['main'].splice(1, 0, 'react-hot-loader/patch')
+    config.entry['admin/main'].splice(1, 0, 'react-hot-loader/patch')
 
     // Dev server config. Check local app config to change options.
     const backendUrl = `http://${appConfig.devProxyHost}:${appConfig.devProxyPort}`

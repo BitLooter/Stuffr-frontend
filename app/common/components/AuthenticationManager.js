@@ -9,14 +9,14 @@ import RegisterDialog from './RegisterDialog'
 const MODE_LOGIN = Symbol('MODE_LOGIN')
 const MODE_REGISTER = Symbol('MODE_REGISTER')
 
-@connect(
+const reduxWrapper = connect(
   function mapStateToProps (state) {
     return {
       authenticated: state.auth.authenticated
     }
   }
 )
-export default class AuthenticationManager extends React.Component {
+class AuthenticationManagerComponent extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     authenticated: PropTypes.bool.isRequired,
@@ -58,3 +58,5 @@ export default class AuthenticationManager extends React.Component {
     return component
   }
 }
+const AuthenticationManager = reduxWrapper(AuthenticationManagerComponent)
+export default AuthenticationManager
