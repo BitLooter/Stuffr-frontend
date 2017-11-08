@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import log from 'loglevel'
+import { AppContainer } from 'react-hot-loader'
 
 import { i18nSetup } from './i18n'
 import { setupApi } from '../stuffrapi'
@@ -45,12 +46,18 @@ export default async function startup (appComponent, reducer, {i18nNS} = {}) {
   }
 
   const appElement = document.getElementById('app')
-  // Provider: Used to provide access to the Redux store in components
-  ReactDOM.render(
-    <Provider store={store}>
-      {appComponent}
-    </Provider>,
-    appElement)
+  function rerender () {
+    ReactDOM.render(
+      // Provider: Used to provide access to the Redux store in components
+      // AppContainer: Used for hot module reloading
+      <Provider store={store}>
+        <AppContainer>
+          {appComponent}
+        </AppContainer>
+      </Provider>,
+      appElement)
+  }
+  rerender()
 
   // Set up HMR for dev server for common code
   if (module.hot) {
@@ -59,7 +66,7 @@ export default async function startup (appComponent, reducer, {i18nNS} = {}) {
   }
 
   log.info('INIT: App setup complete')
-  return store
+  return {store, rerender}
 }
 
 // Convenience function to run startup code and display any fatal errors.

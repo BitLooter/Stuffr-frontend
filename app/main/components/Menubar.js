@@ -17,8 +17,9 @@ import Sidebar from './Sidebar'
 
 // BUG: inventory menu gets screwy when no inventories exist
 
-@connect(undefined, {loadInventory, openInventoryEditor})
-class InventoryMenu extends React.Component {
+const inventoryMenuReduxWrapper = connect(
+  undefined, {loadInventory, openInventoryEditor})
+class InventoryMenuComponent extends React.Component {
   static propTypes = {
     inventories: PropTypes.array.isRequired,
     title: PropTypes.string.isRequired,
@@ -69,8 +70,9 @@ class InventoryMenu extends React.Component {
     )
   }
 }
+const InventoryMenu = inventoryMenuReduxWrapper(InventoryMenuComponent)
 
-@connect(
+const menubarReduxWrapper = connect(
   function mapStateToProps (state) {
     const currentInventory = state.database.inventories[state.ui.currentInventory]
     return {
@@ -81,7 +83,7 @@ class InventoryMenu extends React.Component {
   },
   {logoutUser}
 )
-class Menubar extends React.Component {
+class MenubarComponent extends React.Component {
   static propTypes = {
     inventories: PropTypes.array.isRequired,
     inventoryName: PropTypes.string.isRequired,
@@ -116,5 +118,6 @@ class Menubar extends React.Component {
     )
   }
 }
+const Menubar = menubarReduxWrapper(MenubarComponent)
 
 export default Menubar
