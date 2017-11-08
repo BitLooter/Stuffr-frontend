@@ -1,8 +1,10 @@
 // Main app startup code
 
 import React from 'react'
+import * as ReactDOM from 'react-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
+import { AppContainer } from 'react-hot-loader'
 
 import startup, { renderStartupErrors } from '../common/startup'
 import { loadUser } from './actions'
@@ -15,7 +17,9 @@ renderStartupErrors(async () => {
   const store = await startup(
     // MuiThemeProvider: Needed for Material-UI
     <MuiThemeProvider>
-      <App />
+      <AppContainer>
+        <App />
+      </AppContainer>
     </MuiThemeProvider>,
     reducer,
     {i18nNS: 'main'}
@@ -28,6 +32,7 @@ renderStartupErrors(async () => {
 
   // Set up HMR for dev server
   if (module.hot) {
+    module.hot.accept('./components/App', () => { ReactDOM.render(App) })
     module.hot.accept('./reducers', () => store.replaceReducer(reducer))
     module.hot.accept('./actions')
   }

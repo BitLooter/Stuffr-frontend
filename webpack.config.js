@@ -74,20 +74,17 @@ const copyStaticFilesConfig = new CopyWebpackPlugin(
 const config = {
   context: appPath,
   module: {
-    rules: [
-      {
-        test: /\.js?$/,
-        include: appPath,
-        use: [{
-          loader: 'babel-loader',
-          options: {
-            // TODO: modules: false incompatible with HMR, uncomment when fixed
-            presets: [['env', {/* modules: false */}], 'stage-2', 'react'],
-            plugins: ['transform-decorators-legacy']
-          }
-        }]
-      }
-    ]
+    rules: [{
+      test: /\.js?$/,
+      include: appPath,
+      use: [{
+        loader: 'babel-loader',
+        options: {
+          presets: [['env', {modules: false}], 'stage-2', 'react'],
+          plugins: ['transform-decorators-legacy']
+        }
+      }]
+    }]
   },
   resolve: {
     modules: [
@@ -150,8 +147,9 @@ module.exports = (env) => {
     config.devtool = 'eval-source-map'
 
     // Enable hot reloading
-    config.module.rules[0].use.unshift({loader: 'react-hot-loader'})
+    config.module.rules[0].use[0].options.plugins.unshift('react-hot-loader/babel')
     config.plugins.push(new webpack.HotModuleReplacementPlugin())
+    config.entry.main.splice(1, 0, 'react-hot-loader/patch')
 
     // Dev server config. Check local app config to change options.
     const backendUrl = `http://${appConfig.devProxyHost}:${appConfig.devProxyPort}`
