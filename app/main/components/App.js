@@ -29,7 +29,7 @@ const App = ({
     dialog = <InventoryEditDialog mode={inventoryDialogMode} inventory={inventoryDialogData} />
   }
   // TODO: app needs better offline handling
-  return (<div className='app'>
+  return (
     <AuthenticationManager onLogin={handlePostLogin}>
       <Menubar />
       <ThingList />
@@ -38,7 +38,7 @@ const App = ({
       </FloatingActionButton>
       {dialog /* Dialogs normally hidden */}
     </AuthenticationManager>
-  </div>)
+  )
 }
 App.propTypes = {
   thingDialogMode: PropTypes.symbol.isRequired,

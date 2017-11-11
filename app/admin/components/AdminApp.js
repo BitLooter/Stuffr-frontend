@@ -21,13 +21,15 @@ const AdminApp = reduxWrapper(({activePanel}) => {
     ? panelComponents[activePanel]
     : <div>UNKNOWN PANEL TYPE: {activePanel}</div>
 
-  return <AuthenticationManager onLogin={() => null}>
-    <Sidebar />
-    {/* marginLeft should be the same as the sidebar width */}
-    <div style={{marginLeft: '25%'}} >
-      {panel}
-    </div>
-  </AuthenticationManager>
+  return (
+    <AuthenticationManager onLogin={() => null}>
+      <Sidebar />
+      {/* marginLeft should be the same as the sidebar width */}
+      <div style={{marginLeft: '25%'}} >
+        {panel}
+      </div>
+    </AuthenticationManager>
+  )
 })
 
 export default AdminApp
