@@ -144,6 +144,12 @@ module.exports = (env) => {
   // DEVELOPMENT SETTINGS
   // ====================
   } else {
+    // Node STILL doesn't properly support modules, so enable Babel's module
+    // handling while testing
+    if (env.testing) {
+      config.module.rules[0].use[0].options.presets[0][1].modules = 'commonjs'
+    }
+
     config.devtool = 'eval-source-map'
 
     // Enable hot reloading
