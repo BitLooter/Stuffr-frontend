@@ -146,7 +146,7 @@ module.exports = (env) => {
   } else {
     // Node STILL doesn't properly support modules, so enable Babel's module
     // handling while testing
-    if (env.testing) {
+    if (env && env.testing) {
       config.module.rules[0].use[0].options.presets[0][1].modules = 'commonjs'
     }
 

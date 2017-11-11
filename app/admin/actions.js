@@ -9,9 +9,12 @@ const setPanel = createAction(SET_PANEL)
 const panelLoaderActions = {
   overview: (dispatch) => {
     dispatch(setPanel('overview'))
+    dispatch(refreshStats())
+    dispatch(refreshServerInfo())
   },
   userManagement: (dispatch) => {
     dispatch(setPanel('userManagement'))
+    dispatch(loadUsers())
   },
   adminManagement: (dispatch) => {
     dispatch(setPanel('adminManagement'))
@@ -58,4 +61,17 @@ export const refreshServerInfo = createTaskThunk(
     return stuffrApi.getServerInfo()
   },
   refreshServerInfoStart, refreshServerInfoFinish, refreshServerInfoError
+)
+
+export const LOAD_USERS__START = 'LOAD_USERS__START'
+export const loadUsersStart = createAction(LOAD_USERS__START)
+export const LOAD_USERS__FINISH = 'LOAD_USERS__FINISH'
+export const loadUsersFinish = createAction(LOAD_USERS__FINISH)
+export const LOAD_USERS__ERROR = 'LOAD_USERS__ERROR'
+export const loadUsersError = createAction(LOAD_USERS__ERROR)
+export const loadUsers = createTaskThunk(
+  async function () {
+    return stuffrApi.adminGetUsers()
+  },
+  loadUsersStart, loadUsersFinish, loadUsersError
 )

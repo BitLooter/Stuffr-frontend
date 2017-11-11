@@ -143,8 +143,13 @@ class StuffrApi {
   /* Admin calls
    **************/
   async adminGetStats (callback) {
-    log.info('StuffrApi: (Admin) Request for get stats')
+    log.info('StuffrApi: (Admin) Request for server stats')
     return this._request('/admin/stats', {callback})
+  }
+
+  async adminGetUsers (callback) {
+    log.info('StuffrApi: (Admin) Request for user list')
+    return this._request('/admin/users', {callback})
   }
 
   /* Utility methods

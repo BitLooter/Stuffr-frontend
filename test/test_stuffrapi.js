@@ -10,6 +10,7 @@ import HttpStatus from 'http-status'
 
 import {createStuffrApi} from '../app/stuffrapi'
 import {TEST_DOMAIN, TEST_AUTH_URL, TEST_USER, TEST_INVENTORIES, TEST_THINGS,
+  TEST_STATS, TEST_USER_LIST,
   NEW_INVENTORY, NEW_THING, NEW_INVENTORY_ID, NEW_THING_ID, NEW_USER, NEW_USER_ID}
   from './dummydata'
 
@@ -165,6 +166,24 @@ describe('Stuffr API wrapper:', () => {
       const thingResponse = await api.deleteThing(thingId)
       expect(fetchMock.called(thingsUrlWithId)).to.be.true
       expect(thingResponse).to.be.null
+    })
+  })
+
+  describe('API methods (Admin):', () => {
+    it('/admin/stats (GET)', async () => {
+      const url = `${TEST_DOMAIN}/admin/stats`
+      fetchMock.get(url, TEST_STATS)
+      const stats = await api.adminGetStats()
+      expect(fetchMock.called(url)).to.be.true
+      expect(stats).to.eql(TEST_STATS)
+    })
+
+    it('/admin/users (GET)', async () => {
+      const url = `${TEST_DOMAIN}/admin/users`
+      fetchMock.get(url, TEST_USER_LIST)
+      const users = await api.adminGetUsers()
+      expect(fetchMock.called(url)).to.be.true
+      expect(users).to.eql(TEST_USER_LIST)
     })
   })
 

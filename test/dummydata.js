@@ -66,6 +66,14 @@ export const TEST_STORE = Immutable({
   }
 })
 
+export const TEST_STATS = {
+  numUsers: 111,
+  numInventories: 222,
+  numThings: 333
+}
+
+export const TEST_USER_LIST = [TEST_USER, {...TEST_USER, id: 2}]
+
 export const NEW_USER = Immutable({
   'email': 'default@example.com',
   'name_first': 'NEW',

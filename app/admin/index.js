@@ -6,7 +6,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import startup, { renderStartupErrors } from '../common/startup'
 import { restoreUser } from '../common/actions/auth'
-import { refreshServerInfo, refreshStats } from './actions'
+import { selectPanel } from './actions'
 import reducer from './reducers'
 import AdminApp from './components/AdminApp'
 
@@ -25,9 +25,7 @@ renderStartupErrors(async () => {
   // TODO: Do not restore user until user sucessfully loads
   store.dispatch(restoreUser())
   // store.dispatch(loadUser())
-  // TODO: Load stats on status panel select
-  store.dispatch(refreshStats())
-  store.dispatch(refreshServerInfo())
+  selectPanel('overview')(store.dispatch)()
 
   // Set up HMR for dev server
   if (module.hot) {
