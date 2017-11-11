@@ -6,9 +6,9 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import startup, { renderStartupErrors } from '../common/startup'
 import { restoreUser } from '../common/actions/auth'
+import { refreshServerInfo, refreshStats } from './actions'
 import reducer from './reducers'
 import AdminApp from './components/AdminApp'
-import { refreshServerInfo, refreshStats } from './actions'
 
 renderStartupErrors(async () => {
   injectTapEventPlugin() // Needed for Material-UI

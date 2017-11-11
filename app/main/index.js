@@ -5,8 +5,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import startup, { renderStartupErrors } from '../common/startup'
-import { loadUser } from './actions'
 import { restoreUser } from '../common/actions/auth'
+import { loadUser } from './actions'
 import reducer from './reducers'
 import App from './components/App'
 
