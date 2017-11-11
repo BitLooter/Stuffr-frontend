@@ -51,7 +51,7 @@ export default class Sidebar extends React.Component {
               icon={<ArrowBackIcon />}
               onTouchTap={this.props.onClose}
             />
-            <RaisedButton label={t('menu.logout')}
+            <RaisedButton label={t('auth.logout')}
               onTouchTap={() => {
                 this.props.onClose()
                 this.props.onLogout()

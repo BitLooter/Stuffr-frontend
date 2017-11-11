@@ -1,0 +1,53 @@
+{
+  "common": {
+    "cancel": "❌",
+    "close": "⛔",
+    "save": "💾",
+    "yes": "👍",
+    "no": "👎"
+  },
+  "menu": {
+    "about": "💬",
+    "addInventory": "🆕📇",
+    "logout": "🚪"
+  },
+  "auth": {
+    "loginTitle": "🖋️📒",
+    "loginSubmit": "🖋️📒",
+    "switchToRegister": "🆕🖋️📒",
+    "registerTitle": "🆕🖋️📒",
+    "registerSubmit": "🆕🖋️📒",
+    "switchToLogin": "🖋️📒",
+    "email": "📧",
+    "password": "🔑",
+    "passwordConfirm": "🔑⁉",
+    "passwordMismatch": "🔑🔁‼",
+    "passwordErrorMissing": "🔑‼",
+    "nameFirst": "📛1️⃣",
+    "nameLast": "📛2️⃣"
+  },
+  "thingList": {
+    "nameHeader": "💎🏷",
+    "detailsHeader": "📝"
+  },
+  "inventory": {
+    "name": "📇🏷",
+    "newTitle": "🆕📇",
+    "nameErrorMissing": "🏷‼"
+  },
+  "thing": {
+    "name": "💎🏷",
+    "location": "🗺️",
+    "details": "📝️‍",
+    "dateAdded": "📅➕",
+    "dateModified": "📅➰",
+    "delete": "🗑",
+    "newTitle": "🆕💎",
+    "confirmCancelTitle": "➰⁉",
+    "confirmCancelText": "➰⁉",
+    "nameErrorMissing": "🏷‼"
+  },
+  "about": {
+    "text": "📇💎🏪 v$VERSION"
+  }
+}

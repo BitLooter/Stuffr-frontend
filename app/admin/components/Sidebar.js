@@ -28,7 +28,7 @@ const Sidebar = reduxWrapper(({activePanel, selectPanel, logoutUser}) => {
   menuItems.push(<MenuItem
     onClick={logoutUser}
     key='_logout'
-  >{t('logout')}</MenuItem>)
+  >{t('auth.logout')}</MenuItem>)
 
   return <Drawer open={true} width='25%'>
     {menuItems}

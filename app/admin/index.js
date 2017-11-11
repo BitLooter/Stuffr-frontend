@@ -18,7 +18,7 @@ renderStartupErrors(async () => {
       <AdminApp />
     </MuiThemeProvider>,
     reducer,
-    {i18nNS: 'admin'}
+    {i18nNS: ['admin', 'common']}
   )
 
   // TODO: Do not load user if no api token set
