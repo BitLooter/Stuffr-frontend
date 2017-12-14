@@ -56,8 +56,7 @@ export const REGISTER_USER__ERROR = 'REGISTER_USER__ERROR'
 export const registerUserError = createAction(REGISTER_USER__ERROR)
 // registerUser - Perform user registration
 // Parameters:
-//  email: Login ID
-//  password: Make a wild guess
+//  newUserData: Object containing information on new user
 export const registerUser = createTaskThunk(
   async function ({dispatch, getState}, newUserData) {
     log.info('registerUser: Registering new user')
@@ -81,3 +80,21 @@ export const logoutUser = function () {
     dispatch(purgeUser())
   }
 }
+
+// Actions to reset a user's password
+export const RESET_PASSWORD__START = 'RESET_PASSWORD__START'
+export const resetPasswordStart = createAction(RESET_PASSWORD__START)
+export const RESET_PASSWORD__FINISH = 'RESET_PASSWORD__FINISH'
+export const resetPasswordFinish = createAction(RESET_PASSWORD__FINISH)
+export const RESET_PASSWORD__ERROR = 'RESET_PASSWORD__ERROR'
+export const resetPasswordError = createAction(RESET_PASSWORD__ERROR)
+// resetPassword - Request a password reset
+// Parameters:
+//  email: Login ID
+export const resetPassword = createTaskThunk(
+  async function ({dispatch, getState}, email) {
+    log.info('resetPassword: Submitting password reset request')
+    await stuffrApi.resetPassword(email)
+  },
+  resetPasswordStart, resetPasswordFinish, resetPasswordError
+)

@@ -140,6 +140,12 @@ class StuffrApi {
     log.info(`StuffrApi: Successfully registered new user ${newUserInfo.email}`)
   }
 
+  async resetPassword (email) {
+    log.debug(`StuffrApi: Resetting password for user ${email}`)
+    return this._request('/reset',
+      {parameters: {email}, requestUrlBase: this.authUrlBase})
+  }
+
   /* Admin calls
    **************/
   async adminGetStats (callback) {

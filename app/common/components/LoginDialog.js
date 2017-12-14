@@ -11,6 +11,8 @@ import TextField from 'material-ui/TextField'
 import { loginUser } from '../actions/auth'
 import t from '../i18n'
 
+// TODO: Prevent making a request to userinfo on login error (e.g. bad password)
+
 // TODO: Clear loginError after successful login
 const reduxWrapper = connect(
   function mapStateToProps (state) {
@@ -35,7 +37,7 @@ const formikWrapper = withFormik({
   }
 })
 const LoginDialog = reduxWrapper(formikWrapper(({
-  handleSwitchToRegister,
+  handleSwitchToRegister, handleSwitchToPWReset,
   errorMessage,
   values, errors,
   handleChange, handleSubmit
@@ -62,7 +64,8 @@ const LoginDialog = reduxWrapper(formikWrapper(({
       errorText={errors.email} /> <br />
     <TextField name='password' onChange={handleChange}
       floatingLabelText={t('auth.password')} type='password'
-      errorText={errors.password} /> <br />
+      errorText={errors.password} /> <br /><br />
+    <a onClick={handleSwitchToPWReset}>{t('auth.switchToPWReset')}</a>
   </Dialog>
 }))
 LoginDialog.propTypes = {

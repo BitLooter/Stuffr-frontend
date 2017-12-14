@@ -5,9 +5,11 @@ import log from 'loglevel'
 
 import LoginDialog from './LoginDialog'
 import RegisterDialog from './RegisterDialog'
+import PasswordResetDialog from './PasswordResetDialog'
 
 const MODE_LOGIN = Symbol('MODE_LOGIN')
 const MODE_REGISTER = Symbol('MODE_REGISTER')
+const MODE_PWRESET = Symbol('MODE_PWRESET')
 
 const reduxWrapper = connect(
   function mapStateToProps (state) {
@@ -48,11 +50,17 @@ class AuthenticationManagerComponent extends React.Component {
       // TODO: Allow to disable user register button
       component = <LoginDialog
         onLogin={this.props.onLogin}
-        handleSwitchToRegister={() => this.switchMode(MODE_REGISTER)} />
+        handleSwitchToRegister={() => this.switchMode(MODE_REGISTER)}
+        handleSwitchToPWReset={() => this.switchMode(MODE_PWRESET)} />
     } else if (this.state.mode === MODE_REGISTER) {
       component = <RegisterDialog
         onRegister={handleRegister}
         handleSwitchToLogin={() => this.switchMode(MODE_LOGIN)} />
+    } else if (this.state.mode === MODE_PWRESET) {
+      component = <PasswordResetDialog
+        handleSwitchToLogin={() => this.switchMode(MODE_LOGIN)} />
+    } else {
+      log.error(`AuthenticationManager: Unknown mode ${this.state.mode}`)
     }
 
     return component

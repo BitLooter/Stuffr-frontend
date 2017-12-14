@@ -1,4 +1,6 @@
 /* Reducers to manage UI state */
+// TODO: Better error handling. For example, an uninitialized database will
+// cause a 500 error response, and the UI becomes stuck on loading display.
 
 import { handleActions } from 'redux-actions'
 import Immutable from 'seamless-immutable'
